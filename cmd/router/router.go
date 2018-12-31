@@ -10,13 +10,19 @@ import (
 	"api-routerd/cmd/systemd"
 	"api-routerd/cmd/system"
 	"crypto/tls"
+	"context"
 	"errors"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) error {
+	var srv http.Server
+
 	router := mux.NewRouter()
 
 	// Register services
@@ -35,13 +41,30 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 
 	router.Use(amw.AuthMiddleware)
 
+	var gracefulStop = make(chan os.Signal)
+	signal.Notify(gracefulStop, syscall.SIGTERM)
+	signal.Notify(gracefulStop, syscall.SIGINT)
+	go func() {
+		sig := <-gracefulStop
+
+		log.Printf("Received signal: %+v", sig)
+		log.Println("Shutting down api-routerd ...")
+
+		err := srv.Shutdown(context.Background())
+		if err != nil {
+			log.Errorf("Faild to shutdown server gracefuly: %s", err)
+		}
+
+		os.Exit(0)
+	}()
+
 	if share.PathExists(tlsCertPath) && share.PathExists(tlsKeyPath) {
 		cfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
 			CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
 			PreferServerCipherSuites: false,
 		}
-		srv := &http.Server{
+		srv = http.Server{
 			Addr:         ip + ":" + port,
 			Handler:      router,
 			TLSConfig:    cfg,
