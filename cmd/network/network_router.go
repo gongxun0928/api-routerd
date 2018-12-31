@@ -4,10 +4,8 @@ package network
 
 import (
 	"api-routerd/cmd/network/ethtool"
+	"api-routerd/cmd/network/netlink"
 	"api-routerd/cmd/network/networkd"
-	"api-routerd/cmd/network/resolve"
-	"api-routerd/cmd/network/systemdresolved"
-	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -16,74 +14,39 @@ func NetworkLinkGet(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	link := vars["link"]
 
-	l := Link {Link: link}
-
 	switch r.Method {
 	case "GET":
-		l.GetLink(rw)
+		netlink.GetLink(rw, r, link)
 		break
 	}
 }
 
 func NetworkLinkAdd(rw http.ResponseWriter, r *http.Request) {
-	link := new(Link)
-
-	err := json.NewDecoder(r.Body).Decode(&link);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "POST":
-		switch link.Action {
-		case "add-link-bridge":
-			err := link.LinkCreateBridge()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-			}
+		err := netlink.CreateLink(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
 
 func NetworkLinkDelete(rw http.ResponseWriter, r *http.Request) {
-	link := new(Link)
-
-	err := json.NewDecoder(r.Body).Decode(&link);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "DELETE":
-		switch link.Action {
-		case "delete-link":
-			err := link.LinkDelete()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-			}
+		err := netlink.DeleteLink(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
 
 func NetworkLinkSet(rw http.ResponseWriter, r *http.Request) {
-	link := new(Link)
-
-	err := json.NewDecoder(r.Body).Decode(&link);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "PUT":
-		switch link.Action {
-		case "set-link-up", "set-link-down", "set-link-mtu":
-			err := link.SetLink()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-			}
+		err := netlink.SetLink(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 	}
 }
@@ -92,51 +55,28 @@ func NetworkGetAddress(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	link := vars["link"]
 
-	address := Address{Link: link}
-
 	switch r.Method {
 	case "GET":
-		address.GetAddress(rw)
+		netlink.GetAddress(rw, link)
 		break
 	}
 }
 
 func NetworkAddAddress(rw http.ResponseWriter, r *http.Request) {
-	address := new(Address)
-
-	err := json.NewDecoder(r.Body).Decode(&address);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "POST":
-		switch address.Action {
-		case "add-address":
-			err := address.AddAddress()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
+		err := netlink.AddAddress(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
-
-		break
 	}
 }
 
 func NetworkDeleteAddres(rw http.ResponseWriter, r *http.Request) {
-	address := new(Address)
-
-	err := json.NewDecoder(r.Body).Decode(&address);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "DELETE":
-		err := address.DelAddress()
+		err := netlink.DelAddress(r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -147,68 +87,41 @@ func NetworkDeleteAddres(rw http.ResponseWriter, r *http.Request) {
 }
 
 func NetworkAddRoute(rw http.ResponseWriter, r *http.Request) {
-	route := new(Route)
-
-	err := json.NewDecoder(r.Body).Decode(&route);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "POST":
-		switch route.Action {
-		case "add-default-gw":
-			err := route.AddDefaultGateWay()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			break
+		err := netlink.ConfigureRoutes(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
-
 		break
 	case "PUT":
-		switch route.Action {
-		case "replace-default-gw":
-			err := route.ReplaceDefaultGateWay()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			break
+		err := netlink.ConfigureRoutes(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
+		break
 	}
 }
 
 func NetworkDeleteRoute(rw http.ResponseWriter, r *http.Request) {
-	route := new(Route)
-
-	err := json.NewDecoder(r.Body).Decode(&route);
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	switch r.Method {
 	case "DELETE":
-		switch route.Action {
-		case "del-default-gw":
-			err := route.DelDefaultGateWay()
-			if err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-
-			break
+		err := netlink.DeleteGateWay(r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
+
+		break
 	}
 }
 
 func NetworkGetRoute(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		err := GetRoutes(rw)
+		err := netlink.GetRoutes(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -260,64 +173,6 @@ func NetworkConfigureEthtool(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NetworkConfigureResolv(rw http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-
-		err := resolv.GetResolvConf(rw)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	case "POST":
-
-		err := resolv.UpdateResolvConf(rw, r)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	case "DELETE":
-
-		err := resolv.DeleteResolvConf(rw, r)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	}
-}
-
-func NetworkConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-
-		err := systemdresolved.GetResolveConf(rw)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	case "POST":
-
-		err := systemdresolved.UpdateResolveConf(rw, r)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	case "DELETE":
-
-		err := systemdresolved.DeleteResolveConf(rw, r)
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		break
-	}
-}
-
 func RegisterRouterNetwork(router *mux.Router) {
 	n := router.PathPrefix("/network").Subrouter()
 
@@ -347,17 +202,4 @@ func RegisterRouterNetwork(router *mux.Router) {
 
 	// ethtool
 	n.HandleFunc("/ethtool/{link}/{command}", NetworkConfigureEthtool)
-
-	// resolv.conf
-	n.HandleFunc("/resolv", NetworkConfigureResolv)
-	n.HandleFunc("/resolv/get", NetworkConfigureResolv)
-	n.HandleFunc("/resolv/add", NetworkConfigureResolv)
-	n.HandleFunc("/resolv/delete", NetworkConfigureResolv)
-
-	// systemd-resolved
-	n.HandleFunc("/systemdresolved", NetworkConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/get", NetworkConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/add", NetworkConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/delete", NetworkConfigureSystemdResolved)
-
 }

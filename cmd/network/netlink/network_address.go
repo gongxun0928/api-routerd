@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package network
+package netlink
 
 import (
 	"encoding/json"
@@ -17,7 +17,24 @@ type Address struct {
 	Label   string `json:"label"`
 }
 
-func (address *Address) AddAddress() (error){
+func DecodeAddressJsonRequest(r *http.Request) (Address, error) {
+	address := new(Address)
+
+	err := json.NewDecoder(r.Body).Decode(&address);
+	if err != nil {
+		return *address, err
+	}
+
+	return *address, nil
+}
+
+func AddAddress(r *http.Request) (error){
+	address, err := DecodeAddressJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed decode Address Json request: %s", err)
+		return err
+	}
+
 	link, err := netlink.LinkByName(address.Link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", err, address.Link)
@@ -39,7 +56,13 @@ func (address *Address) AddAddress() (error){
 	return nil
 }
 
-func (address *Address) DelAddress() (error) {
+func DelAddress(r *http.Request) (error) {
+	address, err := DecodeAddressJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed decode Address Json request: %s", err)
+		return err
+	}
+
 	link, err := netlink.LinkByName(address.Link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", err, address.Link)
@@ -61,8 +84,8 @@ func (address *Address) DelAddress() (error) {
 	return nil
 }
 
-func (address *Address) GetAddress(rw http.ResponseWriter) (error) {
-	l := strings.TrimSpace(address.Link)
+func GetAddress(rw http.ResponseWriter, link string) (error) {
+	l := strings.TrimSpace(link)
 	if l != "" {
 		link, err := netlink.LinkByName(l)
 		if err != nil {
@@ -72,13 +95,13 @@ func (address *Address) GetAddress(rw http.ResponseWriter) (error) {
 
 		addrs, err := netlink.AddrList(link, netlink.FAMILY_ALL)
 		if err != nil {
-			log.Errorf("Could not get addresses for link %s: %s", link, err)
+			log.Errorf("Could not get addresses for link %s: %s", l, err)
 			return err
 		}
 
 		j, err := json.Marshal(addrs)
 		if err != nil {
-			log.Errorf("Failed to encode json address for link %s: %s", err, address.Link)
+			log.Errorf("Failed to encode json address for link %s: %s", err, l)
 			return err
 		}
 

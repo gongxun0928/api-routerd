@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package network
+package netlink
 
 import (
 	"encoding/json"
@@ -18,6 +18,17 @@ type Link struct {
 	MTU     string   `json:"mtu"`
 	Kind    string   `json:"kind"`
 	Enslave []string `json:"enslave"`
+}
+
+func DecodeLinkJsonRequest(r *http.Request) (Link, error) {
+	link := new(Link)
+
+	err := json.NewDecoder(r.Body).Decode(&link);
+	if err != nil {
+		return *link, err
+	}
+
+	return *link, nil
 }
 
 func (req *Link) LinkSetMasterBridge() (error) {
@@ -64,24 +75,10 @@ func (req *Link) LinkCreateBridge() (error) {
 
 		log.Debugf("Successfully create bridge link: %s", req.Link)
 	}
+
 	return req.LinkSetMasterBridge()
 }
 
-func (req *Link) LinkDelete() (error) {
-	l, err := netlink.LinkByName(req.Link)
-	if err != nil {
-		log.Errorf("Failed to find link %s: %s", req.Link, err)
-		return err
-	}
-
-	err = netlink.LinkDel(l)
-	if err != nil {
-		log.Errorf("Failed to delete link %s up: %s", l, err)
-		return err
-	}
-
-	return nil
-}
 
 func LinkSetUp(link string) (error) {
 	l, err := netlink.LinkByName(link)
@@ -131,14 +128,18 @@ func LinkSetMTU(link string, mtu int) (error) {
 	return nil
 }
 
-func (req *Link) SetLink() (error) {
-	link := strings.TrimSpace(req.Link)
+func SetLink(r *http.Request) (error) {
+	req, err := DecodeLinkJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed to decode JSON: %s", err)
+		return err
+	}
 
 	switch req.Action {
 	case "set-link-up":
-		return LinkSetUp(link)
+		return LinkSetUp(req.Link)
 	case "set-link-down":
-		return LinkSetDown(link)
+		return LinkSetDown(req.Link)
 	case "set-link-mtu":
 
 		mtu, err := strconv.ParseInt(strings.TrimSpace(req.MTU), 10, 64)
@@ -147,27 +148,25 @@ func (req *Link) SetLink() (error) {
 			return err
 		}
 
-		return LinkSetMTU(link, int(mtu))
+		return LinkSetMTU(req.Link, int(mtu))
 	}
 
 	return nil
 }
 
-func (req *Link) GetLink(rw http.ResponseWriter) (error) {
-	l := strings.TrimSpace(req.Link)
-	if l != "" {
-		link, err := netlink.LinkByName(l)
+func GetLink(rw http.ResponseWriter, r *http.Request, link string) (error) {
+	if link != "" {
+		l, err := netlink.LinkByName(link)
 		if err != nil {
-			log.Errorf("Failed to find link %s: %s", req.Link, err)
+			log.Errorf("Failed to find link %s: %s", link, err)
 			return err
 		}
 
-		j, err := json.Marshal(link)
+		j, err := json.Marshal(l)
 		if err != nil {
-			log.Errorf("Failed to encode json linkInfo for link %s: %s", req.Link, err)
+			log.Errorf("Failed to encode json linkInfo for link %s: %s", link, err)
 			return err
 		}
-
 
 		rw.WriteHeader(http.StatusOK)
 		rw.Write(j)
@@ -181,12 +180,49 @@ func (req *Link) GetLink(rw http.ResponseWriter) (error) {
 
 		j, err := json.Marshal(links)
 		if err != nil {
-			log.Errorf("Failed to encode json linkInfo for link %s: %s", req.Link, err)
+			log.Errorf("Failed to encode json linkInfo for link %s: %s", link, err)
 			return err
 		}
 
 		rw.WriteHeader(http.StatusOK)
 		rw.Write(j)
+	}
+
+	return nil
+}
+
+func DeleteLink(r *http.Request) (error) {
+	req, err := DecodeLinkJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed to decode JSON: %s", err)
+		return err
+	}
+
+	l, err := netlink.LinkByName(req.Link)
+	if err != nil {
+		log.Errorf("Failed to find link %s: %s", req.Link, err)
+		return err
+	}
+
+	err = netlink.LinkDel(l)
+	if err != nil {
+		log.Errorf("Failed to delete link %s up: %s", l, err)
+		return err
+	}
+
+	return nil
+}
+
+func CreateLink(r *http.Request) (error) {
+	req, err := DecodeLinkJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed to decode JSON: %s", err)
+		return err
+	}
+
+	switch req.Action {
+	case "add-link-bridge":
+		return req.LinkCreateBridge()
 	}
 
 	return nil

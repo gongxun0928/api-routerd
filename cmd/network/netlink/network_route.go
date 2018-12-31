@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package network
+package netlink
 
 import (
 	"api-routerd/cmd/share"
@@ -18,6 +18,17 @@ type Route struct {
 	Link    string `json:"link"`
 	Gateway string `json:"gateway"`
 	OnLink  string `json:"onlink"`
+}
+
+func DecodeRouteJsonRequest(r *http.Request) (Route, error) {
+	route := new(Route)
+
+	err := json.NewDecoder(r.Body).Decode(&route);
+	if err != nil {
+		return *route, nil
+	}
+
+	return *route, nil
 }
 
 func (route *Route) AddDefaultGateWay() (error) {
@@ -100,7 +111,13 @@ func (route *Route) ReplaceDefaultGateWay() (error) {
 	return nil
 }
 
-func (route *Route) DelDefaultGateWay() (error) {
+func DeleteGateWay(r *http.Request) (error) {
+	route, err := DecodeRouteJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed to decode route JSON request %s", err)
+		return err
+	}
+
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
 		log.Errorf("Failed to delete default gateway %s: %s", link, err)
@@ -113,23 +130,28 @@ func (route *Route) DelDefaultGateWay() (error) {
 		return err
 	}
 
-	// del a gateway route
-	r := &netlink.Route{
-		Scope:     netlink.SCOPE_UNIVERSE,
-		LinkIndex: link.Attrs().Index,
-		Gw:        ipAddr,
-	}
+	switch route.Action {
+	case "del-default-gw":
 
-	err = netlink.RouteDel(r)
-	if err != nil {
-		log.Errorf("Failed to delete default GateWay address %s: %s", ipAddr, err)
-		return err
+		// del a gateway route
+		rt := &netlink.Route{
+			Scope:     netlink.SCOPE_UNIVERSE,
+			LinkIndex: link.Attrs().Index,
+			Gw:        ipAddr,
+		}
+
+		err = netlink.RouteDel(rt)
+		if err != nil {
+			log.Errorf("Failed to delete default GateWay address %s: %s", ipAddr, err)
+			return err
+		}
+		break
 	}
 
 	return nil
 }
 
-func GetRoutes(rw http.ResponseWriter) (error) {
+func GetRoutes(rw http.ResponseWriter, r *http.Request) (error) {
 	routes, err := netlink.RouteList(nil, 0)
 	if err != nil {
 		log.Errorf("Failed to get routes %s", err)
@@ -144,6 +166,23 @@ func GetRoutes(rw http.ResponseWriter) (error) {
 
 	rw.WriteHeader(http.StatusOK)
 	rw.Write(j)
+
+	return nil
+}
+
+func ConfigureRoutes(r *http.Request) (error) {
+	route, err := DecodeRouteJsonRequest(r)
+	if err != nil {
+		log.Errorf("Failed to decode route JSON request %s", err)
+		return err
+	}
+
+	 switch route.Action {
+	 case "add-default-gw":
+		 return route.AddDefaultGateWay()
+	 case "replace-default-gw":
+		 return  route.ReplaceDefaultGateWay()
+	 }
 
 	return nil
 }
