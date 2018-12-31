@@ -7,9 +7,6 @@ import (
 	"api-routerd/cmd/proc"
 	"api-routerd/cmd/share"
 	"api-routerd/cmd/system"
-	"api-routerd/cmd/system/hostname"
-	"api-routerd/cmd/systemd"
-	"context"
 	"crypto/tls"
 	"fmt"
 	"net/http"
@@ -32,6 +29,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	proc.RegisterRouterProc(router)
 	systemd.RegisterRouterSystemd(router)
 	system.RegisterRouterSystem(router)
+	sshdconf.RegisterRouterSSHdConf(router)
 
 	// Authenticate users
 	amw, err := InitAuthMiddleware()
