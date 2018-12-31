@@ -28,7 +28,7 @@ func DecodeAddressJsonRequest(r *http.Request) (Address, error) {
 	return *address, nil
 }
 
-func AddAddress(r *http.Request) (error){
+func AddAddress(r *http.Request) (error) {
 	address, err := DecodeAddressJsonRequest(r)
 	if err != nil {
 		log.Errorf("Failed decode Address Json request: %s", err)
