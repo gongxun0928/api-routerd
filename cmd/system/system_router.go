@@ -8,6 +8,7 @@ import (
 	"api-routerd/cmd/system/resolv"
 	"api-routerd/cmd/system/systemdresolved"
 	"api-routerd/cmd/system/systemdtimesyncd"
+	"api-routerd/cmd/system/timedate"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -162,4 +163,7 @@ func RegisterRouterSystem(router *mux.Router) {
 	// Generic system confs
 	n.HandleFunc("/conf/sudoers", ReadSudoersConfig)
 	n.HandleFunc("/conf/sshd", ReadSSHConfig)
+
+	// timedate
+	timedate.RegisterRouterTimeDate(n)
 }

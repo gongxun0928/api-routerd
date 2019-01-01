@@ -70,7 +70,6 @@ func (t *TimeSyncConfig) WriteTimeSyncConf() error {
 func ReadTimeSyncConf() (*TimeSyncConfig, error) {
 	cfg, err := ini.Load(TimeSyncdConfPath)
 	if err != nil {
-		fmt.Errorf("Fail to read file %s: %v", err)
 		return nil, err
 	}
 
@@ -93,7 +92,7 @@ func GetTimeSyncConf(rw http.ResponseWriter) error {
 
 	j, err := json.Marshal(conf)
 	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", TimeSyncdConfPath, err)
+		log.Errorf("Failed to encode json for resolv: %s", err)
 		return err
 	}
 

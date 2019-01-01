@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	SudoersPath = "/etc/sudoers"
+	SudoersPath   = "/etc/sudoers"
 	SSHConfigFile = "/etc/ssh/sshd_config"
 )
 
@@ -51,7 +51,7 @@ func GetSudoers(rw http.ResponseWriter) error {
 func SSHConfFileRead(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(SSHConfigFile)
 	if err != nil {
-		log.Errorf("Failed to read: %s", SSHConfigFile)
+		log.Errorf("Failed to read: %s, %s", SSHConfigFile, err)
 		return err
 	}
 
