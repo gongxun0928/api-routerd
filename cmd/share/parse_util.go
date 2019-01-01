@@ -4,9 +4,9 @@ package share
 
 import (
 	"fmt"
+	"net"
 	"strconv"
 	"strings"
-	"net"
 )
 
 func ParseBool(str string) (bool, error) {
@@ -31,7 +31,7 @@ func ParseIP(ip string) (net.IP, error) {
 
 	a := net.ParseIP(ip)
 
-	if a.To4 == nil || a.To16 == nil {
+	if a.To4() == nil || a.To16() == nil {
 		return nil, fmt.Errorf("ParseIP")
 	}
 

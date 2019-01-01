@@ -25,7 +25,7 @@ const (
 	ProcModulesPath = "/proc/modules"
 )
 
-type NetArp struct {
+type NetARP struct {
 	IPAddress string `json:"ip_address"`
 	HWType    string `json:"hw_type"`
 	Flags     string `json:"flags"`
@@ -306,7 +306,7 @@ func GetNetArp(rw http.ResponseWriter) error {
 		return errors.New("Failed to read /proc/net/arp")
 	}
 
-	netarp := make([]NetArp, len(lines)-1)
+	netarp := make([]NetARP, len(lines)-1)
 	for i, line := range lines {
 		if i == 0 {
 			continue
@@ -314,7 +314,7 @@ func GetNetArp(rw http.ResponseWriter) error {
 
 		fields := strings.Fields(line)
 
-		arp := NetArp{}
+		arp := NetARP{}
 		arp.IPAddress = fields[0]
 		arp.HWType = fields[1]
 		arp.Flags = fields[2]

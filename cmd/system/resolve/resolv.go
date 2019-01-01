@@ -4,7 +4,6 @@ import (
 	"api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -18,12 +17,12 @@ const (
 	ResolvConfPath = "/etc/resolv.conf"
 )
 
-type DnsConfig struct {
+type DNSConfig struct {
 	Servers []string `json:"servers"`
 	Search  []string `json:"search"`
 }
 
-func (conf *DnsConfig) WriteResolvConfig() error {
+func (conf *DNSConfig) WriteResolvConfig() error {
 	f, err := os.OpenFile(ResolvConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
@@ -46,14 +45,14 @@ func (conf *DnsConfig) WriteResolvConfig() error {
 	return nil
 }
 
-func ReadResolvConf() (*DnsConfig, error) {
+func ReadResolvConf() (*DNSConfig, error) {
 	lines, err := share.ReadFullFile(ResolvConfPath)
 	if err != nil {
-		log.Fatal("Failed to read: %s", ResolvConfPath)
-		return nil, errors.New("Failed to read resolv")
+		log.Errorf("Failed to read: %s", ResolvConfPath)
+		return nil, err
 	}
 
-	conf := new(DnsConfig)
+	conf := new(DNSConfig)
 
 	for _, line := range lines {
 		fields := strings.Fields(line)
@@ -104,7 +103,7 @@ func GetResolvConf(rw http.ResponseWriter) error {
 }
 
 func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
-	dns := DnsConfig{
+	dns := DNSConfig{
 		Servers: []string{""},
 		Search:  []string{""},
 	}
@@ -161,7 +160,7 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 }
 
 func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
-	dns := DnsConfig{
+	dns := DNSConfig{
 		Servers: []string{""},
 		Search:  []string{""},
 	}

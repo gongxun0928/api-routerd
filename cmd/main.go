@@ -58,7 +58,7 @@ func InitConf() {
 		return
 	}
 
-	log.Infof("Conf file IPAddress=%s, Port=%s", ip, port)
+	log.Debugf("Conf file: Parsed IPAddress=%s and Port=%s", ip, port)
 
 	ipFlag = ip
 	portFlag = port
@@ -74,7 +74,7 @@ func main() {
 
 	err := router.StartRouter(ipFlag, portFlag, path.Join(ConfPath, TLSCert), path.Join(ConfPath, TLSKey))
 	if err != nil {
-		log.Fatalf("Failed to init router: %s", err)
+		log.Fatalf("Failed to init api-routerd: %s", err)
 		os.Exit(1)
 	}
 }

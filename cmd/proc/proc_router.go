@@ -9,13 +9,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type ProcInfo struct {
+type Info struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
-}
-
-type ProcValue struct {
-	Value string `json:"value"`
+	Value    string `json:"value"`
 }
 
 func GetProcNetDev(rw http.ResponseWriter, r *http.Request) {
@@ -180,7 +177,7 @@ func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "PUT":
 
-		v := new(ProcValue)
+		v := new(Info)
 
 		err = json.NewDecoder(r.Body).Decode(&v)
 		if err != nil {
@@ -211,7 +208,7 @@ func ConfigureProcSysNet(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "PUT":
 
-		v := new(ProcValue)
+		v := new(Info)
 		err := json.NewDecoder(r.Body).Decode(&v)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
