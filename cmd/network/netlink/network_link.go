@@ -5,11 +5,12 @@ package netlink
 import (
 	"encoding/json"
 	"errors"
-	log "github.com/sirupsen/logrus"
-	"github.com/vishvananda/netlink"
 	"net/http"
 	"strconv"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/vishvananda/netlink"
 )
 
 type Link struct {
@@ -20,10 +21,10 @@ type Link struct {
 	Enslave []string `json:"enslave"`
 }
 
-func DecodeLinkJsonRequest(r *http.Request) (Link, error) {
+func DecodeLinkJSONRequest(r *http.Request) (Link, error) {
 	link := new(Link)
 
-	err := json.NewDecoder(r.Body).Decode(&link);
+	err := json.NewDecoder(r.Body).Decode(&link)
 	if err != nil {
 		return *link, err
 	}
@@ -31,7 +32,7 @@ func DecodeLinkJsonRequest(r *http.Request) (Link, error) {
 	return *link, nil
 }
 
-func (req *Link) LinkSetMasterBridge() (error) {
+func (req *Link) LinkSetMasterBridge() error {
 	bridge, err := netlink.LinkByName(req.Link)
 	if err != nil {
 		log.Errorf("Failed to find bridge link %s: %s", req.Link, err)
@@ -60,7 +61,7 @@ func (req *Link) LinkSetMasterBridge() (error) {
 	return nil
 }
 
-func (req *Link) LinkCreateBridge() (error) {
+func (req *Link) LinkCreateBridge() error {
 	_, err := netlink.LinkByName(req.Link)
 	if err == nil {
 		log.Infof("Bridge link %s exists. Using the bridge", req.Link)
@@ -79,8 +80,7 @@ func (req *Link) LinkCreateBridge() (error) {
 	return req.LinkSetMasterBridge()
 }
 
-
-func LinkSetUp(link string) (error) {
+func LinkSetUp(link string) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", link, err)
@@ -96,7 +96,7 @@ func LinkSetUp(link string) (error) {
 	return nil
 }
 
-func LinkSetDown(link string) (error) {
+func LinkSetDown(link string) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", link, err)
@@ -112,7 +112,7 @@ func LinkSetDown(link string) (error) {
 	return nil
 }
 
-func LinkSetMTU(link string, mtu int) (error) {
+func LinkSetMTU(link string, mtu int) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", link, err)
@@ -128,8 +128,8 @@ func LinkSetMTU(link string, mtu int) (error) {
 	return nil
 }
 
-func SetLink(r *http.Request) (error) {
-	req, err := DecodeLinkJsonRequest(r)
+func SetLink(r *http.Request) error {
+	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed to decode JSON: %s", err)
 		return err
@@ -154,7 +154,7 @@ func SetLink(r *http.Request) (error) {
 	return nil
 }
 
-func GetLink(rw http.ResponseWriter, r *http.Request, link string) (error) {
+func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 	if link != "" {
 		l, err := netlink.LinkByName(link)
 		if err != nil {
@@ -171,7 +171,7 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) (error) {
 		rw.WriteHeader(http.StatusOK)
 		rw.Write(j)
 
-	} else	{
+	} else {
 
 		links, err := netlink.LinkList()
 		if err != nil {
@@ -191,8 +191,8 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) (error) {
 	return nil
 }
 
-func DeleteLink(r *http.Request) (error) {
-	req, err := DecodeLinkJsonRequest(r)
+func DeleteLink(r *http.Request) error {
+	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed to decode JSON: %s", err)
 		return err
@@ -213,8 +213,8 @@ func DeleteLink(r *http.Request) (error) {
 	return nil
 }
 
-func CreateLink(r *http.Request) (error) {
-	req, err := DecodeLinkJsonRequest(r)
+func CreateLink(r *http.Request) error {
+	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed to decode JSON: %s", err)
 		return err

@@ -6,17 +6,18 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	"github.com/safchain/ethtool"
 	log "github.com/sirupsen/logrus"
-	"net/http"
 )
 
 type Ethtool struct {
-	Action   string `json:"action"`
-	Link     string `json:"link"`
+	Action string `json:"action"`
+	Link   string `json:"link"`
 }
 
-func (req *Ethtool) GetEthTool(rw http.ResponseWriter) (error) {
+func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	var j []byte
 
 	link := share.LinkExists(req.Link)

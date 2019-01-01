@@ -6,8 +6,9 @@ import (
 	"api-routerd/cmd/network/ethtool"
 	"api-routerd/cmd/network/netlink"
 	"api-routerd/cmd/network/networkd"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func NetworkLinkGet(rw http.ResponseWriter, r *http.Request) {
@@ -177,16 +178,16 @@ func RegisterRouterNetwork(router *mux.Router) {
 	n := router.PathPrefix("/network").Subrouter()
 
 	// Link
-	n.HandleFunc("/link/set",        NetworkLinkSet)
-	n.HandleFunc("/link/add",        NetworkLinkAdd)
-	n.HandleFunc("/link/delete",     NetworkLinkDelete)
+	n.HandleFunc("/link/set", NetworkLinkSet)
+	n.HandleFunc("/link/add", NetworkLinkAdd)
+	n.HandleFunc("/link/delete", NetworkLinkDelete)
 	n.HandleFunc("/link/get/{link}", NetworkLinkGet)
-	n.HandleFunc("/link/get",        NetworkLinkGet)
+	n.HandleFunc("/link/get", NetworkLinkGet)
 
 	// Address
-	n.HandleFunc("/address/add",        NetworkAddAddress)
-	n.HandleFunc("/address/delete",     NetworkDeleteAddres)
-	n.HandleFunc("/address/get",        NetworkGetAddress)
+	n.HandleFunc("/address/add", NetworkAddAddress)
+	n.HandleFunc("/address/delete", NetworkDeleteAddres)
+	n.HandleFunc("/address/get", NetworkGetAddress)
 	n.HandleFunc("/address/get/{link}", NetworkGetAddress)
 
 	// Route
@@ -197,8 +198,8 @@ func RegisterRouterNetwork(router *mux.Router) {
 	// systemd-networkd
 	networkd.InitNetworkd()
 	n.HandleFunc("/networkd/network", NetworkdConfigureNetwork)
-	n.HandleFunc("/networkd/netdev",  NetworkdConfigureNetDev)
-	n.HandleFunc("/networkd/link",    NetworkdConfigureLink)
+	n.HandleFunc("/networkd/netdev", NetworkdConfigureNetDev)
+	n.HandleFunc("/networkd/link", NetworkdConfigureLink)
 
 	// ethtool
 	n.HandleFunc("/ethtool/{link}/{command}", NetworkConfigureEthtool)

@@ -3,21 +3,22 @@
 package router
 
 import (
-	"api-routerd/cmd/system/hostname"
 	"api-routerd/cmd/network"
 	"api-routerd/cmd/proc"
 	"api-routerd/cmd/share"
-	"api-routerd/cmd/systemd"
 	"api-routerd/cmd/system"
-	"crypto/tls"
+	"api-routerd/cmd/system/hostname"
+	"api-routerd/cmd/systemd"
 	"context"
-	"errors"
-	"github.com/gorilla/mux"
-	log "github.com/sirupsen/logrus"
+	"crypto/tls"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) error {
@@ -33,10 +34,10 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	system.RegisterRouterSystem(router)
 
 	// Authenticate users
-	amw, r := InitAuthMiddleware()
-	if r != nil {
-		log.Fatal("Faild to init auth DB existing")
-		return errors.New("Failed to init Auth DB")
+	amw, err := InitAuthMiddleware()
+	if err != nil {
+		log.Fatalf("Faild to init auth DB existing: %s", err)
+		return fmt.Errorf("Failed to init Auth DB: %s", err)
 	}
 
 	router.Use(amw.AuthMiddleware)
@@ -52,7 +53,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 
 		err := srv.Shutdown(context.Background())
 		if err != nil {
-			log.Errorf("Faild to shutdown server gracefuly: %s", err)
+			log.Errorf("Failed to shutdown server gracefuly: %s", err)
 		}
 
 		os.Exit(0)
@@ -78,7 +79,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	} else {
 		log.Info("Starting api-routerd in plain text mode")
 
-		log.Fatal(http.ListenAndServe(ip + ":" + port, router))
+		log.Fatal(http.ListenAndServe(ip+":"+port, router))
 	}
 
 	return nil

@@ -5,12 +5,13 @@ package main
 import (
 	"api-routerd/cmd/router"
 	"api-routerd/cmd/share"
-	log "github.com/sirupsen/logrus"
-	"github.com/go-ini/ini"
 	"flag"
-	"runtime"
 	"os"
 	"path"
+	"runtime"
+
+	"github.com/go-ini/ini"
+	log "github.com/sirupsen/logrus"
 )
 
 // App Version
@@ -18,8 +19,8 @@ const (
 	Version  = "0.1"
 	ConfPath = "/etc/api-routerd"
 	ConfFile = "api-routerd.conf"
-	TlsCert  = "tls/server.crt"
-	TlsKey   = "tls/server.key"
+	TLSCert  = "tls/server.crt"
+	TLSKey   = "tls/server.key"
 )
 
 var ipFlag string
@@ -27,8 +28,8 @@ var portFlag string
 
 func init() {
 	const (
-		defaultIP    = ""
-		defaultPort  = "8080"
+		defaultIP   = ""
+		defaultPort = "8080"
 	)
 
 	flag.StringVar(&ipFlag, "ip", defaultIP, "The server IP address.")
@@ -53,7 +54,7 @@ func InitConf() {
 	port := cfg.Section("Network").Key("Port").String()
 	_, err = share.ParsePort(port)
 	if err != nil {
-		log.Errorf("Failed to parse Conf file Port=%d", port)
+		log.Errorf("Failed to parse Conf file Port=%s", port)
 		return
 	}
 
@@ -71,9 +72,9 @@ func main() {
 	log.Infof("api-routerd: v%s (built %s)", Version, runtime.Version())
 	log.Infof("Start Server at %s:%s", ipFlag, portFlag)
 
-	err := router.StartRouter(ipFlag, portFlag, path.Join(ConfPath, TlsCert), path.Join(ConfPath, TlsKey))
+	err := router.StartRouter(ipFlag, portFlag, path.Join(ConfPath, TLSCert), path.Join(ConfPath, TLSKey))
 	if err != nil {
-		log.Fatal("Failed to init router: %s", err)
+		log.Fatalf("Failed to init router: %s", err)
 		os.Exit(1)
 	}
 }

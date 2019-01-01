@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 	"syscall"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"
 )
@@ -20,10 +21,10 @@ type Route struct {
 	OnLink  string `json:"onlink"`
 }
 
-func DecodeRouteJsonRequest(r *http.Request) (Route, error) {
+func DecodeRouteJSONRequest(r *http.Request) (Route, error) {
 	route := new(Route)
 
-	err := json.NewDecoder(r.Body).Decode(&route);
+	err := json.NewDecoder(r.Body).Decode(&route)
 	if err != nil {
 		return *route, nil
 	}
@@ -31,7 +32,7 @@ func DecodeRouteJsonRequest(r *http.Request) (Route, error) {
 	return *route, nil
 }
 
-func (route *Route) AddDefaultGateWay() (error) {
+func (route *Route) AddDefaultGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", err, route.Link)
@@ -71,7 +72,7 @@ func (route *Route) AddDefaultGateWay() (error) {
 	return nil
 }
 
-func (route *Route) ReplaceDefaultGateWay() (error) {
+func (route *Route) ReplaceDefaultGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
 		log.Errorf("Failed to find link %s: %s", err, route.Link)
@@ -111,8 +112,8 @@ func (route *Route) ReplaceDefaultGateWay() (error) {
 	return nil
 }
 
-func DeleteGateWay(r *http.Request) (error) {
-	route, err := DecodeRouteJsonRequest(r)
+func DeleteGateWay(r *http.Request) error {
+	route, err := DecodeRouteJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed to decode route JSON request %s", err)
 		return err
@@ -151,7 +152,7 @@ func DeleteGateWay(r *http.Request) (error) {
 	return nil
 }
 
-func GetRoutes(rw http.ResponseWriter, r *http.Request) (error) {
+func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
 	routes, err := netlink.RouteList(nil, 0)
 	if err != nil {
 		log.Errorf("Failed to get routes %s", err)
@@ -170,19 +171,19 @@ func GetRoutes(rw http.ResponseWriter, r *http.Request) (error) {
 	return nil
 }
 
-func ConfigureRoutes(r *http.Request) (error) {
-	route, err := DecodeRouteJsonRequest(r)
+func ConfigureRoutes(r *http.Request) error {
+	route, err := DecodeRouteJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed to decode route JSON request %s", err)
 		return err
 	}
 
-	 switch route.Action {
-	 case "add-default-gw":
-		 return route.AddDefaultGateWay()
-	 case "replace-default-gw":
-		 return  route.ReplaceDefaultGateWay()
-	 }
+	switch route.Action {
+	case "add-default-gw":
+		return route.AddDefaultGateWay()
+	case "replace-default-gw":
+		return route.ReplaceDefaultGateWay()
+	}
 
 	return nil
 }

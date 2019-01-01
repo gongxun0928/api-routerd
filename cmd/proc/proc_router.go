@@ -4,12 +4,13 @@ package proc
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type ProcInfo struct {
-	Path string `json:"path"`
+	Path     string `json:"path"`
 	Property string `json:"property"`
 }
 
@@ -77,7 +78,7 @@ func GetProcNetStat(rw http.ResponseWriter, r *http.Request) {
 
 func GetProcPidNetStat(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	protocol:= vars["protocol"]
+	protocol := vars["protocol"]
 	pid := vars["pid"]
 
 	switch r.Method {
@@ -171,7 +172,7 @@ func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 	var err error
 
 	vars := mux.Vars(r)
-	vm := ProcVM{Property: vars["path"]}
+	vm := VM{Property: vars["path"]}
 
 	switch r.Method {
 	case "GET":
@@ -181,7 +182,7 @@ func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 
 		v := new(ProcValue)
 
-		err = json.NewDecoder(r.Body).Decode(&v);
+		err = json.NewDecoder(r.Body).Decode(&v)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
@@ -199,11 +200,11 @@ func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 
 func ConfigureProcSysNet(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	proc := ProcSysNet{Path: vars["path"], Property: vars["conf"] , Link: vars["link"]}
+	proc := SysNet{Path: vars["path"], Property: vars["conf"], Link: vars["link"]}
 
 	switch r.Method {
 	case "GET":
-		err := proc.GetProcSysNet(rw)
+		err := proc.GetSysNet(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
@@ -211,14 +212,14 @@ func ConfigureProcSysNet(rw http.ResponseWriter, r *http.Request) {
 	case "PUT":
 
 		v := new(ProcValue)
-		err := json.NewDecoder(r.Body).Decode(&v);
+		err := json.NewDecoder(r.Body).Decode(&v)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		proc.Value = v.Value
-		err = proc.SetProcSysNet(rw)
+		err = proc.SetSysNet(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}

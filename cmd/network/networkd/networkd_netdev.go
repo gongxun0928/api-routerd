@@ -6,54 +6,55 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 // NetDev
 type NetDev struct {
-	Description         string `json:"Description,omitempty"`
-	MACAddress          string `json:"MACAddress,omitempty"`
-	MTUBytes            string `json:"MTUBytes,omitempty"`
-	Name                string `json:"Name,omitempty"`
-	Kind                string `json:"Kind,omitempty"`
+	Description string `json:"Description,omitempty"`
+	MACAddress  string `json:"MACAddress,omitempty"`
+	MTUBytes    string `json:"MTUBytes,omitempty"`
+	Name        string `json:"Name,omitempty"`
+	Kind        string `json:"Kind,omitempty"`
 
 	// Bond
-	Mode                string `json:"Mode,omitempty"`
-	TransmitHashPolicy  string `json:"TransmitHashPolicy,omitempty"`
+	Mode               string `json:"Mode,omitempty"`
+	TransmitHashPolicy string `json:"TransmitHashPolicy,omitempty"`
 
 	// Vlan
-	VlanId              string `json:"VlanId,omitempty"`
+	VlanId string `json:"VlanId,omitempty"`
 
 	//Bridge
-	HelloTimeSec        string `json:"HelloTimeSec,omitempty"`
-	ForwardDelaySec     string `json:"ForwardDelaySec,omitempty"`
-	AgeingTimeSec       string `json:"AgeingTimeSec,omitempty"`
+	HelloTimeSec    string `json:"HelloTimeSec,omitempty"`
+	ForwardDelaySec string `json:"ForwardDelaySec,omitempty"`
+	AgeingTimeSec   string `json:"AgeingTimeSec,omitempty"`
 
 	//Tunnel
-	Local               string `json:"Local,omitempty"`
-	Remote              string `json:"Remote,omitempty"`
-	TTL                 string `json:"TTL,omitempty"`
-	DiscoverPathMTU     string `json:"DiscoverPathMTU,omitempty"`
-	IPv6FlowLabel       string `json:"IPv6FlowLabel,omitempty"`
-	EncapsulationLimit  string `json:"EncapsulationLimit,omitempty"`
-	Key                 string `json:"Key,omitempty"`
-	Independent         string `json:"Independent,omitempty"`
+	Local              string `json:"Local,omitempty"`
+	Remote             string `json:"Remote,omitempty"`
+	TTL                string `json:"TTL,omitempty"`
+	DiscoverPathMTU    string `json:"DiscoverPathMTU,omitempty"`
+	IPv6FlowLabel      string `json:"IPv6FlowLabel,omitempty"`
+	EncapsulationLimit string `json:"EncapsulationLimit,omitempty"`
+	Key                string `json:"Key,omitempty"`
+	Independent        string `json:"Independent,omitempty"`
 
 	//VxLan
-	Id                  string `json:"Id,omitempty"`
-	TOS                 string `json:"TOS,omitempty"`
-	MacLearning         string `json:"MacLearning,omitempty"`
-	DestinationPort     string `json:"DestinationPort,omitempty"`
-	PortRange           string `json:"PortRange,omitempty"`
-	FlowLabel           string `json:"FlowLabel,omitempty"`
+	Id              string `json:"Id,omitempty"`
+	TOS             string `json:"TOS,omitempty"`
+	MacLearning     string `json:"MacLearning,omitempty"`
+	DestinationPort string `json:"DestinationPort,omitempty"`
+	PortRange       string `json:"PortRange,omitempty"`
+	FlowLabel       string `json:"FlowLabel,omitempty"`
 
 	//Veth
-	Peer               string `json:"Peer,omitempty"`
-	PeerMACAddress     string `json:"PeerMACAddress,omitempty"`
+	Peer           string `json:"Peer,omitempty"`
+	PeerMACAddress string `json:"PeerMACAddress,omitempty"`
 }
 
 func (netdev *NetDev) CreateNetDevSectionConfig() string {

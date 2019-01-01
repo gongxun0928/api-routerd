@@ -4,8 +4,9 @@ package systemd
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func RouterGetSystemdState(rw http.ResponseWriter, r *http.Request) {
@@ -88,7 +89,7 @@ func RouterConfigureUnit(rw http.ResponseWriter, r *http.Request) {
 	case "POST":
 		unit := new(Unit)
 
-		err = json.NewDecoder(r.Body).Decode(&unit);
+		err = json.NewDecoder(r.Body).Decode(&unit)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -127,7 +128,7 @@ func RouterGetAllSystemdUnits(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 
-		break;
+		break
 	}
 
 }
@@ -145,7 +146,7 @@ func RouterGetUnitStatus(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 
-		break;
+		break
 	}
 }
 
@@ -171,7 +172,7 @@ func RouterConfigureUnitProperty(rw http.ResponseWriter, r *http.Request) {
 	property := vars["property"]
 
 	u := new(Unit)
-	err := json.NewDecoder(r.Body).Decode(&u);
+	err := json.NewDecoder(r.Body).Decode(&u)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return

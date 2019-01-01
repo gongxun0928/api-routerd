@@ -4,8 +4,9 @@ package hostname
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func RouterGetHostname(rw http.ResponseWriter, r *http.Request) {
@@ -34,7 +35,7 @@ func RouterSetHostname(rw http.ResponseWriter, r *http.Request) {
 	case "PUT":
 
 		hostname := new(Hostname)
-		err := json.NewDecoder(r.Body).Decode(&hostname);
+		err := json.NewDecoder(r.Body).Decode(&hostname)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return

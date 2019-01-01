@@ -4,8 +4,8 @@ package share
 
 import (
 	"bufio"
-	"os"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -39,7 +39,7 @@ func ReadFullFile(path string) (lines []string, err error) {
 	return lines, nil
 }
 
-func WriteFullFile(path string, lines[] string) (error) {
+func WriteFullFile(path string, lines []string) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func ReadOneLineFile(path string) (string, error) {
 	return line, nil
 }
 
-func WriteOneLineFile(path string, line string) (error) {
+func WriteOneLineFile(path string, line string) error {
 	file, err := os.Create(path)
 	if err != nil {
 		return err
@@ -86,7 +86,7 @@ func WriteOneLineFile(path string, line string) (error) {
 	return w.Flush()
 }
 
-func CreateDirectory(directoryPath string, perm os.FileMode) (error) {
+func CreateDirectory(directoryPath string, perm os.FileMode) error {
 	if !PathExists(directoryPath) {
 		err := os.Mkdir(directoryPath, perm)
 		if err != nil {
@@ -97,7 +97,7 @@ func CreateDirectory(directoryPath string, perm os.FileMode) (error) {
 	return nil
 }
 
-func CreateDirectoryNested(directoryPath string, perm os.FileMode) (error) {
+func CreateDirectoryNested(directoryPath string, perm os.FileMode) error {
 	if !PathExists(directoryPath) {
 		err := os.MkdirAll(directoryPath, perm)
 		if err != nil {

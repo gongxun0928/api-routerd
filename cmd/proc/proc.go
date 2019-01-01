@@ -6,16 +6,17 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/net"
-	"github.com/shirou/gopsutil/mem"
-	"github.com/shirou/gopsutil/process"
-	"github.com/shirou/gopsutil/load"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/host"
+	"github.com/shirou/gopsutil/load"
+	"github.com/shirou/gopsutil/mem"
+	"github.com/shirou/gopsutil/net"
+	"github.com/shirou/gopsutil/process"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -34,14 +35,14 @@ type NetArp struct {
 }
 
 type Modules struct {
-	Module      string `json:"module"`
-	MemorySize  string `json:"memory_size"`
-	Instances   string `json:"instances"`
-	Dependent   string `json:"dependent"`
-	State       string `json:"state"`
+	Module     string `json:"module"`
+	MemorySize string `json:"memory_size"`
+	Instances  string `json:"instances"`
+	Dependent  string `json:"dependent"`
+	State      string `json:"state"`
 }
 
-func GetVersion(rw http.ResponseWriter) (error) {
+func GetVersion(rw http.ResponseWriter) error {
 	infostat, err := host.Info()
 	if err != nil {
 		return err
@@ -58,7 +59,7 @@ func GetVersion(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetUserStat(rw http.ResponseWriter) (error) {
+func GetUserStat(rw http.ResponseWriter) error {
 	userstat, err := host.Users()
 	if err != nil {
 		return err
@@ -75,7 +76,7 @@ func GetUserStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetTemperatureStat(rw http.ResponseWriter) (error) {
+func GetTemperatureStat(rw http.ResponseWriter) error {
 	tempstat, err := host.SensorsTemperatures()
 	if err != nil {
 		return err
@@ -92,7 +93,7 @@ func GetTemperatureStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetNetStat(rw http.ResponseWriter, protocol string) (error) {
+func GetNetStat(rw http.ResponseWriter, protocol string) error {
 	conn, err := net.Connections(protocol)
 	if err != nil {
 		return err
@@ -109,9 +110,9 @@ func GetNetStat(rw http.ResponseWriter, protocol string) (error) {
 	return nil
 }
 
-func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) (error) {
+func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) error {
 	pid, err := strconv.ParseInt(process, 10, 32)
-	if err != nil ||  protocol == "" || pid == 0 {
+	if err != nil || protocol == "" || pid == 0 {
 		return errors.New("Can't parse request")
 	}
 
@@ -131,8 +132,8 @@ func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) (err
 	return nil
 }
 
-func GetProtoCountersStat(rw http.ResponseWriter) (error) {
-	protocols := [] string{"ip", "icmp", "icmpmsg", "tcp", "udp", "udplite"}
+func GetProtoCountersStat(rw http.ResponseWriter) error {
+	protocols := []string{"ip", "icmp", "icmpmsg", "tcp", "udp", "udplite"}
 
 	proto, err := net.ProtoCounters(protocols)
 	if err != nil {
@@ -150,7 +151,7 @@ func GetProtoCountersStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetNetDev(rw http.ResponseWriter) (error) {
+func GetNetDev(rw http.ResponseWriter) error {
 	netdev, err := net.IOCounters(true)
 	if err != nil {
 		return err
@@ -167,7 +168,7 @@ func GetNetDev(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetInterfaceStat(rw http.ResponseWriter) (error) {
+func GetInterfaceStat(rw http.ResponseWriter) error {
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		return err
@@ -184,7 +185,7 @@ func GetInterfaceStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetSwapMemoryStat(rw http.ResponseWriter) (error) {
+func GetSwapMemoryStat(rw http.ResponseWriter) error {
 	swap, err := mem.SwapMemory()
 	if err != nil {
 		return err
@@ -201,7 +202,7 @@ func GetSwapMemoryStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetVirtualMemoryStat(rw http.ResponseWriter) (error) {
+func GetVirtualMemoryStat(rw http.ResponseWriter) error {
 	virt, err := mem.VirtualMemory()
 	if err != nil {
 		return err
@@ -218,7 +219,7 @@ func GetVirtualMemoryStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetCPUInfo(rw http.ResponseWriter) (error) {
+func GetCPUInfo(rw http.ResponseWriter) error {
 	cpus, err := cpu.Info()
 	if err != nil {
 		return err
@@ -235,7 +236,7 @@ func GetCPUInfo(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetCPUTimeStat(rw http.ResponseWriter) (error) {
+func GetCPUTimeStat(rw http.ResponseWriter) error {
 	cpus, err := cpu.Times(true)
 	if err != nil {
 		return err
@@ -252,7 +253,7 @@ func GetCPUTimeStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetAvgStat(rw http.ResponseWriter) (error) {
+func GetAvgStat(rw http.ResponseWriter) error {
 	avgstat, r := load.Avg()
 	if r != nil {
 		return r
@@ -269,10 +270,10 @@ func GetAvgStat(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetMisc(rw http.ResponseWriter) (error) {
+func GetMisc(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(ProcMiscPath)
 	if err != nil {
-		log.Fatal("Failed to read: %s", ProcMiscPath)
+		log.Fatalf("Failed to read: %s", ProcMiscPath)
 		return errors.New("Failed to read misc")
 	}
 
@@ -298,10 +299,10 @@ func GetMisc(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetNetArp(rw http.ResponseWriter) (error) {
+func GetNetArp(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(ProcNetArpPath)
 	if err != nil {
-		log.Fatal("Failed to read: %s", ProcNetArpPath)
+		log.Fatalf("Failed to read: %s", ProcNetArpPath)
 		return errors.New("Failed to read /proc/net/arp")
 	}
 
@@ -334,10 +335,11 @@ func GetNetArp(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetModules(rw http.ResponseWriter) (error) {
+// GetModules Get all installed modules
+func GetModules(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(ProcModulesPath)
 	if err != nil {
-		log.Fatal("Failed to read: %s", ProcModulesPath)
+		log.Fatalf("Failed to read: %s", ProcModulesPath)
 		return errors.New("Failed to read /proc/modules")
 	}
 
@@ -381,7 +383,7 @@ func GetModules(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func GetProcessInfo(rw http.ResponseWriter, proc string, property string) (error) {
+func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error {
 	var j []byte
 
 	pid, err := strconv.ParseInt(proc, 10, 32)

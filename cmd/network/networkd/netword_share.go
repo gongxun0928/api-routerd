@@ -4,6 +4,7 @@ package networkd
 
 import (
 	"api-routerd/cmd/share"
+
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,7 +20,7 @@ type Match struct {
 
 func InitNetworkd() (err error) {
 	r := share.CreateDirectory(NetworkdUnitPath, 0777)
-	if (r != nil) {
+	if r != nil {
 		log.Errorf("Failed create network unit path %s: %s", NetworkdUnitPath, r)
 		return r
 	}

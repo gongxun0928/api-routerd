@@ -5,9 +5,10 @@ package router
 import (
 	"api-routerd/cmd/share"
 	"errors"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -33,7 +34,7 @@ func (db *TokenDB) AuthMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func InitAuthMiddleware()(TokenDB, error) {
+func InitAuthMiddleware() (TokenDB, error) {
 	db := TokenDB{make(map[string]string)}
 
 	lines, r := share.ReadFullFile(AuthConfPath)

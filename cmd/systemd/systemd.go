@@ -23,12 +23,12 @@ type Unit struct {
 
 type Property struct {
 	Property string `json:"property"`
-	Value string `json:"value"`
+	Value string    `json:"value"`
 }
 
 type UnitStatus struct {
 	Status string `json:"property"`
-	Unit string `json:"unit"`
+	Unit string   `json:"unit"`
 }
 
 func SystemdProperty(property string) (string, error) {

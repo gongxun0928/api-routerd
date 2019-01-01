@@ -5,12 +5,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/go-ini/ini"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/go-ini/ini"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -25,7 +26,7 @@ type TimeSyncConfig struct {
 	PollIntervalMaxSec string   `json:"PollIntervalMaxSec"`
 }
 
-func (t *TimeSyncConfig) WriteTimeSyncConf() (error) {
+func (t *TimeSyncConfig) WriteTimeSyncConf() error {
 	f, err := os.OpenFile(TimeSyncdConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
@@ -44,20 +45,20 @@ func (t *TimeSyncConfig) WriteTimeSyncConf() (error) {
 
 	FallbackNTP := "FallbackNTP="
 	for _, s := range t.FallbackNTP {
-		FallbackNTP +=  s + " "
+		FallbackNTP += s + " "
 	}
 	conf += FallbackNTP + "\n"
 
 	if t.RootDistanceMaxSec != "" {
-		 conf += "RootDistanceMaxSec=" + t.RootDistanceMaxSec + "\n"
+		conf += "RootDistanceMaxSec=" + t.RootDistanceMaxSec + "\n"
 	}
 
 	if t.PollIntervalMinSec != "" {
-		 conf += "PollIntervalMinSec=" + t.PollIntervalMinSec + "\n"
+		conf += "PollIntervalMinSec=" + t.PollIntervalMinSec + "\n"
 	}
 
 	if t.PollIntervalMaxSec != "" {
-		 conf += "PollIntervalMaxSec=" + t.PollIntervalMaxSec + "\n"
+		conf += "PollIntervalMaxSec=" + t.PollIntervalMaxSec + "\n"
 	}
 
 	fmt.Fprintln(w, conf)
@@ -84,7 +85,7 @@ func ReadTimeSyncConf() (*TimeSyncConfig, error) {
 	return conf, nil
 }
 
-func GetTimeSyncConf(rw http.ResponseWriter) (error) {
+func GetTimeSyncConf(rw http.ResponseWriter) error {
 	conf, err := ReadTimeSyncConf()
 	if err != nil {
 		return err
@@ -101,9 +102,9 @@ func GetTimeSyncConf(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) (error) {
+func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
-		NTP: []string{""},
+		NTP:         []string{""},
 		FallbackNTP: []string{""},
 	}
 
@@ -142,15 +143,15 @@ func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) (error) {
 	}
 
 	if t.RootDistanceMaxSec != "" {
-		 conf.RootDistanceMaxSec = t.RootDistanceMaxSec
+		conf.RootDistanceMaxSec = t.RootDistanceMaxSec
 	}
 
 	if t.PollIntervalMinSec != "" {
-		 conf.PollIntervalMinSec = t.PollIntervalMinSec
+		conf.PollIntervalMinSec = t.PollIntervalMinSec
 	}
 
-	if t.PollIntervalMaxSec  != "" {
-		 conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
+	if t.PollIntervalMaxSec != "" {
+		conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
 	}
 
 	err = conf.WriteTimeSyncConf()
@@ -170,9 +171,9 @@ func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) (error) {
 	return nil
 }
 
-func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) (error) {
+func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
-		NTP: []string{""},
+		NTP:         []string{""},
 		FallbackNTP: []string{""},
 	}
 
@@ -211,17 +212,16 @@ func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) (error) {
 		conf.FallbackNTP, _ = share.StringDeleteSlice(conf.FallbackNTP, s)
 	}
 
-
 	if t.RootDistanceMaxSec != "" {
-		 conf.RootDistanceMaxSec = t.RootDistanceMaxSec
+		conf.RootDistanceMaxSec = t.RootDistanceMaxSec
 	}
 
 	if t.PollIntervalMinSec != "" {
-		 conf.PollIntervalMinSec = t.PollIntervalMinSec
+		conf.PollIntervalMinSec = t.PollIntervalMinSec
 	}
 
-	if t.PollIntervalMaxSec  != "" {
-		 conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
+	if t.PollIntervalMaxSec != "" {
+		conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
 	}
 
 	err = conf.WriteTimeSyncConf()

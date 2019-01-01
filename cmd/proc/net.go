@@ -17,14 +17,14 @@ const (
 	SysNetPathIPv6 = "ipv6"
 )
 
-type ProcSysNet struct {
-	Path string     `json:"path"`
+type SysNet struct {
+	Path     string `json:"path"`
 	Property string `json:"property"`
-	Value string    `json:"value"`
-	Link string     `json:"link"`
+	Value    string `json:"value"`
+	Link     string `json:"link"`
 }
 
-func (req *ProcSysNet) GetProcSysNetPath() (string, error) {
+func (req *SysNet) GetSysNetPath() (string, error) {
 	var procPath string
 
 	switch req.Path {
@@ -33,7 +33,7 @@ func (req *ProcSysNet) GetProcSysNetPath() (string, error) {
 		break
 	case SysNetPathIPv4:
 
-		if (req.Link != "") {
+		if req.Link != "" {
 			procPath = path.Join(path.Join(path.Join(path.Join(SysNetPath, SysNetPathIPv4), "conf"), req.Link), req.Property)
 		} else {
 			procPath = path.Join(path.Join(SysNetPath, SysNetPathIPv4), req.Property)
@@ -41,7 +41,7 @@ func (req *ProcSysNet) GetProcSysNetPath() (string, error) {
 		break
 	case SysNetPathIPv6:
 
-		if (req.Link != "") {
+		if req.Link != "" {
 			procPath = path.Join(path.Join(path.Join(path.Join(SysNetPath, SysNetPathIPv6), "conf"), req.Link), req.Property)
 		} else {
 			procPath = path.Join(path.Join(SysNetPath, SysNetPathIPv6), req.Property)
@@ -54,8 +54,8 @@ func (req *ProcSysNet) GetProcSysNetPath() (string, error) {
 	return procPath, nil
 }
 
-func (req *ProcSysNet) GetProcSysNet(rw http.ResponseWriter) (error) {
-	path, err := req.GetProcSysNetPath()
+func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
+	path, err := req.GetSysNetPath()
 	if err != nil {
 		return err
 	}
@@ -65,14 +65,14 @@ func (req *ProcSysNet) GetProcSysNet(rw http.ResponseWriter) (error) {
 		return err
 	}
 
-	property := ProcSysNet {Path: req.Path, Property: req.Property, Value: line, Link: req.Link}
+	property := SysNet{Path: req.Path, Property: req.Property, Value: line, Link: req.Link}
 	json.NewEncoder(rw).Encode(property)
 
 	return nil
 }
 
-func (req *ProcSysNet) SetProcSysNet(rw http.ResponseWriter) (error) {
-	path, err := req.GetProcSysNetPath()
+func (req *SysNet) SetSysNet(rw http.ResponseWriter) error {
+	path, err := req.GetSysNetPath()
 	if err != nil {
 		return err
 	}

@@ -6,38 +6,39 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Link struct {
-	ConfFile                   string      `json:ConfFile",omitempty"`
-	Match                      interface{} `json:Match",omitempty"`
+	ConfFile string      `json:ConfFile",omitempty"`
+	Match    interface{} `json:Match",omitempty"`
 
-	Description                string      `json:"Description,omitempty"`
-	Alias                      string      `json:"Alias,omitempty"`
-	MACAddressPolicy           string      `json:"MACAddressPolicy,omitempty"`
-	MACAddress                 string      `json:"MACAddress,omitempty"`
-	NamePolicy                 string      `json:"NamePolicy,omitempty"`
-	Name                       string      `json:"Name,omitempty"`
-	MTUBytes                   string      `json:"MTUBytes,omitempty"`
-	BitsPerSecond              string      `json:"BitsPerSecond,omitempty"`
-	Duplex                     string      `json:"Duplex,omitempty"`
-	AutoNegotiation            string      `json:"AutoNegotiation,omitempty"`
-	WakeOnLan                  string      `json:"WakeOnLan,omitempty"`
-	Port                       string      `json:"Port,omitempty"`
-	TCPSegmentationOffload     string      `json:"TCPSegmentationOffload,omitempty"`
-	TCP6SegmentationOffload    string      `json:"TCP6SegmentationOffload,omitempty"`
-	GenericSegmentationOffload string      `json:"GenericSegmentationOffload,omitempty"`
-	GenericReceiveOffload      string      `json:"GenericReceiveOffload,omitempty"`
-	LargeReceiveOffload        string      `json:"LargeReceiveOffload,omitempty"`
-	RxChannels                 string      `json:"RxChannels,omitempty"`
-	TxChannels                 string      `json:"TxChannels,omitempty"`
-	OtherChannels              string      `json:"OtherChannels,omitempty"`
-	CombinedChannels           string      `json:"CombinedChannels,omitempty"`
+	Description                string `json:"Description,omitempty"`
+	Alias                      string `json:"Alias,omitempty"`
+	MACAddressPolicy           string `json:"MACAddressPolicy,omitempty"`
+	MACAddress                 string `json:"MACAddress,omitempty"`
+	NamePolicy                 string `json:"NamePolicy,omitempty"`
+	Name                       string `json:"Name,omitempty"`
+	MTUBytes                   string `json:"MTUBytes,omitempty"`
+	BitsPerSecond              string `json:"BitsPerSecond,omitempty"`
+	Duplex                     string `json:"Duplex,omitempty"`
+	AutoNegotiation            string `json:"AutoNegotiation,omitempty"`
+	WakeOnLan                  string `json:"WakeOnLan,omitempty"`
+	Port                       string `json:"Port,omitempty"`
+	TCPSegmentationOffload     string `json:"TCPSegmentationOffload,omitempty"`
+	TCP6SegmentationOffload    string `json:"TCP6SegmentationOffload,omitempty"`
+	GenericSegmentationOffload string `json:"GenericSegmentationOffload,omitempty"`
+	GenericReceiveOffload      string `json:"GenericReceiveOffload,omitempty"`
+	LargeReceiveOffload        string `json:"LargeReceiveOffload,omitempty"`
+	RxChannels                 string `json:"RxChannels,omitempty"`
+	TxChannels                 string `json:"TxChannels,omitempty"`
+	OtherChannels              string `json:"OtherChannels,omitempty"`
+	CombinedChannels           string `json:"CombinedChannels,omitempty"`
 }
 
 func (link *Link) CreateLinkMatchSectionConfig() string {
@@ -61,7 +62,6 @@ func (link *Link) CreateLinkMatchSectionConfig() string {
 			if b.(map[string]interface{})["Name"] != nil {
 				name = strings.TrimSpace(b.(map[string]interface{})["Name"].(string))
 			}
-
 
 			if mac != "" {
 				mac := fmt.Sprintf("MACAddress=%s\n", mac)

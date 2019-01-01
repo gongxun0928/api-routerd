@@ -5,9 +5,10 @@ package netlink
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"
-	"strings"
 )
 
 type Address struct {
@@ -17,10 +18,10 @@ type Address struct {
 	Label   string `json:"label"`
 }
 
-func DecodeAddressJsonRequest(r *http.Request) (Address, error) {
+func DecodeAddressJSONRequest(r *http.Request) (Address, error) {
 	address := new(Address)
 
-	err := json.NewDecoder(r.Body).Decode(&address);
+	err := json.NewDecoder(r.Body).Decode(&address)
 	if err != nil {
 		return *address, err
 	}
@@ -28,8 +29,8 @@ func DecodeAddressJsonRequest(r *http.Request) (Address, error) {
 	return *address, nil
 }
 
-func AddAddress(r *http.Request) (error) {
-	address, err := DecodeAddressJsonRequest(r)
+func AddAddress(r *http.Request) error {
+	address, err := DecodeAddressJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed decode Address Json request: %s", err)
 		return err
@@ -56,8 +57,8 @@ func AddAddress(r *http.Request) (error) {
 	return nil
 }
 
-func DelAddress(r *http.Request) (error) {
-	address, err := DecodeAddressJsonRequest(r)
+func DelAddress(r *http.Request) error {
+	address, err := DecodeAddressJSONRequest(r)
 	if err != nil {
 		log.Errorf("Failed decode Address Json request: %s", err)
 		return err
@@ -77,14 +78,14 @@ func DelAddress(r *http.Request) (error) {
 
 	err = netlink.AddrDel(link, addr)
 	if err != nil {
-		log.Errorf("Failed to add address %s: %s", err, addr, link)
+		log.Errorf("Failed to add address %s: %s, %s", err, addr, link)
 		return err
 	}
 
 	return nil
 }
 
-func GetAddress(rw http.ResponseWriter, link string) (error) {
+func GetAddress(rw http.ResponseWriter, link string) error {
 	l := strings.TrimSpace(link)
 	if l != "" {
 		link, err := netlink.LinkByName(l)
