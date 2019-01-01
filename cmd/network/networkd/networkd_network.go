@@ -6,54 +6,55 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Address struct {
-	Address string `json:Address",omitempty"`
-	Peer    string `json:Peer",omitempty"`
-	Label   string `json:Label",omitempty"`
-	Scope   string `json:Scope",omitempty"`
+	Address string `json:"Address"`
+	Peer    string `json:"Peer"`
+	Label   string `json:"Label"`
+	Scope   string `json:"Scope"`
 }
 
 type Route struct {
-	Gateway         string `json:Gateway",omitempty"`
-	GatewayOnlink   string `json:GatewayOnlink",omitempty"`
-	Destination     string `json:Destination",omitempty"`
-	Source          string `json:Source",omitempty"`
-	PreferredSource string `json:PreferredSource",omitempty"`
-	Table           string `json:Table",omitempty"`
+	Gateway         string `json:"Gateway"`
+	GatewayOnlink   string `json:"GatewayOnlink"`
+	Destination     string `json:"Destination"`
+	Source          string `json:"Source"`
+	PreferredSource string `json:"PreferredSource"`
+	Table           string `json:"Table"`
 }
 
 type Network struct {
-	ConfFile            string     `json:ConfFile",omitempty"`
+	ConfFile string `json:"ConfFile"`
 
-	Match               interface{} `json:Match",omitempty"`
-	Addresses           interface{} `json:Addresses",omitempty"`
-	Routes              interface{} `json:Routes",omitempty"`
+	Match     interface{} `json:"Match"`
+	Addresses interface{} `json:"Addresses"`
+	Routes    interface{} `json:"Routes"`
 
-	Gateway             string `json:Gateway",omitempty"`
-	DHCP                string `json:DHCP",omitempty"`
-	DNS                 string `json:DNS",omitempty"`
-	Domains             string `json:Domains",omitempty"`
-	NTP                 string `json:NTP",omitempty"`
-	IPv6AcceptRA        string `json:IPv6AcceptRA",omitempty"`
-	LinkLocalAddressing string `json:LinkLocalAddressing",omitempty"`
-	LLDP                string `json:LLDP",omitempty"`
-	EmitLLDP            string `json:EmitLLDP",omitempty"`
+	Gateway             string `json:"Gateway"`
+	DHCP                string `json:"DHCP"`
+	DNS                 string `json:"DNS"`
+	Domains             string `json:"Domains"`
+	NTP                 string `json:"NTP"`
+	IPv6AcceptRA        string `json:"IPv6AcceptRA"`
+	LinkLocalAddressing string `json:"LinkLocalAddressing"`
+	LLDP                string `json:"LLDP"`
+	EmitLLDP            string `json:"EmitLLDP"`
 
-	Bridge              string`json:Bridge",omitempty"`
-	Bond                string`json:Bond",omitempty"`
-	VRF                 string`json:VRF",omitempty"`
-	VLAN                string`json:VLAN",omitempty"`
-	MACVLAN             string`json:MACVLAN",omitempty"`
-	VXLAN               string`json:VXLAN",omitempty"`
-	Tunnel              string`json:Tunnel",omitempty"`
+	Bridge  string `json:"Bridge"`
+	Bond    string `json:"Bond"`
+	VRF     string `json:"VRF"`
+	VLAN    string `json:"VLAN"`
+	MACVLAN string `json:"MACVLAN"`
+	VXLAN   string `json:"VXLAN"`
+	Tunnel  string `json:"Tunnel"`
 }
 
 func (network *Network) CreateNetworkMatchSectionConfig() string {
@@ -77,7 +78,6 @@ func (network *Network) CreateNetworkMatchSectionConfig() string {
 			if b.(map[string]interface{})["Name"] != nil {
 				name = strings.TrimSpace(b.(map[string]interface{})["Name"].(string))
 			}
-
 
 			if mac != "" {
 				mac := fmt.Sprintf("MACAddress=%s\n", mac)
@@ -403,7 +403,7 @@ func (network *Network) CreateNetworkSectionConfig() string {
 	return conf
 }
 
-func NetworkdParseJsonFromHttpReq(req *http.Request) error {
+func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
 	var configs map[string]interface{}
 
 	body, err := ioutil.ReadAll(req.Body)
@@ -433,5 +433,5 @@ func NetworkdParseJsonFromHttpReq(req *http.Request) error {
 }
 
 func ConfigureNetworkFile(rw http.ResponseWriter, req *http.Request) {
-	NetworkdParseJsonFromHttpReq(req)
+	NetworkdParseJSONfromHTTPReq(req)
 }

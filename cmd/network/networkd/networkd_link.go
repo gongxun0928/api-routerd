@@ -15,30 +15,30 @@ import (
 )
 
 type Link struct {
-	ConfFile string      `json:ConfFile",omitempty"`
-	Match    interface{} `json:Match",omitempty"`
+	ConfFile string      `json:"ConfFile"`
+	Match    interface{} `json:"Match"`
 
-	Description                string `json:"Description,omitempty"`
-	Alias                      string `json:"Alias,omitempty"`
-	MACAddressPolicy           string `json:"MACAddressPolicy,omitempty"`
-	MACAddress                 string `json:"MACAddress,omitempty"`
-	NamePolicy                 string `json:"NamePolicy,omitempty"`
-	Name                       string `json:"Name,omitempty"`
-	MTUBytes                   string `json:"MTUBytes,omitempty"`
-	BitsPerSecond              string `json:"BitsPerSecond,omitempty"`
-	Duplex                     string `json:"Duplex,omitempty"`
-	AutoNegotiation            string `json:"AutoNegotiation,omitempty"`
-	WakeOnLan                  string `json:"WakeOnLan,omitempty"`
-	Port                       string `json:"Port,omitempty"`
-	TCPSegmentationOffload     string `json:"TCPSegmentationOffload,omitempty"`
-	TCP6SegmentationOffload    string `json:"TCP6SegmentationOffload,omitempty"`
-	GenericSegmentationOffload string `json:"GenericSegmentationOffload,omitempty"`
-	GenericReceiveOffload      string `json:"GenericReceiveOffload,omitempty"`
-	LargeReceiveOffload        string `json:"LargeReceiveOffload,omitempty"`
-	RxChannels                 string `json:"RxChannels,omitempty"`
-	TxChannels                 string `json:"TxChannels,omitempty"`
-	OtherChannels              string `json:"OtherChannels,omitempty"`
-	CombinedChannels           string `json:"CombinedChannels,omitempty"`
+	Description                string `json:"Description"`
+	Alias                      string `json:"Alias"`
+	MACAddressPolicy           string `json:"MACAddressPolicy"`
+	MACAddress                 string `json:"MACAddress"`
+	NamePolicy                 string `json:"NamePolicy"`
+	Name                       string `json:"Name"`
+	MTUBytes                   string `json:"MTUBytes"`
+	BitsPerSecond              string `json:"BitsPerSecond"`
+	Duplex                     string `json:"Duplex"`
+	AutoNegotiation            string `json:"AutoNegotiation"`
+	WakeOnLan                  string `json:"WakeOnLan"`
+	Port                       string `json:"Port"`
+	TCPSegmentationOffload     string `json:"TCPSegmentationOffload"`
+	TCP6SegmentationOffload    string `json:"TCP6SegmentationOffload"`
+	GenericSegmentationOffload string `json:"GenericSegmentationOffload"`
+	GenericReceiveOffload      string `json:"GenericReceiveOffload"`
+	LargeReceiveOffload        string `json:"LargeReceiveOffload"`
+	RxChannels                 string `json:"RxChannels"`
+	TxChannels                 string `json:"TxChannels"`
+	OtherChannels              string `json:"OtherChannels"`
+	CombinedChannels           string `json:"CombinedChannels"`
 }
 
 func (link *Link) CreateLinkMatchSectionConfig() string {
@@ -179,7 +179,7 @@ func (link *Link) CreateLinkSectionConfig() string {
 	return conf
 }
 
-func LinkParseJsonFromHttpReq(req *http.Request) error {
+func LinkParseJSONFromHTTPReq(req *http.Request) error {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Errorf("Failed to parse HTTP request: %s ", err)
@@ -203,5 +203,5 @@ func LinkParseJsonFromHttpReq(req *http.Request) error {
 }
 
 func ConfigureLinkFile(rw http.ResponseWriter, req *http.Request) {
-	LinkParseJsonFromHttpReq(req)
+	LinkParseJSONFromHTTPReq(req)
 }

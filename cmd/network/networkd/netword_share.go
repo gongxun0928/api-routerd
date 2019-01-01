@@ -13,16 +13,16 @@ const (
 )
 
 type Match struct {
-	MAC    string `json:MAC",omitempty"`
-	Driver string `json:Driver",omitempty"`
-	Name   string `json:Name",omitempty"`
+	MAC    string `json:"MAC"`
+	Driver string `json:"Driver"`
+	Name   string `json:"Name"`
 }
 
-func InitNetworkd() (err error) {
-	r := share.CreateDirectory(NetworkdUnitPath, 0777)
-	if r != nil {
-		log.Errorf("Failed create network unit path %s: %s", NetworkdUnitPath, r)
-		return r
+func InitNetworkd() error {
+	err := share.CreateDirectory(NetworkdUnitPath, 0777)
+	if err != nil {
+		log.Errorf("Failed create network unit path %s: %s", NetworkdUnitPath, err)
+		return err
 	}
 
 	return nil

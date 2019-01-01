@@ -16,45 +16,45 @@ import (
 
 // NetDev
 type NetDev struct {
-	Description string `json:"Description,omitempty"`
-	MACAddress  string `json:"MACAddress,omitempty"`
-	MTUBytes    string `json:"MTUBytes,omitempty"`
-	Name        string `json:"Name,omitempty"`
-	Kind        string `json:"Kind,omitempty"`
+	Description string `json:"Description"`
+	MACAddress  string `json:"MACAddress"`
+	MTUBytes    string `json:"MTUBytes"`
+	Name        string `json:"Name"`
+	Kind        string `json:"Kind"`
 
 	// Bond
-	Mode               string `json:"Mode,omitempty"`
-	TransmitHashPolicy string `json:"TransmitHashPolicy,omitempty"`
+	Mode               string `json:"Mode"`
+	TransmitHashPolicy string `json:"TransmitHashPolicy"`
 
 	// Vlan
-	VlanId string `json:"VlanId,omitempty"`
+	VlanID string `json:"VlanId"`
 
 	//Bridge
-	HelloTimeSec    string `json:"HelloTimeSec,omitempty"`
-	ForwardDelaySec string `json:"ForwardDelaySec,omitempty"`
-	AgeingTimeSec   string `json:"AgeingTimeSec,omitempty"`
+	HelloTimeSec    string `json:"HelloTimeSec"`
+	ForwardDelaySec string `json:"ForwardDelaySec"`
+	AgeingTimeSec   string `json:"AgeingTimeSec"`
 
 	//Tunnel
-	Local              string `json:"Local,omitempty"`
-	Remote             string `json:"Remote,omitempty"`
-	TTL                string `json:"TTL,omitempty"`
-	DiscoverPathMTU    string `json:"DiscoverPathMTU,omitempty"`
-	IPv6FlowLabel      string `json:"IPv6FlowLabel,omitempty"`
-	EncapsulationLimit string `json:"EncapsulationLimit,omitempty"`
-	Key                string `json:"Key,omitempty"`
-	Independent        string `json:"Independent,omitempty"`
+	Local              string `json:"Local"`
+	Remote             string `json:"Remote"`
+	TTL                string `json:"TTL"`
+	DiscoverPathMTU    string `json:"DiscoverPathMTU"`
+	IPv6FlowLabel      string `json:"IPv6FlowLabel"`
+	EncapsulationLimit string `json:"EncapsulationLimit"`
+	Key                string `json:"Key"`
+	Independent        string `json:"Independent"`
 
 	//VxLan
-	Id              string `json:"Id,omitempty"`
-	TOS             string `json:"TOS,omitempty"`
-	MacLearning     string `json:"MacLearning,omitempty"`
-	DestinationPort string `json:"DestinationPort,omitempty"`
-	PortRange       string `json:"PortRange,omitempty"`
-	FlowLabel       string `json:"FlowLabel,omitempty"`
+	ID              string `json:"Id"`
+	TOS             string `json:"TOS"`
+	MacLearning     string `json:"MacLearning"`
+	DestinationPort string `json:"DestinationPort"`
+	PortRange       string `json:"PortRange"`
+	FlowLabel       string `json:"FlowLabel"`
 
 	//Veth
-	Peer           string `json:"Peer,omitempty"`
-	PeerMACAddress string `json:"PeerMACAddress,omitempty"`
+	Peer           string `json:"Peer"`
+	PeerMACAddress string `json:"PeerMACAddress"`
 }
 
 func (netdev *NetDev) CreateNetDevSectionConfig() string {
@@ -99,8 +99,8 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 		conf += "\n[VLAN]\n"
 
-		if netdev.VlanId != "" {
-			conf += "Id=" + strings.TrimSpace(netdev.VlanId) + "\n"
+		if netdev.VlanID != "" {
+			conf += "Id=" + strings.TrimSpace(netdev.VlanID) + "\n"
 		}
 
 		break
@@ -204,8 +204,8 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 		conf += "\n[VXLAN]\n"
 
-		if netdev.Id != "" {
-			conf += "Id=" + strings.TrimSpace(netdev.Id) + "\n"
+		if netdev.ID != "" {
+			conf += "Id=" + strings.TrimSpace(netdev.ID) + "\n"
 		}
 
 		if netdev.Local != "" {
@@ -244,7 +244,7 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	return conf
 }
 
-func NetdevdParseJsonFromHttpReq(req *http.Request) error {
+func NetdevdParseJSONFromHTTPReq(req *http.Request) error {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Error("Failed to parse HTTP request: ", err)
@@ -269,5 +269,5 @@ func NetdevdParseJsonFromHttpReq(req *http.Request) error {
 }
 
 func ConfigureNetDevFile(rw http.ResponseWriter, req *http.Request) {
-	NetdevdParseJsonFromHttpReq(req)
+	NetdevdParseJSONFromHTTPReq(req)
 }
