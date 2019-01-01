@@ -3,8 +3,9 @@
 package system
 
 import (
+	"api-routerd/cmd/system/conf"
 	"api-routerd/cmd/system/journal"
-	resolv "api-routerd/cmd/system/resolve"
+	"api-routerd/cmd/system/resolv"
 	"api-routerd/cmd/system/systemdresolved"
 	"api-routerd/cmd/system/systemdtimesyncd"
 	"net/http"
@@ -117,6 +118,22 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func ReadSudoersConfig(rw http.ResponseWriter, req *http.Request) {
+	err := conf.GetSudoers(rw)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func ReadSSHConfig(rw http.ResponseWriter, req *http.Request) {
+	err := conf.SSHConfFileRead(rw)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func RegisterRouterSystem(router *mux.Router) {
 	n := router.PathPrefix("/system").Subrouter()
 
@@ -141,4 +158,8 @@ func RegisterRouterSystem(router *mux.Router) {
 	n.HandleFunc("/systemdtimesyncd/get", ConfigureSystemdTimeSyncd)
 	n.HandleFunc("/systemdtimesyncd/add", ConfigureSystemdTimeSyncd)
 	n.HandleFunc("/systemdtimesyncd/delete", ConfigureSystemdTimeSyncd)
+
+	// Generic system confs
+	n.HandleFunc("/conf/sudoers", ReadSudoersConfig)
+	n.HandleFunc("/conf/sshd", ReadSSHConfig)
 }
