@@ -18,13 +18,14 @@ func PathExists(path string) bool {
 	return true
 }
 
-func ReadFullFile(path string) (lines []string, err error) {
+func ReadFullFile(path string) ([]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
+	var lines []string
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())

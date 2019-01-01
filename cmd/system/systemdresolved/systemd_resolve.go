@@ -5,24 +5,25 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/go-ini/ini"
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/go-ini/ini"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
 	ResolvedConfPath = "/etc/systemd/resolved.conf"
 )
 
-type DnsConfig struct {
-	DNS          []string `json:"dns"`
-	FallbackDNS  []string `json:"fallback_dns"`
+type DNSConfig struct {
+	DNS         []string `json:"dns"`
+	FallbackDNS []string `json:"fallback_dns"`
 }
 
-func (d *DnsConfig) WriteResolveConfig() (error) {
+func (d *DNSConfig) WriteResolveConfig() error {
 	f, err := os.OpenFile(ResolvedConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
@@ -39,11 +40,11 @@ func (d *DnsConfig) WriteResolveConfig() (error) {
 	}
 	conf += dnsConf + "\n"
 
-	fallbackDns := "FallbackDNS="
+	fallbackDNS := "FallbackDNS="
 	for _, s := range d.FallbackDNS {
-		fallbackDns +=  s + " "
+		fallbackDNS += s + " "
 	}
-	conf += fallbackDns + "\n"
+	conf += fallbackDNS + "\n"
 
 	fmt.Fprintln(w, conf)
 	w.Flush()
@@ -51,25 +52,24 @@ func (d *DnsConfig) WriteResolveConfig() (error) {
 	return nil
 }
 
-func ReadResolveConf() (*DnsConfig, error) {
+func ReadResolveConf() (*DNSConfig, error) {
 	cfg, err := ini.Load(ResolvedConfPath)
 	if err != nil {
-		fmt.Errorf("Fail to read file %s: %v", err)
 		return nil, err
 	}
 
-	conf := new(DnsConfig)
+	conf := new(DNSConfig)
 
 	dns := cfg.Section("Resolve").Key("DNS").String()
-	fallbackDns := cfg.Section("Resolve").Key("FallbackDNS").String()
+	fallbackDNS := cfg.Section("Resolve").Key("FallbackDNS").String()
 
 	conf.DNS = strings.Fields(dns)
-	conf.FallbackDNS = strings.Fields(fallbackDns)
+	conf.FallbackDNS = strings.Fields(fallbackDNS)
 
 	return conf, nil
 }
 
-func GetResolveConf(rw http.ResponseWriter) (error) {
+func GetResolveConf(rw http.ResponseWriter) error {
 	conf, err := ReadResolveConf()
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func GetResolveConf(rw http.ResponseWriter) (error) {
 
 	j, err := json.Marshal(conf)
 	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", ResolvedConfPath, err)
+		log.Errorf("Failed to encode json for resolv: %s", err)
 		return err
 	}
 
@@ -86,9 +86,9 @@ func GetResolveConf(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) (error) {
-	dns := DnsConfig{
-		DNS: []string{""},
+func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) error {
+	dns := DNSConfig{
+		DNS:         []string{""},
 		FallbackDNS: []string{""},
 	}
 
@@ -143,9 +143,9 @@ func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) (error) {
 	return nil
 }
 
-func DeleteResolveConf(rw http.ResponseWriter, r *http.Request) (error) {
-	dns := DnsConfig{
-		DNS: []string{""},
+func DeleteResolveConf(rw http.ResponseWriter, r *http.Request) error {
+	dns := DNSConfig{
+		DNS:         []string{""},
 		FallbackDNS: []string{""},
 	}
 

@@ -5,12 +5,13 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
-	log "github.com/sirupsen/logrus"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
-	"fmt"
+
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -22,7 +23,7 @@ type DnsConfig struct {
 	Search  []string `json:"search"`
 }
 
-func (conf *DnsConfig) WriteResolvConfig() (error) {
+func (conf *DnsConfig) WriteResolvConfig() error {
 	f, err := os.OpenFile(ResolvConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
@@ -74,18 +75,18 @@ func ReadResolvConf() (*DnsConfig, error) {
 	}
 
 	// Don't return nil in json
-	if (len(conf.Servers) == 0) {
+	if len(conf.Servers) == 0 {
 		conf.Servers = []string{""}
 	}
 
-	if (len(conf.Search) == 0) {
+	if len(conf.Search) == 0 {
 		conf.Search = []string{""}
 	}
 
 	return conf, nil
 }
 
-func GetResolvConf(rw http.ResponseWriter) (error) {
+func GetResolvConf(rw http.ResponseWriter) error {
 	conf, err := ReadResolvConf()
 	if err != nil {
 		return err
@@ -102,10 +103,10 @@ func GetResolvConf(rw http.ResponseWriter) (error) {
 	return nil
 }
 
-func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) (error) {
+func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DnsConfig{
 		Servers: []string{""},
-		Search: []string{""},
+		Search:  []string{""},
 	}
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -159,10 +160,10 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) (error) {
 	return nil
 }
 
-func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) (error) {
+func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DnsConfig{
 		Servers: []string{""},
-		Search: []string{""},
+		Search:  []string{""},
 	}
 
 	body, err := ioutil.ReadAll(r.Body)

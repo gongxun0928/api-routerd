@@ -3,12 +3,13 @@
 package system
 
 import (
-	"api-routerd/cmd/system/resolve"
+	"api-routerd/cmd/system/journal"
+	resolv "api-routerd/cmd/system/resolve"
 	"api-routerd/cmd/system/systemdresolved"
 	"api-routerd/cmd/system/systemdtimesyncd"
-	"api-routerd/cmd/system/journal"
-	"github.com/gorilla/mux"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func RouterConfigureJournalConf(rw http.ResponseWriter, r *http.Request) {
