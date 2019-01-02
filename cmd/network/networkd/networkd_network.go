@@ -31,12 +31,28 @@ type Route struct {
 	Table           string `json:"Table"`
 }
 
+type RoutingPolicyRule struct {
+	TypeOfService     string `json:"TypeOfService"`
+	From              string `json:"From"`
+	To                string `json:"To"`
+	FirewallMark      string `json:"FirewallMark"`
+	Table             string `json:"Table"`
+	Priority          string `json:"Priority"`
+	IncomingInterface string `json:"IncomingInterface"`
+	OutgoingInterface string `json:"OutgoingInterface"`
+	SourcePort        string `json:"SourcePort"`
+	DestinationPort   string `json:"DestinationPort"`
+	IPProtocol        string `json:"IPProtocol"`
+	InvertRule        string `json:"InvertRule"`
+}
+
 type Network struct {
 	ConfFile string `json:"ConfFile"`
 
-	Match     interface{} `json:"Match"`
-	Addresses interface{} `json:"Addresses"`
-	Routes    interface{} `json:"Routes"`
+	Match             interface{} `json:"Match"`
+	Addresses         interface{} `json:"Addresses"`
+	Routes            interface{} `json:"Routes"`
+	RoutingPolicyRule interface{} `json:"RoutingPolicyRule"`
 
 	Gateway             string `json:"Gateway"`
 	DHCP                string `json:"DHCP"`
@@ -265,6 +281,128 @@ func (network *Network) CreateAddressSectionConfig() string {
 	return addressConf
 }
 
+func (network *Network) CreateRoutingPolicyRuleSectionConfig() string {
+	ruleConf := "\n[RoutingPolicyRule]\n"
+
+	switch v := network.RoutingPolicyRule.(type) {
+	case []interface{}:
+		for _, b := range v {
+			var IncomingInterface string
+			var OutgoingInterface string
+			var DestinationPort string
+			var TypeOfService string
+			var FirewallMark string
+			var SourcePort string
+			var IPProtocol string
+			var InvertRule string
+			var Priority string
+			var Table string
+			var From string
+			var To string
+
+			if b.(map[string]interface{})["TypeOfService"] != nil {
+				TypeOfService = strings.TrimSpace(b.(map[string]interface{})["TypeOfService"].(string))
+
+				if TypeOfService != "" {
+					ruleConf += "TypeOfService=" + TypeOfService + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["From"] != nil {
+				From = strings.TrimSpace(b.(map[string]interface{})["From"].(string))
+
+				if From != "" {
+					ruleConf += "From=" + From + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["To"] != nil {
+				To = strings.TrimSpace(b.(map[string]interface{})["To"].(string))
+
+				if To != "" {
+					ruleConf += "To=" + To + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["FirewallMark"] != nil {
+				FirewallMark = strings.TrimSpace(b.(map[string]interface{})["FirewallMark"].(string))
+
+				if FirewallMark != "" {
+					ruleConf += "FirewallMark=" + FirewallMark + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["Table"] != nil {
+				Table = strings.TrimSpace(b.(map[string]interface{})["Table"].(string))
+
+				if Table != "" {
+					ruleConf += "Table=" + Table + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["Priority"] != nil {
+				Priority = strings.TrimSpace(b.(map[string]interface{})["Priority"].(string))
+
+				if Priority != "" {
+					ruleConf += "Priority=" + Priority + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["IncomingInterface"] != nil {
+				IncomingInterface = strings.TrimSpace(b.(map[string]interface{})["IncomingInterface"].(string))
+
+				if IncomingInterface != "" {
+					ruleConf += "IncomingInterface=" + IncomingInterface + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["OutgoingInterface"] != nil {
+				OutgoingInterface = strings.TrimSpace(b.(map[string]interface{})["OutgoingInterface"].(string))
+
+				if OutgoingInterface != "" {
+					ruleConf += "OutgoingInterface=" + OutgoingInterface + "\n"
+				}
+
+			}
+
+			if b.(map[string]interface{})["SourcePort"] != nil {
+				SourcePort = strings.TrimSpace(b.(map[string]interface{})["SourcePort"].(string))
+
+				if SourcePort != "" {
+					ruleConf += "SourcePort=" + SourcePort + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["DestinationPort"] != nil {
+				DestinationPort = strings.TrimSpace(b.(map[string]interface{})["DestinationPort"].(string))
+
+				if DestinationPort != "" {
+					ruleConf += "DestinationPort=" + DestinationPort + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["IPProtocol"] != nil {
+				IPProtocol = strings.TrimSpace(b.(map[string]interface{})["IPProtocol"].(string))
+
+				if IPProtocol != "" {
+					ruleConf += "IPProtocol=" + IPProtocol + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["InvertRule"] != nil {
+				InvertRule = strings.TrimSpace(b.(map[string]interface{})["InvertRule"].(string))
+
+				if InvertRule != "" {
+					ruleConf += "InvertRule=" + InvertRule + "\n"
+				}
+			}
+		}
+
+		break
+	}
+	return ruleConf
+}
+
 func (network *Network) CreateNetworkSectionConfig() string {
 	conf := "[Network]\n"
 
@@ -295,6 +433,7 @@ func (network *Network) CreateNetworkSectionConfig() string {
 		gatewayConf := "Gateway="
 
 		gw := strings.TrimSpace(network.Gateway)
+
 		ip := net.ParseIP(gw)
 		if ip != nil {
 			gatewayConf += gw
@@ -421,8 +560,9 @@ func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
 	networkConfig := network.CreateNetworkSectionConfig()
 	addressConfig := network.CreateAddressSectionConfig()
 	routeConfig := network.CreateRouteSectionConfig()
+	ruleConfig := network.CreateRoutingPolicyRuleSectionConfig()
 
-	config := []string{matchConfig, networkConfig, addressConfig, routeConfig}
+	config := []string{matchConfig, networkConfig, addressConfig, routeConfig, ruleConfig}
 
 	fmt.Println(config)
 

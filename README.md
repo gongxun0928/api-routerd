@@ -397,6 +397,38 @@ Table=10
 
 ```
 
+RoutingPolicyRule
+```
+[sus@Zeus ~]$  curl --header "Content-Type: application/json" --request POST --data '{"Match": [{"Name":"eth0"}], "DHCP":"yes", "LLDP":"yes","RoutingPolicyRule": [{"TypeOfService":"1"},{"From":"192.168.1.4", "Table":"3", "Priority":"5"}], "Routes": [{"Gateway":"192.168.1.1","GatewayOnlink":"true"},{"Destination":"192.168.1.10","Table":"10"}]}' --header "X-Session-Token: secret" http://localhost:8080/network/networkd/network
+
+
+[sus@Zeus network]$ cat 25-eth0.network
+[Match]
+Name=eth0
+
+[Network]
+DHCP=yes
+LLDP=yes
+
+
+
+[Route]
+Gateway=192.168.1.1
+GatewayOnlink=yes
+
+[Route]
+Destination=192.168.1.10
+Table=10
+
+
+[RoutingPolicyRule]
+TypeOfService=1
+From=192.168.1.4
+Table=3
+Priority=5
+
+```
+
 networkd NetDev
 ```
 sus@Zeus api-router]$ curl --header "Content-Type: application/json" --request POST --data '{"Name":"bond-test", "Description":"testing bond", "Kind":"bond", "Mode":"balance-rr"}' --header "X-Session-Token: secret" http://localhost:8080/network/networkd/netdev
