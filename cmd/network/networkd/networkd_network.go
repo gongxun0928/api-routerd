@@ -46,6 +46,21 @@ type RoutingPolicyRule struct {
 	InvertRule        string `json:"InvertRule"`
 }
 
+type DHCPSection struct {
+	UseDNS             string `json:"UseDNS"`
+	UseNTP             string `json:"UseNTP"`
+	UseMTU             string `json:"UseMTU"`
+	Anonymize          string `json:"Anonymize"`
+	SendHostname       string `json:"SendHostname"`
+	UseHostname        string `json:"UseHostname"`
+	Hostname           string `json:"Hostname"`
+	UseDomains         string `json:"UseDomains"`
+	UseRoutes          string `json:"UseRoutes"`
+	UseTimezone        string `json:"UseTimezone"`
+	CriticalConnection string `json:"CriticalConnection"`
+	ClientIdentifier   string `json:"ClientIdentifier"`
+}
+
 type Network struct {
 	ConfFile string `json:"ConfFile"`
 
@@ -53,6 +68,7 @@ type Network struct {
 	Addresses         interface{} `json:"Addresses"`
 	Routes            interface{} `json:"Routes"`
 	RoutingPolicyRule interface{} `json:"RoutingPolicyRule"`
+	DHCPSection       interface{} `json:"DHCPSection"`
 
 	Gateway             string `json:"Gateway"`
 	DHCP                string `json:"DHCP"`
@@ -403,6 +419,128 @@ func (network *Network) CreateRoutingPolicyRuleSectionConfig() string {
 	return ruleConf
 }
 
+func (network *Network) CreateDHCPSectionConfig() string {
+	dhcpConf := "\n[DHCP]\n"
+
+	switch v := network.DHCPSection.(type) {
+	case []interface{}:
+		for _, b := range v {
+			var UseDNS string
+			var UseNTP string
+			var UseMTU string
+			var Anonymize string
+			var SendHostname string
+			var UseHostname string
+			var Hostname string
+			var UseDomains string
+			var UseRoutes string
+			var UseTimezone string
+			var CriticalConnection string
+			var ClientIdentifier string
+
+			if b.(map[string]interface{})["UseDNS"] != nil {
+				UseDNS = strings.TrimSpace(b.(map[string]interface{})["UseDNS"].(string))
+
+				if UseDNS != "" {
+					dhcpConf += "UseDNS=" + UseDNS + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["UseNTP"] != nil {
+				UseNTP = strings.TrimSpace(b.(map[string]interface{})["UseNTP"].(string))
+
+				if UseNTP != "" {
+					dhcpConf += "UseNTP=" + UseNTP + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["UseMTU"] != nil {
+				UseMTU = strings.TrimSpace(b.(map[string]interface{})["UseMTU"].(string))
+
+				if UseMTU != "" {
+					dhcpConf += "UseMTU=" + UseMTU + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["Anonymize"] != nil {
+				Anonymize = strings.TrimSpace(b.(map[string]interface{})["Anonymize"].(string))
+
+				if Anonymize != "" {
+					dhcpConf += "Anonymize=" + Anonymize + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["SendHostname"] != nil {
+				SendHostname = strings.TrimSpace(b.(map[string]interface{})["SendHostname"].(string))
+
+				if SendHostname != "" {
+					dhcpConf += "SendHostname=" + SendHostname + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["Hostname"] != nil {
+				Hostname = strings.TrimSpace(b.(map[string]interface{})["Hostname"].(string))
+
+				if Hostname != "" {
+					dhcpConf += "Hostname=" + Hostname + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["UseHostname"] != nil {
+				UseHostname = strings.TrimSpace(b.(map[string]interface{})["UseHostname"].(string))
+
+				if UseHostname != "" {
+					dhcpConf += "UseHostname=" + UseHostname + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["UseDomains"] != nil {
+				UseDomains = strings.TrimSpace(b.(map[string]interface{})["UseDomains"].(string))
+
+				if UseDomains != "" {
+					dhcpConf += "UseDomains=" + UseDomains + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["UseRoutes"] != nil {
+				UseRoutes = strings.TrimSpace(b.(map[string]interface{})["UseRoutes"].(string))
+
+				if UseRoutes != "" {
+					dhcpConf += "UseRoutes=" + UseRoutes + "\n"
+				}
+
+			}
+
+			if b.(map[string]interface{})["UseTimezone"] != nil {
+				UseTimezone = strings.TrimSpace(b.(map[string]interface{})["UseTimezone"].(string))
+
+				if UseTimezone != "" {
+					dhcpConf += "UseTimezone=" + UseTimezone + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["CriticalConnection"] != nil {
+				CriticalConnection = strings.TrimSpace(b.(map[string]interface{})["CriticalConnection"].(string))
+
+				if CriticalConnection != "" {
+					dhcpConf += "CriticalConnection=" + CriticalConnection + "\n"
+				}
+			}
+
+			if b.(map[string]interface{})["ClientIdentifier"] != nil {
+				ClientIdentifier = strings.TrimSpace(b.(map[string]interface{})["ClientIdentifier"].(string))
+
+				if ClientIdentifier != "" {
+					dhcpConf += "ClientIdentifier=" + ClientIdentifier + "\n"
+				}
+			}
+		}
+
+		break
+	}
+	return dhcpConf
+}
+
 func (network *Network) CreateNetworkSectionConfig() string {
 	conf := "[Network]\n"
 
@@ -561,8 +699,9 @@ func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
 	addressConfig := network.CreateAddressSectionConfig()
 	routeConfig := network.CreateRouteSectionConfig()
 	ruleConfig := network.CreateRoutingPolicyRuleSectionConfig()
+	dhcpConfig := network.CreateDHCPSectionConfig()
 
-	config := []string{matchConfig, networkConfig, addressConfig, routeConfig, ruleConfig}
+	config := []string{matchConfig, networkConfig, addressConfig, routeConfig, ruleConfig, dhcpConfig}
 
 	fmt.Println(config)
 

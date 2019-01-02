@@ -429,6 +429,11 @@ Priority=5
 
 ```
 
+[DHCP] Section
+```
+[sus@Zeus ~]$  curl --header "Content-Type: application/json" --request POST --data '{"Match": [{"Name":"eth0"}], "DHCP":"yes", "LLDP":"yes","DHCPSection": [{"UseDNS":"yes"},{"UseMTU":"yes", "CriticalConnection":"yes", "UseRoutes":"yes"}], "Routes": [{"Gateway":"192.168.1.1","GatewayOnlink":"true"},{"Destination":"192.168.1.10","Table":"10"}]}' --header "X-Session-Token: secret" http://localhost:8080/network/networkd/network
+
+```
 networkd NetDev
 ```
 sus@Zeus api-router]$ curl --header "Content-Type: application/json" --request POST --data '{"Name":"bond-test", "Description":"testing bond", "Kind":"bond", "Mode":"balance-rr"}' --header "X-Session-Token: secret" http://localhost:8080/network/networkd/netdev
