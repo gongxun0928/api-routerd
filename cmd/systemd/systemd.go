@@ -6,6 +6,7 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -32,11 +33,11 @@ type UnitStatus struct {
 	Unit   string `json:"unit"`
 }
 
-func SystemdProperty(property string) (string, error) {
+func SystemdProperty(property string) (dbus.Variant, error) {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
 		log.Error("Failed to get dbus connection: ", err)
-		return "", err
+		return dbus.Variant{}, err
 	}
 	defer conn.Close()
 
@@ -44,15 +45,14 @@ func SystemdProperty(property string) (string, error) {
 	p, perr := c.GetProperty("org.freedesktop.systemd1.Manager." + property)
 	if perr != nil {
 		log.Error("org.freedesktop.systemd1.Manager.%s", property)
-		return "", errors.New("dbus error")
+		return dbus.Variant{}, errors.New("dbus error")
 	}
 
 	if p.Value() == nil {
-		return "", errors.New("Failed to get property")
+		return dbus.Variant{}, errors.New("Failed to get property")
 	}
 
-	v, _ := p.Value().(string)
-	return v, nil
+	return p, nil
 }
 
 func SystemdState(w http.ResponseWriter) error {
@@ -61,7 +61,7 @@ func SystemdState(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "SystemState", Value: v}
+	prop := Property{Property: "SystemState", Value: v.Value().(string)}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -81,7 +81,7 @@ func SystemdVersion(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Version", Value: v}
+	prop := Property{Property: "Version", Value: v.Value().(string)}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -101,7 +101,7 @@ func SystemdVirtualization(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Virtualization", Value: v}
+	prop := Property{Property: "Virtualization", Value: v.Value().(string)}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -121,7 +121,7 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Architecture", Value: v}
+	prop := Property{Property: "Architecture", Value: v.Value().(string)}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -134,13 +134,54 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 
 	return nil
 }
+
 func SystemdFeatures(w http.ResponseWriter) error {
 	v, err := SystemdProperty("Features")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{Property: "Features", Value: v}
+	prop := Property{Property: "Features", Value: v.Value().(string)}
+
+	j, err := json.Marshal(prop)
+	if err != nil {
+		log.Errorf("Failed to encode Features: %s", err)
+		return err
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+
+	return nil
+}
+
+func SystemdNFailedUnits(w http.ResponseWriter) error {
+	v, err := SystemdProperty("NFailedUnits")
+	if err != nil {
+		return err
+	}
+
+	prop := Property{Property: "NFailedUnits", Value: fmt.Sprint(v.Value().(uint32))}
+
+	j, err := json.Marshal(prop)
+	if err != nil {
+		log.Errorf("Failed to encode Features: %s", err)
+		return err
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+
+	return nil
+}
+
+func SystemdNNames(w http.ResponseWriter) error {
+	v, err := SystemdProperty("NNames")
+	if err != nil {
+		return err
+	}
+
+	prop := Property{Property: "NNames", Value: fmt.Sprint(v.Value().(uint32))}
 
 	j, err := json.Marshal(prop)
 	if err != nil {

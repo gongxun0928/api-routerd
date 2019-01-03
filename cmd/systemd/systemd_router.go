@@ -53,6 +53,28 @@ func RouterGetSystemdVirtualization(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func RouterGetSystemdNFailedUnits(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		err := SystemdNFailedUnits(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+		}
+		break
+	}
+}
+
+func RouterGetSystemdNNames(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		err := SystemdNNames(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+		}
+		break
+	}
+}
+
 func RouterGetSystemdArchitecture(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -198,6 +220,8 @@ func RegisterRouterSystemd(router *mux.Router) {
 	n.HandleFunc("/systemd/virtualization", RouterGetSystemdVirtualization)
 	n.HandleFunc("/systemd/architecture", RouterGetSystemdArchitecture)
 	n.HandleFunc("/systemd/units", RouterGetAllSystemdUnits)
+	n.HandleFunc("/systemd/nnames", RouterGetSystemdNNames)
+	n.HandleFunc("/systemd/nfailedunits", RouterGetSystemdNFailedUnits)
 
 	// unit
 	n.HandleFunc("/systemd", RouterConfigureUnit)
