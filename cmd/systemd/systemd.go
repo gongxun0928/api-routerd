@@ -6,29 +6,30 @@ import (
 	"api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
+	"net/http"
+	"strconv"
+
 	sd "github.com/coreos/go-systemd/dbus"
 	"github.com/godbus/dbus"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"strconv"
 )
 
 type Unit struct {
-	Action string   `json:"action"`
-	Unit string     `json:"unit"`
+	Action   string `json:"action"`
+	Unit     string `json:"unit"`
 	UnitType string `json:"unit_type"`
 	Property string `json:"property"`
-	Value string    `json:"value"`
+	Value    string `json:"value"`
 }
 
 type Property struct {
 	Property string `json:"property"`
-	Value string    `json:"value"`
+	Value    string `json:"value"`
 }
 
 type UnitStatus struct {
 	Status string `json:"property"`
-	Unit string   `json:"unit"`
+	Unit   string `json:"unit"`
 }
 
 func SystemdProperty(property string) (string, error) {
@@ -54,13 +55,13 @@ func SystemdProperty(property string) (string, error) {
 	return v, nil
 }
 
-func SystemdState(w http.ResponseWriter) (error) {
+func SystemdState(w http.ResponseWriter) error {
 	v, err := SystemdProperty("SystemState")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{ Property: "SystemState", Value: v}
+	prop := Property{Property: "SystemState", Value: v}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -74,13 +75,13 @@ func SystemdState(w http.ResponseWriter) (error) {
 	return nil
 }
 
-func SystemdVersion(w http.ResponseWriter) (error) {
+func SystemdVersion(w http.ResponseWriter) error {
 	v, err := SystemdProperty("Version")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{ Property: "Version", Value: v}
+	prop := Property{Property: "Version", Value: v}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -94,13 +95,13 @@ func SystemdVersion(w http.ResponseWriter) (error) {
 	return nil
 }
 
-func SystemdVirtualization(w http.ResponseWriter) (error) {
+func SystemdVirtualization(w http.ResponseWriter) error {
 	v, err := SystemdProperty("Virtualization")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{ Property: "Virtualization", Value: v}
+	prop := Property{Property: "Virtualization", Value: v}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -114,13 +115,13 @@ func SystemdVirtualization(w http.ResponseWriter) (error) {
 	return nil
 }
 
-func SystemdArchitecture(w http.ResponseWriter) (error) {
+func SystemdArchitecture(w http.ResponseWriter) error {
 	v, err := SystemdProperty("Architecture")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{ Property: "Architecture", Value: v}
+	prop := Property{Property: "Architecture", Value: v}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -133,13 +134,13 @@ func SystemdArchitecture(w http.ResponseWriter) (error) {
 
 	return nil
 }
-func SystemdFeatures(w http.ResponseWriter) (error) {
+func SystemdFeatures(w http.ResponseWriter) error {
 	v, err := SystemdProperty("Features")
 	if err != nil {
 		return err
 	}
 
-	prop := Property{ Property: "Features", Value: v}
+	prop := Property{Property: "Features", Value: v}
 
 	j, err := json.Marshal(prop)
 	if err != nil {
@@ -153,7 +154,7 @@ func SystemdFeatures(w http.ResponseWriter) (error) {
 	return nil
 }
 
-func ListUnits(w http.ResponseWriter) (error) {
+func ListUnits(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -163,7 +164,7 @@ func ListUnits(w http.ResponseWriter) (error) {
 
 	units, err := conn.ListUnits()
 	if err != nil {
-		log.Errorf("Failed ListUnits: %s",  err)
+		log.Errorf("Failed ListUnits: %s", err)
 		return err
 	}
 
@@ -179,7 +180,7 @@ func ListUnits(w http.ResponseWriter) (error) {
 	return nil
 }
 
-func (u *Unit) StartUnit() (error) {
+func (u *Unit) StartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -197,7 +198,7 @@ func (u *Unit) StartUnit() (error) {
 	return nil
 }
 
-func (u *Unit) StopUnit() (error) {
+func (u *Unit) StopUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -215,7 +216,7 @@ func (u *Unit) StopUnit() (error) {
 	return nil
 }
 
-func (u *Unit) RestartUnit() (error) {
+func (u *Unit) RestartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -233,7 +234,7 @@ func (u *Unit) RestartUnit() (error) {
 	return nil
 }
 
-func (u *Unit) ReloadUnit() (error) {
+func (u *Unit) ReloadUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -250,7 +251,7 @@ func (u *Unit) ReloadUnit() (error) {
 	return nil
 }
 
-func (u *Unit) KillUnit() (error) {
+func (u *Unit) KillUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -269,7 +270,7 @@ func (u *Unit) KillUnit() (error) {
 	return nil
 }
 
-func (u *Unit) GetUnitStatus(w http.ResponseWriter) (error) {
+func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -283,13 +284,13 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) (error) {
 		return err
 	}
 
-	status := UnitStatus{ Status: units[0].ActiveState, Unit: u.Unit }
+	status := UnitStatus{Status: units[0].ActiveState, Unit: u.Unit}
 	json.NewEncoder(w).Encode(status)
 
 	return nil
 }
 
-func (u *Unit) GetUnitProperty(w http.ResponseWriter) (error) {
+func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -340,8 +341,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) (error) {
 	return nil
 }
 
-
-func (u *Unit) SetUnitProperty(w http.ResponseWriter) (error) {
+func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
 		log.Errorf("Failed to get systemd bus connection: %s", err)
@@ -353,7 +353,7 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) (error) {
 	case "CPUShares":
 		n, err := strconv.ParseInt(u.Value, 10, 64)
 		if err != nil {
-			log.Errorf("Failed to parse CPUShares: ", u.Value, err)
+			log.Errorf("Failed to parse CPUShares: %s", err)
 			return err
 		}
 
