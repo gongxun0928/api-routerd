@@ -408,3 +408,29 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 
 	return nil
 }
+
+func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
+	conn, err := sd.NewSystemdConnection()
+	if err != nil {
+		log.Errorf("Failed to get systemd bus connection: %s", err)
+		return err
+	}
+	defer conn.Close()
+
+	p, err := conn.GetUnitTypeProperties(u.Unit, u.UnitType)
+	if err != nil {
+		log.Errorf("Failed to get unit type properties: %s", err)
+		return err
+	}
+
+	j, err := json.Marshal(p)
+	if err != nil {
+		log.Errorf("Failed to encode unit type properties: %s", err)
+		return err
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+
+	return nil
+}

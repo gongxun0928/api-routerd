@@ -159,7 +159,9 @@ func RouterGetUnitStatus(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	unit := vars["unit"]
 
-	u := Unit{Unit: unit}
+	u := Unit{
+		Unit: unit,
+	}
 
 	switch r.Method {
 	case "GET":
@@ -177,9 +179,10 @@ func RouterGetUnitProperty(rw http.ResponseWriter, r *http.Request) {
 	unit := vars["unit"]
 	property := vars["property"]
 
-	u := new(Unit)
-	u.Unit = unit
-	u.Property = property
+	u := Unit{
+		Unit:     unit,
+		Property: property,
+	}
 
 	switch r.Method {
 	case "GET":
@@ -210,6 +213,25 @@ func RouterConfigureUnitProperty(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func RouterGetUnitTypeProperty(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	unit := vars["unit"]
+	unitType := vars["unittype"]
+	property := vars["property"]
+
+	u := Unit{
+		Unit:     unit,
+		UnitType: unitType,
+		Property: property,
+	}
+
+	switch r.Method {
+	case "GET":
+		u.GetUnitTypeProperty(rw)
+		break
+	}
+}
+
 func RegisterRouterSystemd(router *mux.Router) {
 	n := router.PathPrefix("/service").Subrouter()
 
@@ -229,9 +251,9 @@ func RegisterRouterSystemd(router *mux.Router) {
 	n.HandleFunc("/systemd/{unit}/get", RouterGetUnitProperty)
 	n.HandleFunc("/systemd/{unit}/get/{property}", RouterGetUnitProperty)
 	n.HandleFunc("/systemd/{unit}/set/{property}", RouterConfigureUnitProperty)
+	n.HandleFunc("/systemd/{unit}/gettype/{unittype}", RouterGetUnitTypeProperty)
 
 	// conf
 	n.HandleFunc("/systemd/conf", RouterConfigureSystemdConf)
 	n.HandleFunc("/systemd/conf/update", RouterConfigureSystemdConf)
-
 }
