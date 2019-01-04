@@ -4,6 +4,7 @@ package system
 
 import (
 	"api-routerd/cmd/system/conf"
+	"api-routerd/cmd/system/coredump"
 	"api-routerd/cmd/system/hostname"
 	"api-routerd/cmd/system/journal"
 	"api-routerd/cmd/system/resolv"
@@ -120,6 +121,35 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func ConfigureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+
+		err := coredump.GetCoreDumpConf(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		break
+	case "POST":
+
+		err := coredump.UpdateCoreDumpConf(rw, r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		break
+	case "DELETE":
+
+		err := coredump.DeleteCoreDumpConf(rw, r)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		break
+	}
+}
+
 func ReadSudoersConfig(rw http.ResponseWriter, req *http.Request) {
 	err := conf.GetSudoers(rw)
 	if err != nil {
@@ -163,6 +193,12 @@ func RegisterRouterSystem(router *mux.Router) {
 	n.HandleFunc("/systemdtimesyncd/get", ConfigureSystemdTimeSyncd)
 	n.HandleFunc("/systemdtimesyncd/add", ConfigureSystemdTimeSyncd)
 	n.HandleFunc("/systemdtimesyncd/delete", ConfigureSystemdTimeSyncd)
+
+	// coredump.conf
+	n.HandleFunc("/coredump", ConfigureSystemdCoreDump)
+	n.HandleFunc("/coredump/get", ConfigureSystemdCoreDump)
+	n.HandleFunc("/coredump/add", ConfigureSystemdCoreDump)
+	n.HandleFunc("/coredump/delete", ConfigureSystemdCoreDump)
 
 	// Generic system confs
 	n.HandleFunc("/conf/sudoers", ReadSudoersConfig)

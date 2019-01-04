@@ -670,3 +670,12 @@ Delete
 [sus@Zeus ~]$  curl --header "Content-Type: application/json" --request DELETE --data '{"dns":["192.168.1.131"]}' --header "X-Session-Token: secret" http://localhost:8080/system/systemdresolved/delete
 {"dns":["10.68.5.26","10.64.63.6","192.168.225.1"],"fallback_dns":["8.8.8.8","8.8.4.4","2001:4860:4860::8888","2001:4860:4860::8844"]}
 ```
+configure coredump
+```
+[sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request GET http://localhost:8080/system/coredump --header "X-Session-Token: secret"
+
+[sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request POST --data '{"Storage":"internal"}' --header "X-Session-Token: secret" http://localhost:8080/system/coredump/add
+
+[sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request DELETE --data '{"Storage":"#"}' --header "X-Session-Token: secret" http://localhost:8080/system/coredump/delete
+
+```
