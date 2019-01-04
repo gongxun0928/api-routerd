@@ -1,4 +1,4 @@
-package systemdtimesyncd
+package timesyncd
 
 import (
 	"api-routerd/cmd/share"

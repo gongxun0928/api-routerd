@@ -7,7 +7,6 @@ import (
 	"api-routerd/cmd/proc"
 	"api-routerd/cmd/share"
 	"api-routerd/cmd/system"
-	"api-routerd/cmd/system/hostname"
 	"api-routerd/cmd/systemd"
 	"context"
 	"crypto/tls"
@@ -28,7 +27,6 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	router := mux.NewRouter()
 
 	// Register services
-	hostname.RegisterRouterHostname(router)
 	network.RegisterRouterNetwork(router)
 	proc.RegisterRouterProc(router)
 	systemd.RegisterRouterSystemd(router)

@@ -1,4 +1,4 @@
-package systemdresolved
+package resolved
 
 import (
 	"api-routerd/cmd/share"

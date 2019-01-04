@@ -4,10 +4,11 @@ package system
 
 import (
 	"api-routerd/cmd/system/conf"
+	"api-routerd/cmd/system/hostname"
 	"api-routerd/cmd/system/journal"
 	"api-routerd/cmd/system/resolv"
-	"api-routerd/cmd/system/systemdresolved"
-	"api-routerd/cmd/system/systemdtimesyncd"
+	"api-routerd/cmd/system/resolved"
+	"api-routerd/cmd/system/timesyncd"
 	"api-routerd/cmd/system/timedate"
 	"net/http"
 
@@ -65,7 +66,7 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := systemdresolved.GetResolveConf(rw)
+		err := resolved.GetResolveConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -73,7 +74,7 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := systemdresolved.UpdateResolveConf(rw, r)
+		err := resolved.UpdateResolveConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -81,7 +82,7 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := systemdresolved.DeleteResolveConf(rw, r)
+		err := resolved.DeleteResolveConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -94,7 +95,7 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := systemdtimesyncd.GetTimeSyncConf(rw)
+		err := timesyncd.GetTimeSyncConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -102,7 +103,7 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := systemdtimesyncd.UpdateTimeSyncConf(rw, r)
+		err := timesyncd.UpdateTimeSyncConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -110,7 +111,7 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := systemdtimesyncd.DeleteTimeSyncConf(rw, r)
+		err := timesyncd.DeleteTimeSyncConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -137,6 +138,9 @@ func ReadSSHConfig(rw http.ResponseWriter, req *http.Request) {
 
 func RegisterRouterSystem(router *mux.Router) {
 	n := router.PathPrefix("/system").Subrouter()
+
+	// hostname
+	hostname.RegisterRouterHostname(router)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)
