@@ -77,7 +77,7 @@ $ go get github.com/go-ini/ini
 [sus@Zeus src]$ git clone https://github.com/RestGW/api-routerd
 [sus@Zeus src]$ cd api-routerd/cmd
 [sus@Zeus cmd]$ pwd
-/home/sus/go/src/api-routerd/cmd
+/home/sus/go/src/api-routerd
 [sus@Zeus cmd]$ go build -o api-routerd
 
 ```
