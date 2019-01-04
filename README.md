@@ -7,7 +7,7 @@ A super light weight remote management tool which uses REST API for real time co
 
 #### Objectives:
 - No client installation required. curl is enough.
-- No GUI
+- No GUI . You can design your own. [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS
 - Minimal data transfer using JSON
 
 
@@ -21,8 +21,14 @@ A super light weight remote management tool which uses REST API for real time co
     - .network
     - .netdev
     - .link
-- set and get hostname
-   - hostnamed
+- configure hostnamed
+- configure timdate
+- configure nameserver /etc/resolv.conf
+- configure timesynd
+- configure journald.conf
+- configure system.conf
+- configure coredump.conf
+- configure systemd-resolved.conf
 
 - configure network (netlink)
    - Link: mtu, up, down
@@ -30,9 +36,11 @@ A super light weight remote management tool which uses REST API for real time co
    - Adddress: Set, Get, Delete
    - Gateway: Default Gateway Add and Delete
 
-- see information from /proc such as netstat, netdev, memory
+- see information from /proc such as netstat, netdev, memory and much more
+- configure /proc/sys/net (core/ipv4/ipv6), VM
 - See ethtool information
-- configure nameserver /etc/resolv.conf
+- See sudoers and sshd conf
+
 - systemd socket activation support
 
  ### api-routerd json API
