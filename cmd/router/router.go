@@ -17,6 +17,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/coreos/go-systemd/activation"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 )
@@ -59,6 +60,16 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 		os.Exit(0)
 	}()
 
+	// socket activation
+	listeners, err := activation.Listeners()
+	if err != nil {
+		log.Panicf("cannot retrieve listeners: %s", err)
+	}
+
+	if len(listeners) != 1 {
+		log.Panicf("unexpected number of socket activation (%d != 1)", len(listeners))
+	}
+
 	if share.PathExists(tlsCertPath) && share.PathExists(tlsKeyPath) {
 		cfg := &tls.Config{
 			MinVersion:               tls.VersionTLS12,
@@ -74,12 +85,23 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 
 		log.Info("Starting api-routerd in TLS mode")
 
-		log.Fatal(srv.ListenAndServeTLS(tlsCertPath, tlsKeyPath))
-
+		if len(listeners) <= 0 {
+			log.Fatal(srv.ListenAndServeTLS(tlsCertPath, tlsKeyPath))
+		} else {
+			log.Fatal(srv.ServeTLS(listeners[0], tlsCertPath, tlsKeyPath))
+		}
 	} else {
+		srv = http.Server{
+			Addr:    ip + ":" + port,
+			Handler: router,
+		}
 		log.Info("Starting api-routerd in plain text mode")
 
-		log.Fatal(http.ListenAndServe(ip+":"+port, router))
+		if len(listeners) <= 0 {
+			log.Fatal(srv.ListenAndServe())
+		} else {
+			log.Fatal(srv.Serve(listeners[0]))
+		}
 	}
 
 	return nil
