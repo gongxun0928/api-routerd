@@ -33,6 +33,7 @@ A super light weight remote management tool which uses REST API for real time co
 - see information from /proc such as netstat, netdev, memory
 - See ethtool information
 - configure nameserver /etc/resolv.conf
+- systemd socket activation support
 
  ### api-routerd json API
  Refer spreadsheet [API](https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2Vmp-BdTE5Vgi_PiW-qKPJnbLxdSso9kT2GAkAxCu_iWrw3_PZLlEuyXz0lbFgd7DoofXlmmb3dP/pubhtml
@@ -75,7 +76,7 @@ $ go get github.com/go-ini/ini
 ##### Now build it
 ```
 [sus@Zeus src]$ git clone https://github.com/RestGW/api-routerd
-[sus@Zeus src]$ cd api-routerd/cmd
+[sus@Zeus src]$ cd api-routerd
 [sus@Zeus cmd]$ pwd
 /home/sus/go/src/api-routerd
 [sus@Zeus cmd]$ go build -o api-routerd
@@ -179,11 +180,11 @@ http://localhost:8080/service/systemd/sshd.service/status
 ```
 Set and get propetties
 ```
-[sus@Zeus] curl --request GET --header "X-Session-Token: secret"http://localhost:8080/service/systemd/sshd.service/get/LimitNOFILESoft
-[sus@Zeus]  curl --request GET --header "X-Session-Token: secret"  http://localhost:8080/service/systemd/sshd.service/get/LimitNOFILE
-[sus@Zeus]  curl --request GET --header "X-Session-Token: secret"  http://localhost:8080/service/systemd/sshd.service/get
-[sus@Zeus] curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"value":"1100"}' http://localhost:8080/service/systemd/sshd.service/set/CPUShares
-[sus@Zeus]  curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/get/CPUShares
+[sus@Zeus]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/get/LimitNOFILESoft
+[sus@Zeus]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/get/LimitNOFILE
+[sus@Zeus]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/get
+[sus@Zeus]$ curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"value":"1100"}' http://localhost:8080/service/systemd/sshd.service/set/CPUShares
+[sus@Zeus]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/get/CPUShares
 [sus@Zeus]$ curl --header "Content-Type: application/json" --request POST --data '{"action":"start","unit":"sshd.service"}' --header "X-Session-Token: secret" http://localhost:8080/service/systemd
 [sus@Zeus]$ curl --header "Content-Type: application/json" --request POST --data '{"action":"stop","unit":"sshd.service"}' --header "X-Session-Token: secret" http://localhost:8080/service/systemd
 [sus@Zeus proc]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/service/systemd/sshd.service/status
@@ -194,7 +195,10 @@ Send a signal to the service
 ```
 $curl --header "Content-Type: application/json" --request POST --data '{"action":"kill","unit":"sshd.service", "value":"9"}' --header "X-Session-Token: secret" http://localhost:8080/service/systemd
 ```
-
+Get all unittype properties such as Service, Mount, Socket
+```
+[sus@Zeus]$ curl --request GET --header "X-Session-Token: secret http://localhost:8080/service/systemd/sshd.service/gettype/Service
+```
 
 Manipulate system.conf /etc/systemd/system.conf
 ```
@@ -214,7 +218,6 @@ Configure journald
 ```
 curl --header "Content-Type: application/json" --request GET --header "X-Session-Token: secret" http://localhost:8080/system/journal/conf
 ```
-
 Use case:
 * command: "GET"
   * netdev
@@ -666,5 +669,4 @@ Add
 Delete
 [sus@Zeus ~]$  curl --header "Content-Type: application/json" --request DELETE --data '{"dns":["192.168.1.131"]}' --header "X-Session-Token: secret" http://localhost:8080/system/systemdresolved/delete
 {"dns":["10.68.5.26","10.64.63.6","192.168.225.1"],"fallback_dns":["8.8.8.8","8.8.4.4","2001:4860:4860::8888","2001:4860:4860::8844"]}
-
 ```
