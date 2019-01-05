@@ -170,7 +170,9 @@ func RegisterRouterSystem(router *mux.Router) {
 	n := router.PathPrefix("/system").Subrouter()
 
 	// hostname
-	hostname.RegisterRouterHostname(router)
+	hostname.RegisterRouterHostname(n)
+	// timedate
+	timedate.RegisterRouterTimeDate(n)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)
@@ -203,7 +205,4 @@ func RegisterRouterSystem(router *mux.Router) {
 	// Generic system confs
 	n.HandleFunc("/conf/sudoers", ReadSudoersConfig)
 	n.HandleFunc("/conf/sshd", ReadSSHConfig)
-
-	// timedate
-	timedate.RegisterRouterTimeDate(n)
 }

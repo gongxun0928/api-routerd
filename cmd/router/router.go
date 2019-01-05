@@ -24,13 +24,14 @@ import (
 func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) error {
 	var srv http.Server
 
-	router := mux.NewRouter()
+	r := mux.NewRouter()
+	s := r.PathPrefix("/api").Subrouter()
 
 	// Register services
-	network.RegisterRouterNetwork(router)
-	proc.RegisterRouterProc(router)
-	systemd.RegisterRouterSystemd(router)
-	system.RegisterRouterSystem(router)
+	network.RegisterRouterNetwork(s)
+	proc.RegisterRouterProc(s)
+	systemd.RegisterRouterSystemd(s)
+	system.RegisterRouterSystem(s)
 
 	// Authenticate users
 	amw, err := InitAuthMiddleware()
@@ -39,7 +40,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 		return fmt.Errorf("Failed to init Auth DB: %s", err)
 	}
 
-	router.Use(amw.AuthMiddleware)
+	r.Use(amw.AuthMiddleware)
 
 	var gracefulStop = make(chan os.Signal)
 	signal.Notify(gracefulStop, syscall.SIGTERM)
@@ -72,7 +73,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 		}
 		srv = http.Server{
 			Addr:         ip + ":" + port,
-			Handler:      router,
+			Handler:      r,
 			TLSConfig:    cfg,
 			TLSNextProto: make(map[string]func(*http.Server, *tls.Conn, http.Handler), 0),
 		}
@@ -87,7 +88,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	} else {
 		srv = http.Server{
 			Addr:    ip + ":" + port,
-			Handler: router,
+			Handler: r,
 		}
 		log.Info("Starting api-routerd in plain text mode")
 
