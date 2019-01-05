@@ -4,7 +4,6 @@ package proc
 
 import (
 	"api-routerd/cmd/share"
-	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -48,15 +47,7 @@ func GetVersion(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(infostat)
-	if err != nil {
-		return errors.New("Json encoding: Version")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(infostat, rw)
 }
 
 func GetUserStat(rw http.ResponseWriter) error {
@@ -65,15 +56,7 @@ func GetUserStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(userstat)
-	if err != nil {
-		return errors.New("Json encoding UserStat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(userstat, rw)
 }
 
 func GetTemperatureStat(rw http.ResponseWriter) error {
@@ -82,15 +65,7 @@ func GetTemperatureStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(tempstat)
-	if err != nil {
-		return errors.New("Json encoding TemperatureStat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(tempstat, rw)
 }
 
 func GetNetStat(rw http.ResponseWriter, protocol string) error {
@@ -99,15 +74,7 @@ func GetNetStat(rw http.ResponseWriter, protocol string) error {
 		return err
 	}
 
-	j, err := json.Marshal(conn)
-	if err != nil {
-		return errors.New("Json encoding netstat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conn, rw)
 }
 
 func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) error {
@@ -121,15 +88,7 @@ func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) erro
 		return err
 	}
 
-	j, err := json.Marshal(conn)
-	if err != nil {
-		return errors.New("Json encoding netstat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conn, rw)
 }
 
 func GetProtoCountersStat(rw http.ResponseWriter) error {
@@ -140,15 +99,7 @@ func GetProtoCountersStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(proto)
-	if err != nil {
-		return errors.New("Json encoding proto counters stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(proto, rw)
 }
 
 func GetNetDev(rw http.ResponseWriter) error {
@@ -157,15 +108,7 @@ func GetNetDev(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(netdev)
-	if err != nil {
-		return errors.New("Json encoding NetDev")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(netdev, rw)
 }
 
 func GetInterfaceStat(rw http.ResponseWriter) error {
@@ -174,15 +117,7 @@ func GetInterfaceStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(interfaces)
-	if err != nil {
-		return errors.New("Json encoding interface stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(interfaces, rw)
 }
 
 func GetSwapMemoryStat(rw http.ResponseWriter) error {
@@ -191,15 +126,7 @@ func GetSwapMemoryStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(swap)
-	if err != nil {
-		return errors.New("Json encoding memory stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(swap, rw)
 }
 
 func GetVirtualMemoryStat(rw http.ResponseWriter) error {
@@ -208,15 +135,7 @@ func GetVirtualMemoryStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(virt)
-	if err != nil {
-		return errors.New("Json encoding VM stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(virt, rw)
 }
 
 func GetCPUInfo(rw http.ResponseWriter) error {
@@ -225,15 +144,7 @@ func GetCPUInfo(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(cpus)
-	if err != nil {
-		return errors.New("Json encoding CPU Info")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(cpus, rw)
 }
 
 func GetCPUTimeStat(rw http.ResponseWriter) error {
@@ -242,15 +153,7 @@ func GetCPUTimeStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(cpus)
-	if err != nil {
-		return errors.New("Json encoding CPU stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(cpus, rw)
 }
 
 func GetAvgStat(rw http.ResponseWriter) error {
@@ -259,15 +162,7 @@ func GetAvgStat(rw http.ResponseWriter) error {
 		return r
 	}
 
-	j, err := json.Marshal(avgstat)
-	if err != nil {
-		return errors.New("Json encoding avg stat")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(avgstat, rw)
 }
 
 func GetMisc(rw http.ResponseWriter) error {
@@ -288,15 +183,7 @@ func GetMisc(rw http.ResponseWriter) error {
 		miscMap[deviceNum] = fields[1]
 	}
 
-	j, err := json.Marshal(miscMap)
-	if err != nil {
-		return errors.New("Json encoding")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(miscMap, rw)
 }
 
 func GetNetArp(rw http.ResponseWriter) error {
@@ -324,15 +211,7 @@ func GetNetArp(rw http.ResponseWriter) error {
 		netarp[i-1] = arp
 	}
 
-	j, err := json.Marshal(netarp)
-	if err != nil {
-		return errors.New("Json encoding ARP")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(netarp, rw)
 }
 
 // GetModules Get all installed modules
@@ -372,20 +251,10 @@ func GetModules(rw http.ResponseWriter) error {
 		modules[i] = module
 	}
 
-	j, err := json.Marshal(modules)
-	if err != nil {
-		return errors.New("Json encoding Module")
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(modules, rw)
 }
 
 func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error {
-	var j []byte
-
 	pid, err := strconv.ParseInt(proc, 10, 32)
 	if err != nil {
 		return err
@@ -403,104 +272,96 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		j, err = json.Marshal(conn)
-		break
+		return share.JsonResponse(conn, rw)
+
 	case "pid-rlimit":
 		rlimit, err := p.Rlimit()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(rlimit)
-		break
+		return share.JsonResponse(rlimit, rw)
+
 	case "pid-rlimit-usage":
 		rlimit, err := p.RlimitUsage(true)
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(rlimit)
-		break
+		return share.JsonResponse(rlimit, rw)
+
 	case "pid-status":
 		s, err := p.Status()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(s)
-		break
+		return share.JsonResponse(s, rw)
+
 	case "pid-username":
 		u, err := p.Username()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(u)
-		break
+		return share.JsonResponse(u, rw)
+
 	case "pid-open-files":
 		f, err := p.OpenFiles()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(f)
-		break
+		return share.JsonResponse(f, rw)
+
 	case "pid-fds":
 		f, err := p.NumFDs()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(f)
-		break
+		return share.JsonResponse(f, rw)
+
 	case "pid-name":
 		n, err := p.Name()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(n)
-		break
+		return share.JsonResponse(n, rw)
+
 	case "pid-memory-percent":
 		m, err := p.MemoryPercent()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(m)
-		break
+		return share.JsonResponse(m, rw)
+
 	case "pid-memory-maps":
 		m, err := p.MemoryMaps(true)
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(m)
-		break
+		return share.JsonResponse(m, rw)
+
 	case "pid-memory-info":
 		m, err := p.MemoryInfo()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(m)
-		break
+		return share.JsonResponse(m, rw)
+
 	case "pid-io-counters":
 		m, err := p.IOCounters()
 		if err != nil {
 			return err
 		}
 
-		j, err = json.Marshal(m)
-		break
+		return share.JsonResponse(m, rw)
 	}
-
-	if err != nil {
-		return err
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
 
 	return nil
 }

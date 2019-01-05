@@ -159,16 +159,7 @@ func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(routes)
-	if err != nil {
-		log.Errorf("Failed to encode json routeInfo : %s", err)
-		return err
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(routes, rw)
 }
 
 func ConfigureRoutes(r *http.Request) error {

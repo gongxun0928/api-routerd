@@ -4,7 +4,6 @@ package proc
 
 import (
 	"api-routerd/cmd/share"
-	"encoding/json"
 	"errors"
 	"net/http"
 	"path"
@@ -66,9 +65,8 @@ func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
 	}
 
 	property := SysNet{Path: req.Path, Property: req.Property, Value: line, Link: req.Link}
-	json.NewEncoder(rw).Encode(property)
 
-	return nil
+	return share.JsonResponse(property, rw)
 }
 
 func (req *SysNet) SetSysNet(rw http.ResponseWriter) error {

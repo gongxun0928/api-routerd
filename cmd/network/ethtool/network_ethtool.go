@@ -4,7 +4,6 @@ package ethtool
 
 import (
 	"api-routerd/cmd/share"
-	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -18,8 +17,6 @@ type Ethtool struct {
 }
 
 func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
-	var j []byte
-
 	link := share.LinkExists(req.Link)
 	if !link {
 		log.Errorf("Failed to get link: %s", req.Link)
@@ -41,12 +38,7 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		j, err = json.Marshal(stats)
-		if err != nil {
-			log.Errorf("Failed to encode ethtool json statitics for link %s: %s", err, req.Link)
-			return err
-		}
-		break
+		return share.JsonResponse(stats, rw)
 
 	case "get-link-features":
 
@@ -56,12 +48,7 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		j, err = json.Marshal(features)
-		if err != nil {
-			log.Errorf("Failed to encode json features for link %s: %s", err, req.Link)
-			return err
-		}
-		break
+		return share.JsonResponse(features, rw)
 
 	case "get-link-bus":
 
@@ -77,13 +64,7 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			bus,
 		}
 
-		j, err = json.Marshal(b)
-		if err != nil {
-			log.Errorf("Failed to get encode json bus information for link %s: %s", err, req.Link)
-			return err
-		}
-
-		break
+		return share.JsonResponse(b, rw)
 
 	case "get-link-driver-name":
 
@@ -99,17 +80,8 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			driver,
 		}
 
-		j, err = json.Marshal(d)
-		if err != nil {
-			log.Errorf("Failed to get encode json driver name for link %s: %s", err, req.Link)
-			return err
-		}
-
-		break
+		return share.JsonResponse(d, rw)
 	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
 
 	return nil
 }

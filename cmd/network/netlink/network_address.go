@@ -3,6 +3,7 @@
 package netlink
 
 import (
+	"api-routerd/cmd/share"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -100,13 +101,7 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 			return err
 		}
 
-		j, err := json.Marshal(addrs)
-		if err != nil {
-			log.Errorf("Failed to encode json address for link %s: %s", err, l)
-			return err
-		}
-
-		rw.Write(j)
+		return share.JsonResponse(addrs, rw)
 
 	} else {
 		addrs, err := netlink.AddrList(nil, netlink.FAMILY_ALL)
@@ -115,16 +110,8 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 			return err
 		}
 
-		j, err := json.Marshal(addrs)
-		if err != nil {
-			log.Errorf("Failed to encode json address: %s", err)
-			return err
-		}
-
-		rw.Write(j)
+		return share.JsonResponse(addrs, rw)
 	}
-
-	rw.WriteHeader(http.StatusOK)
 
 	return nil
 }
