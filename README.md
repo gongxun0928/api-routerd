@@ -78,6 +78,7 @@ $ go get github.com/shirou/gopsutil
 $ go get github.com/coreos/go-systemd/dbus
 $ go get github.com/godbus/dbus
 $ go get github.com/safchain/ethtool
+$ go get github.com/BurntSushi/toml
 $ go get github.com/go-ini/ini
 ```
 
@@ -97,10 +98,10 @@ Conf dir: ```/etc/api-routerd/```
 Conf File: ```api-routerd.conf```
 
 ```
-$ cat /etc/api-routerd/api-routerd.conf
+$ cat /etc/api-routerd/api-routerd.toml
 [Network]
-IPAddress=0.0.0.0
-Port=8080
+IPAddress="0.0.0.0"
+Port="8080"
 ```
 
 ##### How to configure users ?

@@ -10,7 +10,7 @@ import (
 	"path"
 	"runtime"
 
-	"github.com/go-ini/ini"
+	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -18,61 +18,70 @@ import (
 const (
 	Version  = "0.1"
 	ConfPath = "/etc/api-routerd"
-	ConfFile = "api-routerd.conf"
+	ConfFile = "api-routerd.toml"
 	TLSCert  = "tls/server.crt"
 	TLSKey   = "tls/server.key"
 )
 
-var ipFlag string
-var portFlag string
+// flag
+var IPFlag string
+var PortFlag string
+
+type tomlConfig struct {
+	Server Network `toml:"Network"`
+}
+
+type Network struct {
+	IPAddress string
+	Port string
+}
 
 func init() {
 	const (
-		defaultIP   = ""
+		defaultIP   = "0.0.0.0"
 		defaultPort = "8080"
 	)
 
-	flag.StringVar(&ipFlag, "ip", defaultIP, "The server IP address.")
-	flag.StringVar(&portFlag, "port", defaultPort, "The server port.")
+	flag.StringVar(&IPFlag, "ip", defaultIP, "The server IP address.")
+	flag.StringVar(&PortFlag, "port", defaultPort, "The server port.")
 }
 
-func InitConf() {
+func InitConf() (tomlConfig, error){
+	var conf tomlConfig
+
 	confFile := path.Join(ConfPath, ConfFile)
-	cfg, err := ini.Load(confFile)
+	_, err := toml.DecodeFile(confFile, &conf)
 	if err != nil {
 		log.Errorf("Fail to read conf file '%s': %v", ConfPath, err)
-		return
+		return conf, err
 	}
 
-	ip := cfg.Section("Network").Key("IPAddress").String()
-	_, err = share.ParseIP(ip)
+	_, err = share.ParseIP(conf.Server.IPAddress)
 	if err != nil {
-		log.Errorf("Failed to parse Conf file IPAddress=%s", ip)
-		return
+		log.Errorf("Failed to parse IPAddress=%s, %s", conf.Server.IPAddress, conf.Server.Port)
+		return conf, err
 	}
 
-	port := cfg.Section("Network").Key("Port").String()
-	_, err = share.ParsePort(port)
-	if err != nil {
-		log.Errorf("Failed to parse Conf file Port=%s", port)
-		return
-	}
+	log.Debugf("Conf file: Parsed IPAddress=%s and Port=%s", conf.Server.IPAddress, conf.Server.Port)
 
-	log.Debugf("Conf file: Parsed IPAddress=%s and Port=%s", ip, port)
-
-	ipFlag = ip
-	portFlag = port
+	return conf, nil
 }
 
 func main() {
 	share.InitLog()
-	InitConf()
-	flag.Parse()
+
+	conf, err := InitConf()
+	if err != nil {
+		flag.Parse()
+	} else {
+		IPFlag = conf.Server.IPAddress
+		PortFlag = conf.Server.Port
+	}
 
 	log.Infof("api-routerd: v%s (built %s)", Version, runtime.Version())
-	log.Infof("Start Server at %s:%s", ipFlag, portFlag)
+	log.Infof("Start Server at %s:%s", IPFlag, PortFlag)
 
-	err := router.StartRouter(ipFlag, portFlag, path.Join(ConfPath, TLSCert), path.Join(ConfPath, TLSKey))
+	err = router.StartRouter(IPFlag, PortFlag, path.Join(ConfPath, TLSCert), path.Join(ConfPath, TLSKey))
 	if err != nil {
 		log.Fatalf("Failed to init api-routerd: %s", err)
 		os.Exit(1)
