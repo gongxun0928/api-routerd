@@ -62,6 +62,12 @@ func InitConf() (tomlConfig, error){
 		return conf, err
 	}
 
+	_, err = share.ParsePort(conf.Server.Port)
+	if err != nil {
+		log.Errorf("Failed to parse Conf file Port=%s", conf.Server.Port)
+		return conf, err
+	}
+
 	log.Debugf("Conf file: Parsed IPAddress=%s and Port=%s", conf.Server.IPAddress, conf.Server.Port)
 
 	return conf, nil

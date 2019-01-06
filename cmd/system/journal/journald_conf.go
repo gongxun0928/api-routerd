@@ -3,6 +3,7 @@
 package journal
 
 import (
+	"api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
 	"fmt"
@@ -94,15 +95,7 @@ func GetJournalConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(JournalConfig)
-	if err != nil {
-		log.Errorf("Failed to encode json for Journal %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(JournalConfig, rw)
 }
 
 func UpdateJournalConf(rw http.ResponseWriter, r *http.Request) error {
@@ -137,13 +130,5 @@ func UpdateJournalConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(JournalConfig)
-	if err != nil {
-		log.Errorf("Failed to encode json for system conf %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(JournalConfig, rw)
 }

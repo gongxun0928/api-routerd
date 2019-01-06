@@ -3,6 +3,7 @@
 package coredump
 
 import (
+	"api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
 	"fmt"
@@ -95,15 +96,7 @@ func GetCoreDumpConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for coredump: %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func UpdateCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
@@ -152,15 +145,7 @@ func UpdateCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func DeleteCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {

@@ -90,15 +90,7 @@ func GetTimeSyncConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv: %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
@@ -159,15 +151,7 @@ func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
@@ -229,13 +213,5 @@ func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }

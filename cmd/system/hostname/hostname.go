@@ -92,6 +92,8 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 	}
 
 	if property == "" {
+		return share.JsonResponse(HostNameInfo, rw)
+
 		b, err := json.Marshal(HostNameInfo)
 		if err != nil {
 			return err
@@ -100,12 +102,8 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 		rw.Write(b)
 	} else {
 		host := Hostname{Property: property, Value: HostNameInfo[property]}
-		b, err := json.Marshal(host)
-		if err != nil {
-			return err
-		}
 
-		rw.Write(b)
+		return share.JsonResponse(host, rw)
 	}
 
 	return nil

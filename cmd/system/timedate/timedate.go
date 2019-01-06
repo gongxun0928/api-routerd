@@ -4,7 +4,6 @@ package timedate
 
 import (
 	"api-routerd/cmd/share"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -160,20 +159,10 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 	}
 
 	if property == "" {
-		b, err := json.Marshal(TimeInfo)
-		if err != nil {
-			return err
-		}
-
-		rw.Write(b)
+		return share.JsonResponse(TimeInfo, rw)
 	} else {
 		t := TimeDate{Property: property, Value: TimeInfo[property]}
-		b, err := json.Marshal(t)
-		if err != nil {
-			return err
-		}
-
-		rw.Write(b)
+		return share.JsonResponse(t, rw)
 	}
 
 	return nil

@@ -93,15 +93,7 @@ func GetResolvConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
@@ -150,15 +142,7 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }
 
 func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
@@ -208,13 +192,5 @@ func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for resolv %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }

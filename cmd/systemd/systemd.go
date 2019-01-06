@@ -63,16 +63,7 @@ func SystemdState(w http.ResponseWriter) error {
 
 	prop := Property{Property: "SystemState", Value: v.Value().(string)}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode SystemState: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdVersion(w http.ResponseWriter) error {
@@ -83,16 +74,7 @@ func SystemdVersion(w http.ResponseWriter) error {
 
 	prop := Property{Property: "Version", Value: v.Value().(string)}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode prop: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdVirtualization(w http.ResponseWriter) error {
@@ -103,16 +85,7 @@ func SystemdVirtualization(w http.ResponseWriter) error {
 
 	prop := Property{Property: "Virtualization", Value: v.Value().(string)}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode Virtualization: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdArchitecture(w http.ResponseWriter) error {
@@ -123,16 +96,8 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 
 	prop := Property{Property: "Architecture", Value: v.Value().(string)}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode Architecture: %s", err)
-		return err
-	}
 
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdFeatures(w http.ResponseWriter) error {
@@ -143,16 +108,7 @@ func SystemdFeatures(w http.ResponseWriter) error {
 
 	prop := Property{Property: "Features", Value: v.Value().(string)}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode Features: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdNFailedUnits(w http.ResponseWriter) error {
@@ -163,16 +119,7 @@ func SystemdNFailedUnits(w http.ResponseWriter) error {
 
 	prop := Property{Property: "NFailedUnits", Value: fmt.Sprint(v.Value().(uint32))}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode Features: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func SystemdNNames(w http.ResponseWriter) error {
@@ -183,16 +130,7 @@ func SystemdNNames(w http.ResponseWriter) error {
 
 	prop := Property{Property: "NNames", Value: fmt.Sprint(v.Value().(uint32))}
 
-	j, err := json.Marshal(prop)
-	if err != nil {
-		log.Errorf("Failed to encode Features: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(prop, w)
 }
 
 func ListUnits(w http.ResponseWriter) error {
@@ -209,16 +147,7 @@ func ListUnits(w http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(units)
-	if err != nil {
-		log.Errorf("Failed to encode units: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(units, w)
 }
 
 func (u *Unit) StartUnit() error {
@@ -351,15 +280,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 			cpu := strconv.FormatUint(p.Value.Value().(uint64), 10)
 			prop := Property{Property: p.Name, Value: cpu}
 
-			j, err := json.Marshal(prop)
-			if err != nil {
-				log.Errorf("Failed to encode property: %s", err)
-				return err
-			}
-
-			w.WriteHeader(http.StatusOK)
-			w.Write(j)
-			break
+			return share.JsonResponse(prop, w)
 		}
 	} else {
 
@@ -369,14 +290,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 			return err
 		}
 
-		j, err := json.Marshal(p)
-		if err != nil {
-			log.Errorf("Failed to encode property: %s", err)
-			return err
-		}
-
-		w.WriteHeader(http.StatusOK)
-		w.Write(j)
+		 return share.JsonResponse(p, w)
 	}
 
 	return nil
@@ -423,14 +337,5 @@ func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
 		return err
 	}
 
-	j, err := json.Marshal(p)
-	if err != nil {
-		log.Errorf("Failed to encode unit type properties: %s", err)
-		return err
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-
-	return nil
+	return share.JsonResponse(p, w)
 }

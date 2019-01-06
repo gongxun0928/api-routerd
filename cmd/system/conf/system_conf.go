@@ -4,7 +4,6 @@ package conf
 
 import (
 	"api-routerd/cmd/share"
-	"encoding/json"
 	"net/http"
 	"strings"
 
@@ -42,9 +41,8 @@ func GetSudoers(rw http.ResponseWriter) error {
 	}
 
 	sshdconf := SudoersConf{Sudoers: sudoers}
-	json.NewEncoder(rw).Encode(sshdconf)
 
-	return nil
+	return share.JsonResponse(sshdconf, rw)
 }
 
 // SSHConfFileRead read sshd configuration file
@@ -62,14 +60,5 @@ func SSHConfFileRead(rw http.ResponseWriter) error {
 		sshdConfMap[paramName] = fields[1]
 	}
 
-	j, err := json.Marshal(sshdConfMap)
-	if err != nil {
-		log.Error("Failed to encode JSON payload")
-		return err
-	}
-
-	rw.WriteHeader(http.StatusOK)
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(sshdConfMap, rw)
 }
