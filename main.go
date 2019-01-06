@@ -8,9 +8,8 @@ import (
 	"path"
 	"runtime"
 
-	"github.com/RestGW/api-routerd/cmd/share"
-
 	"github.com/RestGW/api-routerd/cmd/router"
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"

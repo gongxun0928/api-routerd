@@ -3,11 +3,12 @@
 package hostname
 
 import (
-	"github.com/RestGW/api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )

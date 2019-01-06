@@ -24,6 +24,7 @@ func RouterGetHostname(rw http.ResponseWriter, r *http.Request) {
 		err := GetHostname(rw, property)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
 		break
@@ -44,6 +45,7 @@ func RouterSetHostname(rw http.ResponseWriter, r *http.Request) {
 		err = hostname.SetHostname()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
 		break
 	}

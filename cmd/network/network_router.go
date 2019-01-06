@@ -3,10 +3,11 @@
 package network
 
 import (
+	"net/http"
+
 	"github.com/RestGW/api-routerd/cmd/network/ethtool"
 	"github.com/RestGW/api-routerd/cmd/network/netlink"
 	"github.com/RestGW/api-routerd/cmd/network/networkd"
-	"net/http"
 
 	"github.com/gorilla/mux"
 )
