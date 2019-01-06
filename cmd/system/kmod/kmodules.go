@@ -27,7 +27,12 @@ func (r *KModules) ModProbe() error {
 		return err
 	}
 
-	cmd := exec.Command("/usr/sbin/modprobe", r.Name, r.Args)
+	path, err := exec.LookPath("modprobe")
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(path, r.Name, r.Args)
 	stdout, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Errorf("Failed to load module %s: %s", r.Name, stdout)
