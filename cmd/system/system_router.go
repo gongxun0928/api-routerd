@@ -3,15 +3,16 @@
 package system
 
 import (
-	"api-routerd/cmd/system/conf"
-	"api-routerd/cmd/system/coredump"
-	"api-routerd/cmd/system/hostname"
-	"api-routerd/cmd/system/journal"
-	"api-routerd/cmd/system/resolv"
-	"api-routerd/cmd/system/resolved"
-	"api-routerd/cmd/system/timesyncd"
-	"api-routerd/cmd/system/timedate"
 	"net/http"
+
+	"github.com/RestGW/api-routerd/cmd/system/conf"
+	"github.com/RestGW/api-routerd/cmd/system/coredump"
+	"github.com/RestGW/api-routerd/cmd/system/hostname"
+	"github.com/RestGW/api-routerd/cmd/system/journal"
+	"github.com/RestGW/api-routerd/cmd/system/resolv"
+	"github.com/RestGW/api-routerd/cmd/system/resolved"
+	"github.com/RestGW/api-routerd/cmd/system/timedate"
+	"github.com/RestGW/api-routerd/cmd/system/timesyncd"
 
 	"github.com/gorilla/mux"
 )

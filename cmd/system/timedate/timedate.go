@@ -3,11 +3,12 @@
 package timedate
 
 import (
-	"api-routerd/cmd/share"
 	"fmt"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )

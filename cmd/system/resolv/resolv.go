@@ -3,7 +3,6 @@
 package resolv
 
 import (
-	"api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
 	"fmt"
@@ -11,6 +10,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )

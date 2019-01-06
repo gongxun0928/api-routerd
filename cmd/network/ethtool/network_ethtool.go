@@ -3,9 +3,10 @@
 package ethtool
 
 import (
-	"api-routerd/cmd/share"
 	"errors"
 	"net/http"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/safchain/ethtool"
 	log "github.com/sirupsen/logrus"

@@ -3,10 +3,11 @@
 package netlink
 
 import (
-	"api-routerd/cmd/share"
 	"encoding/json"
 	"net/http"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"

@@ -3,7 +3,7 @@
 package networkd
 
 import (
-	"api-routerd/cmd/share"
+	"github.com/RestGW/api-routerd/cmd/share"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"

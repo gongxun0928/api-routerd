@@ -3,12 +3,14 @@
 package main
 
 import (
-	"api-routerd/cmd/router"
-	"api-routerd/cmd/share"
 	"flag"
 	"os"
 	"path"
 	"runtime"
+
+	"github.com/RestGW/api-routerd/cmd/share"
+
+	"github.com/RestGW/api-routerd/cmd/router"
 
 	"github.com/BurntSushi/toml"
 	log "github.com/sirupsen/logrus"
@@ -33,7 +35,7 @@ type tomlConfig struct {
 
 type Network struct {
 	IPAddress string
-	Port string
+	Port      string
 }
 
 func init() {
@@ -46,7 +48,7 @@ func init() {
 	flag.StringVar(&PortFlag, "port", defaultPort, "The server port.")
 }
 
-func InitConf() (tomlConfig, error){
+func InitConf() (tomlConfig, error) {
 	var conf tomlConfig
 
 	confFile := path.Join(ConfPath, ConfFile)

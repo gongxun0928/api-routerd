@@ -3,7 +3,7 @@
 package netlink
 
 import (
-	"api-routerd/cmd/share"
+	"github.com/RestGW/api-routerd/cmd/share"
 	"encoding/json"
 	"net"
 	"net/http"

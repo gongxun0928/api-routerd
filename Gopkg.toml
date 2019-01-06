@@ -26,6 +26,14 @@
 
 
 [[constraint]]
+  name = "github.com/BurntSushi/toml"
+  version = "0.3.1"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/RestGW/api-routerd"
+
+[[constraint]]
   name = "github.com/coreos/go-systemd"
   version = "18.0.0"
 
@@ -51,7 +59,7 @@
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.2.0"
+  version = "1.3.0"
 
 [[constraint]]
   name = "github.com/vishvananda/netlink"

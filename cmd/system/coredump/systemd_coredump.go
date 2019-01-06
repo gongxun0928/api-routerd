@@ -3,7 +3,7 @@
 package coredump
 
 import (
-	"api-routerd/cmd/share"
+	"github.com/RestGW/api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
 	"fmt"

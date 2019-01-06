@@ -3,12 +3,13 @@
 package systemd
 
 import (
-	"api-routerd/cmd/share"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	sd "github.com/coreos/go-systemd/dbus"
 	"github.com/godbus/dbus"
@@ -95,7 +96,6 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 	}
 
 	prop := Property{Property: "Architecture", Value: v.Value().(string)}
-
 
 	return share.JsonResponse(prop, w)
 }
@@ -290,7 +290,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 			return err
 		}
 
-		 return share.JsonResponse(p, w)
+		return share.JsonResponse(p, w)
 	}
 
 	return nil

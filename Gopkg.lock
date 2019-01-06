@@ -2,6 +2,40 @@
 
 
 [[projects]]
+  digest = "1:9f3b30d9f8e0d7040f729b82dcbc8f0dead820a133b3147ce355fc451f32d761"
+  name = "github.com/BurntSushi/toml"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3012a1dbe2e4bd1391d42b32f0577cb7bbc7f005"
+  version = "v0.3.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:ca0b96fc606d2d1c3bbfc09978c26dfe8d548ae5f73225080bd75a56a34ac4ba"
+  name = "github.com/RestGW/api-routerd"
+  packages = [
+    "cmd/network",
+    "cmd/network/ethtool",
+    "cmd/network/netlink",
+    "cmd/network/networkd",
+    "cmd/proc",
+    "cmd/router",
+    "cmd/share",
+    "cmd/system",
+    "cmd/system/conf",
+    "cmd/system/coredump",
+    "cmd/system/hostname",
+    "cmd/system/journal",
+    "cmd/system/resolv",
+    "cmd/system/resolved",
+    "cmd/system/timedate",
+    "cmd/system/timesyncd",
+    "cmd/systemd",
+  ]
+  pruneopts = "UT"
+  revision = "0ffe1711f956cd72bab638d6e39a6780d8f9f517"
+
+[[projects]]
   digest = "1:e92f5581902c345eb4ceffdcd4a854fb8f73cf436d47d837d1ec98ef1fe0a214"
   name = "github.com/StackExchange/wmi"
   packages = ["."]
@@ -104,12 +138,12 @@
   revision = "bb4de0191aa41b5507caa14b0650cdbddcd9280b"
 
 [[projects]]
-  digest = "1:69b1cc331fca23d702bd72f860c6a647afd0aa9fcbc1d0659b1365e26546dd70"
+  digest = "1:87c2e02fb01c27060ccc5ba7c5a407cc91147726f8f40b70cceeedbc52b1f3a8"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bcd833dfe83d3cebad139e4a29ed79cb2318bf95"
-  version = "v1.2.0"
+  revision = "e1e72e9de974bd926e5c56f83753fba2df402ce5"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:2d9d06cb9d46dacfdbb45f8575b39fc0126d083841a29d4fbf8d97708f43107e"
@@ -147,12 +181,30 @@
     "windows",
   ]
   pruneopts = "UT"
-  revision = "82a175fd1598e8a172e58ebdf5ed262bb29129e5"
+  revision = "badf5585203e739f88c2c6cd34188a6f54b5d619"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/BurntSushi/toml",
+    "github.com/RestGW/api-routerd/cmd/network",
+    "github.com/RestGW/api-routerd/cmd/network/ethtool",
+    "github.com/RestGW/api-routerd/cmd/network/netlink",
+    "github.com/RestGW/api-routerd/cmd/network/networkd",
+    "github.com/RestGW/api-routerd/cmd/proc",
+    "github.com/RestGW/api-routerd/cmd/router",
+    "github.com/RestGW/api-routerd/cmd/share",
+    "github.com/RestGW/api-routerd/cmd/system",
+    "github.com/RestGW/api-routerd/cmd/system/conf",
+    "github.com/RestGW/api-routerd/cmd/system/coredump",
+    "github.com/RestGW/api-routerd/cmd/system/hostname",
+    "github.com/RestGW/api-routerd/cmd/system/journal",
+    "github.com/RestGW/api-routerd/cmd/system/resolv",
+    "github.com/RestGW/api-routerd/cmd/system/resolved",
+    "github.com/RestGW/api-routerd/cmd/system/timedate",
+    "github.com/RestGW/api-routerd/cmd/system/timesyncd",
+    "github.com/RestGW/api-routerd/cmd/systemd",
     "github.com/coreos/go-systemd/activation",
     "github.com/coreos/go-systemd/dbus",
     "github.com/go-ini/ini",

@@ -3,11 +3,12 @@
 package proc
 
 import (
-	"api-routerd/cmd/share"
 	"errors"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/host"

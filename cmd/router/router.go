@@ -3,11 +3,11 @@
 package router
 
 import (
-	"api-routerd/cmd/network"
-	"api-routerd/cmd/proc"
-	"api-routerd/cmd/share"
-	"api-routerd/cmd/system"
-	"api-routerd/cmd/systemd"
+	"github.com/RestGW/api-routerd/cmd/network"
+	"github.com/RestGW/api-routerd/cmd/proc"
+	"github.com/RestGW/api-routerd/cmd/share"
+	"github.com/RestGW/api-routerd/cmd/system"
+	"github.com/RestGW/api-routerd/cmd/systemd"
 	"context"
 	"crypto/tls"
 	"fmt"

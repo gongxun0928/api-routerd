@@ -3,10 +3,11 @@
 package proc
 
 import (
-	"api-routerd/cmd/share"
 	"errors"
 	"net/http"
 	"path"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 )
 
 const (

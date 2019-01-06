@@ -3,10 +3,11 @@
 package router
 
 import (
-	"api-routerd/cmd/share"
 	"errors"
 	"net/http"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )

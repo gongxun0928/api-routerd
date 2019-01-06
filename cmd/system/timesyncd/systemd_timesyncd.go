@@ -1,7 +1,6 @@
 package timesyncd
 
 import (
-	"api-routerd/cmd/share"
 	"bufio"
 	"encoding/json"
 	"fmt"
@@ -9,6 +8,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
