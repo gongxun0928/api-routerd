@@ -45,7 +45,7 @@ func SystemdProperty(property string) (dbus.Variant, error) {
 	c := conn.Object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
 	p, perr := c.GetProperty("org.freedesktop.systemd1.Manager." + property)
 	if perr != nil {
-		log.Error("org.freedesktop.systemd1.Manager.%s", property)
+		log.Errorf("org.freedesktop.systemd1.Manager.%s", property)
 		return dbus.Variant{}, errors.New("dbus error")
 	}
 
@@ -161,7 +161,7 @@ func (u *Unit) StartUnit() error {
 	reschan := make(chan string)
 	_, err = conn.StartUnit(u.Unit, "replace", reschan)
 	if err != nil {
-		log.Errorf("Failed to start unit %s: %s", u.Unit)
+		log.Errorf("Failed to start unit %s: %s", u.Unit, err)
 		return err
 	}
 
@@ -231,7 +231,7 @@ func (u *Unit) KillUnit() error {
 
 	signal, err := strconv.ParseInt(u.Value, 10, 64)
 	if err != nil {
-		log.Errorf("Failed to parse signal number: ", u.Value, err)
+		log.Errorf("Failed to parse signal number '%s': %s", u.Value, err)
 		return err
 	}
 

@@ -3,9 +3,9 @@
 package networkd
 
 import (
-	"github.com/RestGW/api-routerd/cmd/share"
 	"encoding/json"
 	"fmt"
+	"github.com/RestGW/api-routerd/cmd/share"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"

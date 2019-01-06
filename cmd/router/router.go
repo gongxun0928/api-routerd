@@ -3,14 +3,14 @@
 package router
 
 import (
+	"context"
+	"crypto/tls"
+	"fmt"
 	"github.com/RestGW/api-routerd/cmd/network"
 	"github.com/RestGW/api-routerd/cmd/proc"
 	"github.com/RestGW/api-routerd/cmd/share"
 	"github.com/RestGW/api-routerd/cmd/system"
 	"github.com/RestGW/api-routerd/cmd/systemd"
-	"context"
-	"crypto/tls"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
