@@ -62,6 +62,7 @@ func (r *User) UserAdd() error {
 	if err != nil {
 		return err
 	}
+
 	path, err := exec.LookPath("newusers")
 	if err != nil {
 		return err

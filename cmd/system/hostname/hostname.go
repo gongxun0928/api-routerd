@@ -3,7 +3,6 @@
 package hostname
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -94,13 +93,6 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 
 	if property == "" {
 		return share.JsonResponse(HostNameInfo, rw)
-
-		b, err := json.Marshal(HostNameInfo)
-		if err != nil {
-			return err
-		}
-
-		rw.Write(b)
 	} else {
 		host := Hostname{Property: property, Value: HostNameInfo[property]}
 

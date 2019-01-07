@@ -103,16 +103,13 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 		}
 
 		return share.JsonResponse(addrs, rw)
-
-	} else {
-		addrs, err := netlink.AddrList(nil, netlink.FAMILY_ALL)
-		if err != nil {
-			log.Errorf("Could not get addresses: %s", err)
-			return err
-		}
-
-		return share.JsonResponse(addrs, rw)
 	}
 
-	return nil
+	addrs, err := netlink.AddrList(nil, netlink.FAMILY_ALL)
+	if err != nil {
+		log.Errorf("Could not get addresses: %s", err)
+		return err
+	}
+
+	return share.JsonResponse(addrs, rw)
 }
