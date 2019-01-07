@@ -1,6 +1,7 @@
 ![Logo](https://ibin.co/4R6Hzr2H7l4A.png)
 
 #### A RestAPI Microservice GateWay For Linux
+[![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
 
 A super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
@@ -29,7 +30,7 @@ A super light weight remote management tool which uses REST API for real time co
 - configure system.conf
 - configure coredump.conf
 - configure systemd-resolved.conf
-
+- configure kernel modules (modprobe, lsmod, rmmod)
 - configure network (netlink)
    - Link: mtu, up, down
    - Create bridge and enslave links
@@ -80,15 +81,23 @@ $ go get github.com/godbus/dbus
 $ go get github.com/safchain/ethtool
 $ go get github.com/BurntSushi/toml
 $ go get github.com/go-ini/ini
+
 ```
 
 ##### Now build it
+
 ```
+[sus@Zeus src]$ go get github.com/RestGW/api-routerd
 [sus@Zeus src]$ git clone https://github.com/RestGW/api-routerd
 [sus@Zeus src]$ cd api-routerd
 [sus@Zeus cmd]$ pwd
 /home/sus/go/src/api-routerd
-[sus@Zeus cmd]$ go build -o api-routerd
+[sus@Zeus cmd]$ go build -v
+
+[sus@Zeus api-routerd]$ sudo ./api-routerd
+INFO[0000] api-routerd: v0.1 (built go1.11.4)
+INFO[0000] Start Server at 0.0.0.0:8080
+INFO[0000] Starting api-routerd in plain text mode
 
 ```
 
@@ -687,4 +696,8 @@ configure coredump
 
 [sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request DELETE --data '{"Storage":"#"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/coredump/delete
 
+```
+kmod
+```
+curl --header "Content-Type: application/json" --request POST --data '{"name":"ipip"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/kmod/modprobe
 ```
