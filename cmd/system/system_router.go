@@ -7,6 +7,7 @@ import (
 
 	"github.com/RestGW/api-routerd/cmd/system/conf"
 	"github.com/RestGW/api-routerd/cmd/system/coredump"
+	"github.com/RestGW/api-routerd/cmd/system/group"
 	"github.com/RestGW/api-routerd/cmd/system/hostname"
 	"github.com/RestGW/api-routerd/cmd/system/journal"
 	"github.com/RestGW/api-routerd/cmd/system/kmod"
@@ -179,6 +180,9 @@ func RegisterRouterSystem(router *mux.Router) {
 
 	// kmod
 	kmod.RegisterRouterKMod(n)
+
+	// group
+	group.RegisterRouterGroup(n)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)

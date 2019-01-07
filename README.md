@@ -37,6 +37,7 @@ A super light weight remote management tool which uses REST API for real time co
    - Create bridge and enslave links
    - Adddress: Set, Get, Delete
    - Gateway: Default Gateway Add and Delete
+- configure group add/delete/modify
 
 - see information from /proc such as netstat, netdev, memory and much more
 - configure /proc/sys/net (core/ipv4/ipv6), VM
@@ -61,11 +62,9 @@ First configure your GOPATH. If you have already done this skip this step.
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export OS_OUTPUT_GOPATH=1
-
- ```
+```
 
 clone inside src dir of GOPATH. In my case
-
 ```
 [sus@Zeus src]$ pwd
 /home/sus/go/src
@@ -105,7 +104,7 @@ INFO[0000] Starting api-routerd in plain text mode
 ##### How to configure IP and Port ?
 
 Conf dir: ```/etc/api-routerd/```
-Conf File: ```api-routerd.conf```
+Conf File: ```api-routerd.toml```
 
 ```
 $ cat /etc/api-routerd/api-routerd.toml
@@ -701,4 +700,11 @@ configure coredump
 kmod
 ```
 curl --header "Content-Type: application/json" --request POST --data '{"name":"ipip"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/kmod/modprobe
+```
+
+```
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"name":"test", "gid":"1111"}' http://localhost:8080/api/system/group/add
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request DELETE --data '{"name":"test"}' http://localhost:8080/api/system/group/delete
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"name":"test1", "new_name":"test"}' http://localhost:8080/api/system/group/modify
+
 ```
