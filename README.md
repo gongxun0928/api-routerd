@@ -5,6 +5,7 @@
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
 [![HitCount](http://hits.dwyl.io/ssahani/RestGW/api-routerd.svg)](http://hits.dwyl.io/ssahani/RestGW/api-routerd)
 [![CodeFactor](https://www.codefactor.io/repository/github/restgw/api-routerd/badge)](https://www.codefactor.io/repository/github/restgw/api-routerd)
+[![codebeat badge](https://codebeat.co/badges/1bdd48c6-4cc1-4255-a11b-9807473e9c3d)](https://codebeat.co/projects/github-com-restgw-api-routerd-master)
 [![Coverage Status](https://coveralls.io/repos/github/RestGW/api-routerd/badge.svg?branch=master)](https://coveralls.io/github/RestGW/api-routerd?branch=master)
 
 A super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
