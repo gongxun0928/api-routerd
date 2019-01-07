@@ -2,6 +2,7 @@
 
 #### A RestAPI Microservice GateWay For Linux
 [![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
+[![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
 
 A super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
