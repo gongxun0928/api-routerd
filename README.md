@@ -38,6 +38,7 @@ A super light weight remote management tool which uses REST API for real time co
    - Adddress: Set, Get, Delete
    - Gateway: Default Gateway Add and Delete
 - configure group add/delete/modify
+- configure users add/delete/modify (requires newuser)
 
 - see information from /proc such as netstat, netdev, memory and much more
 - configure /proc/sys/net (core/ipv4/ipv6), VM
@@ -702,9 +703,18 @@ kmod
 curl --header "Content-Type: application/json" --request POST --data '{"name":"ipip"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/kmod/modprobe
 ```
 
+group add/delete/modify
 ```
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"name":"test", "gid":"1111"}' http://localhost:8080/api/system/group/add
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request DELETE --data '{"name":"test"}' http://localhost:8080/api/system/group/delete
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"name":"test1", "new_name":"test"}' http://localhost:8080/api/system/group/modify
+```
+user add/delete/modify
+```
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"username":"testuser3", "password":"password@321", "home_die":"/home/testuser3"}' http://localhost:8080/api/system/user/add
+
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request DELETE --data '{"username":"testuser3"}' http://localhost:8080/api/system/user/delete
+
+[sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"username":"testuser3", "groups": ["1004"]}' http://localhost:8080/api/system/user/modify
 
 ```

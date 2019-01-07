@@ -11,8 +11,8 @@ import (
 )
 
 type Group struct {
-	Gid string `json:"gid"`
-	Name string `json:"name"`
+	Gid     string `json:"gid"`
+	Name    string `json:"name"`
 	NewName string `json:"new_name"`
 }
 
@@ -20,7 +20,7 @@ func (r *Group) GroupAdd() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {
 		_, ok := err.(user.UnknownGroupError)
-		if (!ok) {
+		if !ok {
 			return err
 		}
 	}
@@ -32,7 +32,7 @@ func (r *Group) GroupAdd() error {
 	id, err := user.LookupGroupId(r.Gid)
 	if err != nil {
 		_, ok := err.(user.UnknownGroupIdError)
-		if (!ok) {
+		if !ok {
 			return err
 		}
 	}
@@ -60,7 +60,7 @@ func (r *Group) GroupDel() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {
 		_, ok := err.(user.UnknownGroupError)
-		if (!ok) {
+		if !ok {
 			return err
 		}
 	}
@@ -88,7 +88,7 @@ func (r *Group) GroupModify() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {
 		_, ok := err.(user.UnknownGroupError)
-		if (!ok) {
+		if !ok {
 			return err
 		}
 	}
@@ -100,7 +100,7 @@ func (r *Group) GroupModify() error {
 	g, err = user.LookupGroup(r.NewName)
 	if err != nil {
 		_, ok := err.(user.UnknownGroupError)
-		if (!ok) {
+		if !ok {
 			return err
 		}
 	}

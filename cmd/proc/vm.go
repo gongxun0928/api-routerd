@@ -20,9 +20,9 @@ type VM struct {
 }
 
 func (req *VM) GetVM(rw http.ResponseWriter) error {
-	line, r := share.ReadOneLineFile(path.Join(VMPath, req.Property))
-	if r != nil {
-		return r
+	line, err := share.ReadOneLineFile(path.Join(VMPath, req.Property))
+	if err != nil {
+		return err
 	}
 
 	vmProperty := VM{Property: req.Property, Value: line}
@@ -32,14 +32,14 @@ func (req *VM) GetVM(rw http.ResponseWriter) error {
 }
 
 func (req *VM) SetVM(rw http.ResponseWriter) error {
-	r := share.WriteOneLineFile(path.Join(VMPath, req.Property), req.Value)
-	if r != nil {
-		return r
+	err := share.WriteOneLineFile(path.Join(VMPath, req.Property), req.Value)
+	if err != nil {
+		return err
 	}
 
-	line, r := share.ReadOneLineFile(path.Join(VMPath, req.Property))
-	if r != nil {
-		return r
+	line, err := share.ReadOneLineFile(path.Join(VMPath, req.Property))
+	if err != nil {
+		return err
 	}
 
 	vmProperty := VM{Property: req.Property, Value: line}
