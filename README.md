@@ -1,6 +1,7 @@
 ![Logo](https://ibin.co/4R6Hzr2H7l4A.png)
 
 #### A RestAPI Microservice GateWay For Linux
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5094d66b86f44522b3de7381a0bba5a1)](https://app.codacy.com/app/ssahani/api-routerd?utm_source=github.com&utm_medium=referral&utm_content=RestGW/api-routerd&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
 [![HitCount](http://hits.dwyl.io/ssahani/RestGW/api-routerd.svg)](http://hits.dwyl.io/ssahani/RestGW/api-routerd)
