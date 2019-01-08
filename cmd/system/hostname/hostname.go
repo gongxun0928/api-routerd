@@ -12,6 +12,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	dbusInterface = "org.freedesktop.hostname1"
+	dbusPath      = "/org/freedesktop/hostname1"
+)
+
 var HostNameInfo = map[string]string{
 	"Hostname":                  "",
 	"StaticHostname":            "",
@@ -56,8 +61,8 @@ func (hostname *Hostname) SetHostname() error {
 		return fmt.Errorf("Failed to set hostname property: %s not found", hostname.Property)
 	}
 
-	h := conn.Object("org.freedesktop.hostname1", "/org/freedesktop/hostname1")
-	r := h.Call("org.freedesktop.hostname1."+hostname.Property, 0, hostname.Value, false).Err
+	h := conn.Object(dbusInterface, dbusPath)
+	r := h.Call(dbusInterface+"."+hostname.Property, 0, hostname.Value, false).Err
 	if r != nil {
 		log.Errorf("Failed to set hostname: %s", r)
 		return errors.New("Failed to set hostname")
@@ -74,9 +79,9 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 	}
 	defer conn.Close()
 
-	h := conn.Object("org.freedesktop.hostname1", "/org/freedesktop/hostname1")
+	h := conn.Object(dbusInterface, dbusPath)
 	for k, _ := range HostNameInfo {
-		p, perr := h.GetProperty("org.freedesktop.hostname1." + k)
+		p, perr := h.GetProperty(dbusInterface + "." + k)
 		if perr != nil {
 			log.Errorf("Failed to get org.freedesktop.hostname1.%s", k)
 			continue
@@ -93,11 +98,9 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 
 	if property == "" {
 		return share.JsonResponse(HostNameInfo, rw)
-	} else {
-		host := Hostname{Property: property, Value: HostNameInfo[property]}
-
-		return share.JsonResponse(host, rw)
 	}
 
-	return nil
+	host := Hostname{Property: property, Value: HostNameInfo[property]}
+
+	return share.JsonResponse(host, rw)
 }

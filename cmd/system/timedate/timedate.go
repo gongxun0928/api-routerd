@@ -13,6 +13,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	dbusInterface = "org.freedesktop.timedate1"
+	dbusPath      = "/org/freedesktop/timedate1"
+)
+
 var TimeInfo = map[string]string{
 	"Timezone":        "",
 	"LocalRTC":        "",
@@ -49,7 +54,7 @@ func (t *TimeDate) SetTimeDate() error {
 		return fmt.Errorf("Failed to set timedate:  %s not found", t.Property)
 	}
 
-	h := conn.Object("org.freedesktop.timedate1", "/org/freedesktop/timedate1")
+	h := conn.Object(dbusInterface, dbusPath)
 
 	if t.Value == "SetNTP" {
 
@@ -58,14 +63,14 @@ func (t *TimeDate) SetTimeDate() error {
 			return err
 		}
 
-		r := h.Call("org.freedesktop.timedate1."+t.Property, 0, b, false).Err
+		r := h.Call(dbusInterface+"."+t.Property, 0, b, false).Err
 		if r != nil {
 			log.Errorf("Failed to set SetNTP: %s", r)
 			return r
 		}
 	} else {
 
-		r := h.Call("org.freedesktop.timedate1."+t.Property, 0, t.Value, false).Err
+		r := h.Call(dbusInterface+"."+t.Property, 0, t.Value, false).Err
 		if r != nil {
 			log.Errorf("Failed to set timedate property: %s", r)
 			return r
@@ -83,7 +88,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 	}
 	defer conn.Close()
 
-	h := conn.Object("org.freedesktop.timedate1", "/org/freedesktop/timedate1")
+	h := conn.Object(dbusInterface, dbusPath)
 	for k := range TimeInfo {
 		p, perr := h.GetProperty("org.freedesktop.timedate1." + k)
 		if perr != nil {
