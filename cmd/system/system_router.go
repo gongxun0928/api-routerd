@@ -8,15 +8,16 @@ import (
 	"github.com/RestGW/api-routerd/cmd/system/conf"
 	"github.com/RestGW/api-routerd/cmd/system/coredump"
 	"github.com/RestGW/api-routerd/cmd/system/group"
-	"github.com/RestGW/api-routerd/cmd/system/user"
 	"github.com/RestGW/api-routerd/cmd/system/hostname"
 	"github.com/RestGW/api-routerd/cmd/system/journal"
 	"github.com/RestGW/api-routerd/cmd/system/kmod"
+	"github.com/RestGW/api-routerd/cmd/system/login"
 	"github.com/RestGW/api-routerd/cmd/system/resolv"
 	"github.com/RestGW/api-routerd/cmd/system/resolved"
 	"github.com/RestGW/api-routerd/cmd/system/sysctl"
 	"github.com/RestGW/api-routerd/cmd/system/timedate"
 	"github.com/RestGW/api-routerd/cmd/system/timesyncd"
+	"github.com/RestGW/api-routerd/cmd/system/user"
 
 	"github.com/gorilla/mux"
 )
@@ -191,6 +192,9 @@ func RegisterRouterSystem(router *mux.Router) {
 
 	// sysctl
 	sysctl.RegisterRouterSysctl(n)
+
+	// login
+	login.RegisterRouterLogin(n)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)

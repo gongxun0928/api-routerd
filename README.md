@@ -31,6 +31,7 @@ A super light weight remote management tool which uses REST API for real time co
     - .netdev
     - .link
 - configure hostnamed
+- configure users using login (list-sessions, list-users and terminate-user etc)
 - configure timdate
 - configure nameserver /etc/resolv.conf
 - configure timesynd
@@ -608,6 +609,25 @@ Supported Property (Methods) for setting hostname. For example: ```'{"property":
         "SetLocation"
 ```
 
+##### systemd-logind
+
+Supported methods
+```
+        list-sessions
+        list-users
+        lock-session
+        lock-sessions
+        terminate-session
+        terminate-user
+```
+
+example:
+```
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request GET --header "X-Session-Token: secret" http://localhost:8080/api/system/login/get/list-sessions
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request GET --header "X-Session-Token: secret" http://localhost:8080/api/system/login/get/list-users
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request POST --data '{"value":"1002"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/login/post/terminate-user
+```
+
 ##### ethtool
 
 ```
@@ -680,9 +700,7 @@ sus@Zeus cmd]$ curl --header "Content-Type: application/json" --request POST --d
 Delete
 ```
 sus@Zeus cmd]$ curl --header "Content-Type: application/json" --request DELETE --data '{"servers":["192.168.225.3","192.168.225.2"]}' --header "X-Session-Token: secret" http://localhost:8080/api/network/system/delete
-
 ```
-
 
 Configure systemd-resolved
 ```
@@ -700,9 +718,7 @@ Delete
 configure coredump
 ```
 [sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request GET http://localhost:8080/api/system/coredump --header "X-Session-Token: secret"
-
 [sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request POST --data '{"Storage":"internal"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/coredump/add
-
 [sus@Zeus api-routerd]$  curl --header "Content-Type: application/json" --request DELETE --data '{"Storage":"#"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/coredump/delete
 
 ```
@@ -720,18 +736,13 @@ group add/delete/modify
 user add/delete/modify
 ```
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"username":"testuser3", "password":"password@321", "home_die":"/home/testuser3"}' http://localhost:8080/api/system/user/add
-
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request DELETE --data '{"username":"testuser3"}' http://localhost:8080/api/system/user/delete
-
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"username":"testuser3", "groups": ["1004"]}' http://localhost:8080/api/system/user/modify
-
 ```
 
 sysctl
 ```
 [sus@Zeus ~]$ curl --header "Content-Type: application/json" --request add --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0", "apply":"yes"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/add
-
 [sus@Zeus ~]$ curl --header "Content-Type: application/json" --request POST --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/modify
-
 [sus@Zeus ~]$ curl --header "Content-Type: application/json" --request DELETE --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/delete
 ```
