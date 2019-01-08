@@ -46,6 +46,7 @@ A super light weight remote management tool which uses REST API for real time co
    - Gateway: Default Gateway Add and Delete
 - configure group add/delete/modify
 - configure users add/delete/modify (requires newuser)
+- configure sysctl add/delete/modify and apply
 
 - see information from /proc such as netstat, netdev, memory and much more
 - configure /proc/sys/net (core/ipv4/ipv6), VM
@@ -724,4 +725,13 @@ user add/delete/modify
 
 [sus@Zeus api-routerd]$  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"username":"testuser3", "groups": ["1004"]}' http://localhost:8080/api/system/user/modify
 
+```
+
+sysctl
+```
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request add --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0", "apply":"yes"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/add
+
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request POST --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/modify
+
+[sus@Zeus ~]$ curl --header "Content-Type: application/json" --request DELETE --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/delete
 ```

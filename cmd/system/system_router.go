@@ -14,6 +14,7 @@ import (
 	"github.com/RestGW/api-routerd/cmd/system/kmod"
 	"github.com/RestGW/api-routerd/cmd/system/resolv"
 	"github.com/RestGW/api-routerd/cmd/system/resolved"
+	"github.com/RestGW/api-routerd/cmd/system/sysctl"
 	"github.com/RestGW/api-routerd/cmd/system/timedate"
 	"github.com/RestGW/api-routerd/cmd/system/timesyncd"
 
@@ -187,6 +188,9 @@ func RegisterRouterSystem(router *mux.Router) {
 
 	// user
 	user.RegisterRouterUser(n)
+
+	// sysctl
+	sysctl.RegisterRouterSysctl(n)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)
