@@ -5,6 +5,7 @@ package ethtool
 import (
 	"errors"
 	"net/http"
+	"unsafe"
 
 	"github.com/RestGW/api-routerd/cmd/share"
 
@@ -82,6 +83,84 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(d, rw)
+
+	case "get-link-driver-info":
+
+		e, err := NewEthTool()
+		if err != nil {
+			log.Errorf("Failed to init ethtool for link %s: %s", err, req.Link)
+			return err
+		}
+		defer e.Close()
+
+		drvinfo := EthtoolDrvInfo{
+			Cmd: ETHTOOL_GDRVINFO,
+		}
+
+		err = e.Ioctl(req.Link, uintptr(unsafe.Pointer(&drvinfo)))
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(drvinfo, rw)
+
+	case "get-link-permaddr":
+
+		permaddr, err := e.PermAddr(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool Perm Addr for link %s: %s", err, req.Link)
+			return err
+		}
+
+		p := struct {
+			PermAddr string
+		}{
+			permaddr,
+		}
+
+		return share.JsonResponse(p, rw)
+
+	case "get-link-eeprom":
+
+		eeprom, err := e.ModuleEepromHex(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool eeprom for link %s: %s", err, req.Link)
+			return err
+		}
+
+		e := struct {
+			ModuleEeprom string
+		}{
+			eeprom,
+		}
+
+		return share.JsonResponse(e, rw)
+
+	case "get-link-msglvl":
+
+		msglvl, err := e.MsglvlGet(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			return err
+		}
+
+		g := struct {
+			ModuleMsglv uint32
+		}{
+			msglvl,
+		}
+
+		return share.JsonResponse(g, rw)
+
+	case "get-link-mapped":
+
+		mapped, err := e.CmdGetMapped(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			return err
+		}
+
+		return share.JsonResponse(mapped, rw)
 	}
 
 	return nil

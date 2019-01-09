@@ -649,6 +649,12 @@ example:
 ```
 [sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET http://localhost:8080/api/network/ethtool/wlp4s0/get-link-driver-name
 {"action":"get-link-driver-name","link":"wlp4s0","reply":"iwlwifi"}
+
+[sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-driver-info
+[sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-permaddr
+[sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-eeprom
+[sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-msglvl
+[sus@Zeus cmd]$  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-mapped
 ```
 
 Get link netlink

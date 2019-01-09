@@ -19,7 +19,7 @@ func main() {
 
 	err := conf.InitConf()
 	if err != nil {
-		log.Errorf("Failed to init conf: %s", conf.ConfFile, err)
+		log.Errorf("Failed to init conf file %s: %s", conf.ConfFile, err)
 	}
 
 	log.Infof("api-routerd: v%s (built %s)", conf.Version, runtime.Version())
