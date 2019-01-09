@@ -45,6 +45,7 @@ type EthtoolDrvInfo struct {
 
 func NewEthTool() (*EthTool, error) {
 	e := new(EthTool)
+
 	err := e.EthtoolConnect()
 	if err != nil {
 		return nil, err
@@ -70,7 +71,7 @@ func (e *EthTool) EthtoolConnect() error {
 
 // SocketIoctlFd returns a new fd
 func (e *EthTool) SocketIoctlFd() error {
-	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_DGRAM, syscall.IPPROTO_IP)
+	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_DGRAM|syscall.SOCK_CLOEXEC, syscall.IPPROTO_IP)
 	if err != nil {
 		fd, err := syscall.Socket(syscall.AF_NETLINK, syscall.SOCK_RAW|syscall.SOCK_CLOEXEC, syscall.NETLINK_GENERIC)
 		if err != nil {
