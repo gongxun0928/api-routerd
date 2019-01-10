@@ -1,27 +1,28 @@
-# A RestAPI MicroService GateWay for Linux
+# api-routerd
+![N|Solid](https://ibin.co/4R6Hzr2H7l4A.png)
 
-![Logo](https://ibin.co/4R6Hzr2H7l4A.png)
+A RestAPI MicroService GateWay for Linux
 
-
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5094d66b86f44522b3de7381a0bba5a1)](https://app.codacy.com/app/ssahani/api-routerd?utm_source=github.com&utm_medium=referral&utm_content=RestGW/api-routerd&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
 [![HitCount](http://hits.dwyl.io/ssahani/RestGW/api-routerd.svg)](http://hits.dwyl.io/ssahani/RestGW/api-routerd)
 [![CodeFactor](https://www.codefactor.io/repository/github/restgw/api-routerd/badge)](https://www.codefactor.io/repository/github/restgw/api-routerd)
 [![codebeat badge](https://codebeat.co/badges/1bdd48c6-4cc1-4255-a11b-9807473e9c3d)](https://codebeat.co/projects/github-com-restgw-api-routerd-master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RestGW/api-routerd)](https://goreportcard.com/report/github.com/RestGW/api-routerd)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5094d66b86f44522b3de7381a0bba5a1)](https://app.codacy.com/app/ssahani/api-routerd?utm_source=github.com&utm_medium=referral&utm_content=RestGW/api-routerd&utm_campaign=Badge_Grade_Dashboard)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Coverage Status](https://coveralls.io/repos/github/RestGW/api-routerd/badge.svg?branch=master)](https://coveralls.io/github/RestGW/api-routerd?branch=master)
 
-A super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
-- Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan etc.) from any OS (Linux, IOS, Android, Windows etc ...)
+api-routerd is a cloud-enabled, mobile-ready, a super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
+
+- Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan ...) from any OS (Linux, IOS, Android, Windows ...)
 - An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS
-- Minimal data transfer using JSON
+- Minimal data transfer using JSONoffline-storage, AngularJS powered HTML5 Markdown editor.
 
+# Features!
 
-## Features
-
+- systemd socket activation support
 - systemd
   - systemd informations
   - services (start, stop, restart, status)
@@ -49,21 +50,39 @@ A super light weight remote management tool which uses REST API for real time co
 - configure group add/delete/modify
 - configure users add/delete/modify (requires newuser)
 - configure sysctl add/delete/modify and apply
-
 - see information from /proc such as netstat, netdev, memory and much more
 - configure /proc/sys/net (core/ipv4/ipv6), VM
 - See ethtool information
 - See sudoers and sshd conf
-
-- systemd socket activation support
 
 ### api-routerd json API
 
  Refer spreadsheet [API](https://docs.google.com/spreadsheets/d/e/2PACX-1vTl2Vmp-BdTE5Vgi_PiW-qKPJnbLxdSso9kT2GAkAxCu_iWrw3_PZLlEuyXz0lbFgd7DoofXlmmb3dP/pubhtml
 )
 
+### Tech
 
-### Quick Start
+api-routerd uses a number of open source projects to work properly:
+
+* [logrus](github.com/sirupsen/logrus)
+* [gorilla mux](github.com/gorilla/mux) 
+* [netlink](github.com/vishvananda/netlink)
+* [gopsutil](github.com/shirou/gopsutil)
+* [coreos dbus](github.com/coreos/go-systemd/dbus)
+* [dbus](github.com/godbus/dbus) 
+* [ethtool](github.com/safchain/ethtool)
+* [BurntSushi toml](github.com/BurntSushi/toml)
+* [go-ini](github.com/go-ini/ini)
+
+
+And of course Dillinger itself is open source with a [public repository][git-repo-url]
+ on GitHub.
+
+### Development
+
+Want to contribute? Great!
+
+### Installation
 
 First configure your GOPATH. If you have already done this skip this step.
 
@@ -77,29 +96,14 @@ export PATH=$PATH:$GOPATH/bin
 export OS_OUTPUT_GOPATH=1
 ```
 
-clone inside src dir of GOPATH. In my case
+Clone inside src dir of $GOPATH. In my case
 
 ```sh
 $ pwd
 /home/sus/go/src
 ```
 
-### Install libs
-
-```sh
-- $ go get github.com/sirupsen/logrus
-- $ go get github.com/gorilla/mux
-- $ go get github.com/vishvananda/netlink
-- $ go get github.com/shirou/gopsutil
-- $ go get github.com/coreos/go-systemd/dbus
-- $ go get github.com/godbus/dbus
-- $ go get github.com/safchain/ethtool
-- $ go get github.com/BurntSushi/toml
-- $ go get github.com/go-ini/ini
-
-```
-
-### Clone nad build
+### Installation
 
 ```sh
 $ go get github.com/RestGW/api-routerd
@@ -199,14 +203,14 @@ $ curl --request GET --header "X-Session-Token: secret" https://localhost:8080/a
 
 Use case: systemd
 
-Know systemd information
+See systemd information
 
 ```sh
-http://localhost:8080/api/service/systemd/version
-http://localhost:8080/api/service/systemd/state
-http://localhost:8080/api/service/systemd/features
-http://localhost:8080/api/service/systemd/virtualization
-http://localhost:8080/api/service/systemd/architecture
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/version
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/state
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/features
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/virtualization
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/architecture
 ````
 
 Get all units
@@ -237,7 +241,7 @@ $ curl --header "X-Session-Token: secret" --header "Content-Type: application/js
 $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/sshd.service/get/CPUShares
 $ curl --header "Content-Type: application/json" --request POST --data '{"action":"start","unit":"sshd.service"}' --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd
 $ curl --header "Content-Type: application/json" --request POST --data '{"action":"stop","unit":"sshd.service"}' --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd
-[sus@Zeus proc]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/sshd.service/status
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/sshd.service/status
 {"property":"active","unit":"sshd.service"}
 ```
 
@@ -253,17 +257,23 @@ Get all unittype properties such as Service, Mount, Socket
 $ curl --request GET --header "X-Session-Token: secret http://localhost:8080/api/service/systemd/sshd.service/gettype/Service
 ```
 
-system.conf /etc/systemd/system.conf
+systemd system.conf ```/etc/systemd/system.conf```
 
-```sh
 Get
+```sh
 $ curl --header "Content-Type: application/json" --request POST --data '{ "DefaultLimitNOFILE":"1024"}' --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/conf
 {"CPUAffinity":"","CapabilityBoundingSe":"","CrashChangeVT":"","CrashReboot":"","CrashShell":"","CtrlAltDelBurstAction":"","DefaultBlockIOAccounting":"","DefaultCPUAccounting":"","DefaultEnvironment":"","DefaultIOAccounting":"","DefaultIPAccounting":"","DefaultLimitAS":"","DefaultLimitCORE":"","DefaultLimitCPU":"","DefaultLimitDATA":"","DefaultLimitFSIZE":"","DefaultLimitLOCKS":"","DefaultLimitMEMLOCK":"","DefaultLimitMSGQUEUE":"","DefaultLimitNICE":"","DefaultLimitNOFILE":"1024","DefaultLimitNPROC":"","DefaultLimitRSS":"","DefaultLimitRTPRIO":"","DefaultLimitRTTIME":"","DefaultLimitSIGPENDING":"","DefaultLimitSTACK":"","DefaultMemoryAccounting":"","DefaultRestartSec":"","DefaultStandardError":"","DefaultStandardOutput":"","DefaultStartLimitBurst":"","DefaultStartLimitIntervalSec":"","DefaultTasksAccounting":"","DefaultTasksMax":"","DefaultTimeoutStartSec":"","DefaultTimeoutStopSec":"","DefaultTimerAccuracySec":"","DumpCore":"","IPAddressAllow":"","IPAddressDeny":"","JoinControllers":"","LogColor":"","LogLevel":"","LogLocation":"","LogTarget":"","RuntimeWatchdogSec":"","ShowStatus":"","ShutdownWatchdogSec":"","SystemCallArchitectures":"","TimerSlackNSec":""}
+```
 
 Set
+
+```sh
 $ curl --header "Content-Type: application/json" --request POST --data '{ "DefaultLimitNOFILE":"1024"}' --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/conf/update
+```
 
 Reset
+
+```sh
 $ curl --header "Content-Type: application/json" --request POST --data '{ "DefaultLimitNOFILE":""}' --header "X-Session-Token: secret" http://localhost:8080/api/service/systemd/conf/update
 
 ```
@@ -314,23 +324,24 @@ $ curl --request GET --header "X-Session-Token: secret" https://localhost:8080/a
 $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/modules
 ```
 
-information by pid request = "GET"
+Information by pid
 
+GET
 ```sh
 $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-connections/
 [{"fd":270,"family":2,"type":1,"localaddr":{"ip":"192.168.225.101","port":45354},"remoteaddr":{"ip":"74.125.24.102","port":443},"status":"ESTABLISHED","uids":[1000,1000,1000,1000],"pid":2769},{"fd":196,"family":2,"type":1,"localaddr":{"ip":"192.168.225.101","port":49138},"remoteaddr":{"ip":"172.217.194.94","port":443},"status":"ESTABLISHED","uids":[1000,1000,1000,1000],"pid":27
 
-http://localhost:8080/api/proc/process/2769/pid-rlimit/
-http://localhost:8080/api/proc/process/2769/pid-rlimit-usage/
-http://localhost:8080/api/proc/process/2769/pid-status/
-http://localhost:8080/api/proc/process/2769/pid-username/
-http://localhost:8080/api/proc/process/2769/pid-open-files/
-http://localhost:8080/api/proc/process/2769/pid-fds/
-http://localhost:8080/api/proc/process/2769/pid-name/
-http://localhost:8080/api/proc/process/2769/pid-memory-percent/
-http://localhost:8080/api/proc/process/2769/pid-memory-maps/
-http://localhost:8080/api/proc/process/2769/pid-memory-info/
-http://localhost:8080/api/proc/process/2769/pid-io-counters/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-rlimit/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-rlimit-usage/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-status/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-username/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-open-files/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-fds/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-name/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-memory-percent/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-memory-maps/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-memory-info/
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/process/2769/pid-io-counters/
 ```
 
 ```sh
@@ -358,16 +369,15 @@ set and get any value from ```/proc/sys/net```.
 supported: IPv4, IPv6 and core
 
 ```sh
-[sus@Zeus proc]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
 {"path":"ipv4","property":"forwarding","value":"0","link":"enp0s31f6"}
-[sus@Zeus proc]$  curl --header "Content-Type: application/json" --request PUT --data '{"value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
-[sus@Zeus proc]$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
+$  curl --header "Content-Type: application/json" --request PUT --data '{"value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/sys/net/ipv4/enp0s31f6/forwarding
 {"path":"ipv4","property":"forwarding","value":"1","link":"enp0s31f6"}
-[sus@Zeus proc]$
 
 ```
 
-##### Use case configure link
+###### Use case configure link
 
 Add address
 
@@ -434,7 +444,7 @@ Delete a link
 $ curl --header "Content-Type: application/json" --request DELETE --data '{"action":"delete-link", "link":"test-br"}' --header "X-Session-Token: secret" http://localhost:8080/api/network/link/delete
 ```
 
-##### Use Case: networkd
+###### Use Case: networkd
 
 ```sh
 $ curl --header "Content-Type: application/json" --request POST --data '{"Match": [{"Name":"eth0"}], "DHCP":"yes", "LLDP":"yes","Addresses": [{"Address":"192.168.1est1"},{"Address":"192.168.1.4", "Label":"test3", "Peer":"192.168.1.5"}], "Routes": [{"Gateway":"192.168.1.1","GatewayOnlink":"true"},{"Destination":"192.168.1.10","Table":"10"}]}' --header "X-Session-Token: secret" http://localhost:8080/api/network/networkd/network
@@ -614,7 +624,7 @@ Kind=veth
 Name=test
 ```
 
-##### Hostname
+###### Hostname
 
 Example: Get and Set Hostname
 
@@ -661,7 +671,7 @@ Supported Property (Methods) for setting hostname. For example: ```'{"property":
         "SetLocation"
 ```
 
-##### systemd-logind
+###### systemd-logind
 
 Supported methods
 
@@ -682,7 +692,7 @@ $ curl --header "Content-Type: application/json" --request GET --header "X-Sessi
 $ curl --header "Content-Type: application/json" --request POST --data '{"value":"1002"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/login/post/terminate-user
 ```
 
-##### ethtool
+###### ethtool
 
 ```sh
 $ curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-features
@@ -710,6 +720,8 @@ $  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/
 $  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-msglvl
 $  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-mapped
 ```
+
+###### Netlink
 
 Get link netlink
 
@@ -752,7 +764,7 @@ Get all addresses
 http://localhost:8080/api/network/address/get
 ```
 
-##### Add/Read/Delete confs in resolv.conf
+###### Add/Read/Delete confs in ```resolv.conf```
 
 Get
 
@@ -773,7 +785,7 @@ Delete
 $ curl --header "Content-Type: application/json" --request DELETE --data '{"servers":["192.168.225.3","192.168.225.2"]}' --header "X-Session-Token: secret" http://localhost:8080/api/network/system/delete
 ```
 
-Configure systemd-resolved
+###### Configure systemd-resolved
 
 ```sh
 To get
@@ -788,20 +800,20 @@ $  curl --header "Content-Type: application/json" --request DELETE --data '{"dns
 {"dns":["10.68.5.26","10.64.63.6","192.168.225.1"],"fallback_dns":["8.8.8.8","8.8.4.4","2001:4860:4860::8888","2001:4860:4860::8844"]}
 ```
 
-configure coredump
+###### configure coredump
 
 ```sh
 $  curl --header "Content-Type: application/json" --request GET http://localhost:8080/api/system/coredump --header "X-Session-Token: secret"
 $  curl --header "Content-Type: application/json" --request POST --data '{"Storage":"internal"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/coredump/add
 $  curl --header "Content-Type: application/json" --request DELETE --data '{"Storage":"#"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/coredump/delete
 ```
-kmod
+###### kmod
 
 ```sh
 curl --header "Content-Type: application/json" --request POST --data '{"name":"ipip"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/kmod/modprobe
 ```
 
-group add/delete/modify
+###### group add/delete/modify
 
 ```sh
 $  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"name":"test", "gid":"1111"}' http://localhost:8080/api/system/group/add
@@ -810,7 +822,7 @@ $  curl --header "X-Session-Token: secret" --header "Content-Type: application/j
 
 ```
 
-user add/delete/modify
+###### user add/delete/modify
 
 ``` sh
 $  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request POST --data '{"username":"testuser3", "password":"password@321", "home_die":"/home/testuser3"}' http://localhost:8080/api/system/user/add
@@ -818,10 +830,30 @@ $  curl --header "X-Session-Token: secret" --header "Content-Type: application/j
 $  curl --header "X-Session-Token: secret" --header "Content-Type: application/json" --request PUT --data '{"username":"testuser3", "groups": ["1004"]}' http://localhost:8080/api/system/user/modify
 ```
 
-sysctl
+###### sysctl
 
 ```sh
 $ curl --header "Content-Type: application/json" --request POST --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0", "apply":"yes"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/add
 $ curl --header "Content-Type: application/json" --request POST --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/modify
 $ curl --header "Content-Type: application/json" --request DELETE --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/delete
 ```
+
+
+### Todos
+
+ - Write Tests
+ - Networkd
+ - iptables
+
+License
+----
+
+Apchehe 2.0
+
+
+**Free Software, Hell Yeah!**
+
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+
+   [git-repo-url]: <git@github.com:RestGW/api-routerd.git>
+
