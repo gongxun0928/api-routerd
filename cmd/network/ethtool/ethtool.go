@@ -14,8 +14,10 @@ import (
 )
 
 type Ethtool struct {
-	Action string `json:"action"`
-	Link   string `json:"link"`
+	Action   string `json:"action"`
+	Link     string `json:"link"`
+	Property string `json:"property"`
+	Value    string `json:"Value"`
 }
 
 func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
@@ -161,6 +163,37 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(mapped, rw)
+	}
+
+	return nil
+}
+
+func (r *Ethtool) SetEthTool(rw http.ResponseWriter) error {
+	link := share.LinkExists(r.Link)
+	if !link {
+		log.Errorf("Failed to get link: %s", r.Link)
+		return errors.New("Link not found")
+	}
+
+	e, err := ethtool.NewEthtool()
+	if err != nil {
+		log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
+		return err
+	}
+	defer e.Close()
+
+	switch r.Action {
+	case "set-link-feature":
+
+		feature := make(map[string]bool)
+
+		b, err := share.ParseBool(r.Value)
+		feature[r.Property] = b
+
+		err = e.Change(r.Link, feature)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

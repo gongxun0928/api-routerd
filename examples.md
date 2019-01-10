@@ -531,6 +531,13 @@ $  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/
 $  curl --header "X-Session-Token: secret" --request GET  http://localhost:8080/api/network/ethtool/vmnet8/get-link-mapped
 ```
 
+Set offload
+
+``` sh
+$curl --header "X-Session-Token: secret" --request POST --data '{"property":"rx-checksum", "value":"1"}' http://localhost:17999/api/network/ethtool/vmnet8/set-link-feature
+
+```
+
 Get link netlink
 
 ```sh
