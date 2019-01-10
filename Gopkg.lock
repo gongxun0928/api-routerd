@@ -10,32 +10,6 @@
   version = "v0.3.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:ca0b96fc606d2d1c3bbfc09978c26dfe8d548ae5f73225080bd75a56a34ac4ba"
-  name = "github.com/RestGW/api-routerd"
-  packages = [
-    "cmd/network",
-    "cmd/network/ethtool",
-    "cmd/network/netlink",
-    "cmd/network/networkd",
-    "cmd/proc",
-    "cmd/router",
-    "cmd/share",
-    "cmd/system",
-    "cmd/system/conf",
-    "cmd/system/coredump",
-    "cmd/system/hostname",
-    "cmd/system/journal",
-    "cmd/system/resolv",
-    "cmd/system/resolved",
-    "cmd/system/timedate",
-    "cmd/system/timesyncd",
-    "cmd/systemd",
-  ]
-  pruneopts = "UT"
-  revision = "0ffe1711f956cd72bab638d6e39a6780d8f9f517"
-
-[[projects]]
   digest = "1:e92f5581902c345eb4ceffdcd4a854fb8f73cf436d47d837d1ec98ef1fe0a214"
   name = "github.com/StackExchange/wmi"
   packages = ["."]
@@ -44,11 +18,12 @@
   version = "1.0.0"
 
 [[projects]]
-  digest = "1:81fc5b93df0f3e7815f13aa30d2ee9e6d95370234840fa7f2df648a765c7b39c"
+  digest = "1:7dceea6e55c29ef84e90f1e466edd5f7beb58c6e9fddc34276a38d271eae0955"
   name = "github.com/coreos/go-systemd"
   packages = [
     "activation",
     "dbus",
+    "login1",
   ]
   pruneopts = "UT"
   revision = "9002847aa1425fb6ac49077c0a630b3b67e0fbfd"
@@ -107,11 +82,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:1b91bad0d84499c3dc0df8d616ada09c5a2caea443b647579af4e8442a4eb1ba"
+  digest = "1:2649d7958160c3a92344df6a3751cdcd6c639dccd780737db3ad5779bbdb99c5"
   name = "github.com/safchain/ethtool"
   packages = ["."]
   pruneopts = "UT"
-  revision = "58d9475509e967d235eb0cee15d99dc8e77842f5"
+  revision = "41a6d35882ae02b093542a1b7a177a3b6ff52f60"
 
 [[projects]]
   digest = "1:5552baf3a531af37ca85a348706726d02cd67776b70da5d38a9c6763e825f0fc"
@@ -174,39 +149,23 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:191cccd950a4aeadb60306062f2bdc2f924d750d0156ec6c691b17211bfd7349"
+  digest = "1:5ee4df7ab18e945607ac822de8d10b180baea263b5e8676a1041727543b9c1e4"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "badf5585203e739f88c2c6cd34188a6f54b5d619"
+  revision = "48ac38b7c8cbedd50b1613c0fccacfc7d88dfcdf"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
     "github.com/BurntSushi/toml",
-    "github.com/RestGW/api-routerd/cmd/network",
-    "github.com/RestGW/api-routerd/cmd/network/ethtool",
-    "github.com/RestGW/api-routerd/cmd/network/netlink",
-    "github.com/RestGW/api-routerd/cmd/network/networkd",
-    "github.com/RestGW/api-routerd/cmd/proc",
-    "github.com/RestGW/api-routerd/cmd/router",
-    "github.com/RestGW/api-routerd/cmd/share",
-    "github.com/RestGW/api-routerd/cmd/system",
-    "github.com/RestGW/api-routerd/cmd/system/conf",
-    "github.com/RestGW/api-routerd/cmd/system/coredump",
-    "github.com/RestGW/api-routerd/cmd/system/hostname",
-    "github.com/RestGW/api-routerd/cmd/system/journal",
-    "github.com/RestGW/api-routerd/cmd/system/resolv",
-    "github.com/RestGW/api-routerd/cmd/system/resolved",
-    "github.com/RestGW/api-routerd/cmd/system/timedate",
-    "github.com/RestGW/api-routerd/cmd/system/timesyncd",
-    "github.com/RestGW/api-routerd/cmd/systemd",
     "github.com/coreos/go-systemd/activation",
     "github.com/coreos/go-systemd/dbus",
+    "github.com/coreos/go-systemd/login1",
     "github.com/go-ini/ini",
     "github.com/godbus/dbus",
     "github.com/gorilla/mux",
