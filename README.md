@@ -207,6 +207,7 @@ you can quickly isolate and solve problems. You can create custom versions of an
 * Write ```RegisterRouterModule```
 * Register ```RegisterRouterModule``` with parent router for example for ```login``` registered with
   ```RegisterRouterSystem``` under ```system``` namespace as ```login.RegisterRouterLogin```
+* See examples directory how to write on your own plugin.
 
 ### Todos
 
