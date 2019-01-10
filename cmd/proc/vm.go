@@ -25,10 +25,12 @@ func (req *VM) GetVM(rw http.ResponseWriter) error {
 		return err
 	}
 
-	vmProperty := VM{Property: req.Property, Value: line}
-	json.NewEncoder(rw).Encode(vmProperty)
+	vmProperty := VM{
+		Property: req.Property,
+		Value:    line,
+	}
 
-	return nil
+	return json.NewEncoder(rw).Encode(vmProperty)
 }
 
 func (req *VM) SetVM(rw http.ResponseWriter) error {
@@ -42,8 +44,10 @@ func (req *VM) SetVM(rw http.ResponseWriter) error {
 		return err
 	}
 
-	vmProperty := VM{Property: req.Property, Value: line}
-	json.NewEncoder(rw).Encode(vmProperty)
+	vmProperty := VM{
+		Property: req.Property,
+		Value:    line,
+	}
 
-	return nil
+	return json.NewEncoder(rw).Encode(vmProperty)
 }

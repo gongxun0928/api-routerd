@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/RestGW/api-routerd/cmd/share"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/vishvananda/netlink"
 )
@@ -178,14 +180,7 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 			return err
 		}
 
-		j, err := json.Marshal(links)
-		if err != nil {
-			log.Errorf("Failed to encode json linkInfo for link %s: %s", link, err)
-			return err
-		}
-
-		rw.WriteHeader(http.StatusOK)
-		rw.Write(j)
+		return share.JsonResponse(links, rw)
 	}
 
 	return nil

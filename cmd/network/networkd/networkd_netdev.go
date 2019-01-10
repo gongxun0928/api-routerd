@@ -5,11 +5,12 @@ package networkd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RestGW/api-routerd/cmd/share"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -57,6 +58,118 @@ type NetDev struct {
 	PeerMACAddress string `json:"PeerMACAddress"`
 }
 
+func (netdev *NetDev) CreateBondSectionConfig() string {
+	conf := "\n[Bond]\n"
+
+	if netdev.Mode != "" {
+		conf += "Mode=" + strings.TrimSpace(netdev.Mode) + "\n"
+	}
+
+	if netdev.TransmitHashPolicy != "" {
+		conf += "TransmitHashPolicy=" + strings.TrimSpace(netdev.TransmitHashPolicy) + "\n"
+	}
+
+	return conf
+}
+
+func (netdev *NetDev) CreateBridgeSectionConfig() string {
+	conf := "\n[Bridge]\n"
+
+	if netdev.HelloTimeSec != "" {
+		conf += "HelloTimeSec=" + strings.TrimSpace(netdev.HelloTimeSec) + "\n"
+	}
+
+	if netdev.ForwardDelaySec != "" {
+		conf += "ForwardDelaySec=" + strings.TrimSpace(netdev.ForwardDelaySec) + "\n"
+	}
+
+	if netdev.AgeingTimeSec != "" {
+		conf += "AgeingTimeSec=" + strings.TrimSpace(netdev.AgeingTimeSec) + "\n"
+	}
+
+	return conf
+}
+
+func (netdev *NetDev) CreateTunnelSectionConfig() string {
+	conf := "\n[Tunnel]\n"
+
+	if netdev.Local != "" {
+		conf += "Local=" + strings.TrimSpace(netdev.Local) + "\n"
+	}
+
+	if netdev.Remote != "" {
+		conf += "Remote=" + strings.TrimSpace(netdev.Remote) + "\n"
+	}
+
+	if netdev.TTL != "" {
+		conf += "TTL=" + strings.TrimSpace(netdev.TTL) + "\n"
+	}
+
+	if netdev.DiscoverPathMTU != "" {
+		conf += "DiscoverPathMTU=" + strings.TrimSpace(netdev.DiscoverPathMTU) + "\n"
+	}
+
+	if netdev.IPv6FlowLabel != "" {
+		conf += "IPv6FlowLabel=" + strings.TrimSpace(netdev.IPv6FlowLabel) + "\n"
+	}
+
+	if netdev.EncapsulationLimit != "" {
+		conf += "EncapsulationLimit=" + strings.TrimSpace(netdev.EncapsulationLimit) + "\n"
+	}
+
+	if netdev.Key != "" {
+		conf += "Key=" + strings.TrimSpace(netdev.Key) + "\n"
+	}
+
+	if netdev.Independent != "" {
+		conf += "Independent=" + strings.TrimSpace(netdev.Independent) + "\n"
+	}
+
+	return conf
+}
+
+func (netdev *NetDev) CreateVxLanSectionConfig() string {
+	conf := "\n[VXLAN]\n"
+
+	if netdev.ID != "" {
+		conf += "Id=" + strings.TrimSpace(netdev.ID) + "\n"
+	}
+
+	if netdev.Local != "" {
+		conf += "Local=" + strings.TrimSpace(netdev.Local) + "\n"
+	}
+
+	if netdev.Remote != "" {
+		conf += "Remote=" + strings.TrimSpace(netdev.Remote) + "\n"
+	}
+
+	if netdev.TOS != "" {
+		conf += "TOS=" + strings.TrimSpace(netdev.TOS) + "\n"
+	}
+
+	if netdev.TTL != "" {
+		conf += "TTL=" + strings.TrimSpace(netdev.TTL) + "\n"
+	}
+
+	if netdev.MacLearning != "" {
+		conf += "MacLearning=" + strings.TrimSpace(netdev.MacLearning) + "\n"
+	}
+
+	if netdev.DestinationPort != "" {
+		conf += "DestinationPort=" + strings.TrimSpace(netdev.DestinationPort) + "\n"
+	}
+
+	if netdev.PortRange != "" {
+		conf += "PortRange=" + strings.TrimSpace(netdev.PortRange) + "\n"
+	}
+
+	if netdev.FlowLabel != "" {
+		conf += "FlowLabel=" + strings.TrimSpace(netdev.FlowLabel) + "\n"
+	}
+
+	return conf
+}
+
 func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	conf := "[NetDev]\n"
 
@@ -83,15 +196,7 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	switch netdev.Kind {
 	case "bond":
 
-		conf += "\n[Bond]\n"
-
-		if netdev.Mode != "" {
-			conf += "Mode=" + strings.TrimSpace(netdev.Mode) + "\n"
-		}
-
-		if netdev.TransmitHashPolicy != "" {
-			conf += "TransmitHashPolicy=" + strings.TrimSpace(netdev.TransmitHashPolicy) + "\n"
-		}
+		conf += netdev.CreateBondSectionConfig()
 
 		break
 
@@ -107,56 +212,12 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 	case "bridge":
 
-		conf += "\n[Bridge]\n"
-
-		if netdev.HelloTimeSec != "" {
-			conf += "HelloTimeSec=" + strings.TrimSpace(netdev.HelloTimeSec) + "\n"
-		}
-
-		if netdev.ForwardDelaySec != "" {
-			conf += "ForwardDelaySec=" + strings.TrimSpace(netdev.ForwardDelaySec) + "\n"
-		}
-
-		if netdev.AgeingTimeSec != "" {
-			conf += "AgeingTimeSec=" + strings.TrimSpace(netdev.AgeingTimeSec) + "\n"
-		}
+		conf += netdev.CreateBridgeSectionConfig()
 
 		break
 	case "tunnel":
 
-		conf += "\n[Tunnel]\n"
-
-		if netdev.Local != "" {
-			conf += "Local=" + strings.TrimSpace(netdev.Local) + "\n"
-		}
-
-		if netdev.Remote != "" {
-			conf += "Remote=" + strings.TrimSpace(netdev.Remote) + "\n"
-		}
-
-		if netdev.TTL != "" {
-			conf += "TTL=" + strings.TrimSpace(netdev.TTL) + "\n"
-		}
-
-		if netdev.DiscoverPathMTU != "" {
-			conf += "DiscoverPathMTU=" + strings.TrimSpace(netdev.DiscoverPathMTU) + "\n"
-		}
-
-		if netdev.IPv6FlowLabel != "" {
-			conf += "IPv6FlowLabel=" + strings.TrimSpace(netdev.IPv6FlowLabel) + "\n"
-		}
-
-		if netdev.EncapsulationLimit != "" {
-			conf += "EncapsulationLimit=" + strings.TrimSpace(netdev.EncapsulationLimit) + "\n"
-		}
-
-		if netdev.Key != "" {
-			conf += "Key=" + strings.TrimSpace(netdev.Key) + "\n"
-		}
-
-		if netdev.Independent != "" {
-			conf += "Independent=" + strings.TrimSpace(netdev.Independent) + "\n"
-		}
+		conf += netdev.CreateTunnelSectionConfig()
 
 		break
 	case "veth":
@@ -202,43 +263,8 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 	case "vxlan":
 
-		conf += "\n[VXLAN]\n"
+		conf += netdev.CreateVxLanSectionConfig()
 
-		if netdev.ID != "" {
-			conf += "Id=" + strings.TrimSpace(netdev.ID) + "\n"
-		}
-
-		if netdev.Local != "" {
-			conf += "Local=" + strings.TrimSpace(netdev.Local) + "\n"
-		}
-
-		if netdev.Remote != "" {
-			conf += "Remote=" + strings.TrimSpace(netdev.Remote) + "\n"
-		}
-
-		if netdev.TOS != "" {
-			conf += "TOS=" + strings.TrimSpace(netdev.TOS) + "\n"
-		}
-
-		if netdev.TTL != "" {
-			conf += "TTL=" + strings.TrimSpace(netdev.TTL) + "\n"
-		}
-
-		if netdev.MacLearning != "" {
-			conf += "MacLearning=" + strings.TrimSpace(netdev.MacLearning) + "\n"
-		}
-
-		if netdev.DestinationPort != "" {
-			conf += "DestinationPort=" + strings.TrimSpace(netdev.DestinationPort) + "\n"
-		}
-
-		if netdev.PortRange != "" {
-			conf += "PortRange=" + strings.TrimSpace(netdev.PortRange) + "\n"
-		}
-
-		if netdev.FlowLabel != "" {
-			conf += "FlowLabel=" + strings.TrimSpace(netdev.FlowLabel) + "\n"
-		}
 	}
 
 	return conf
@@ -262,10 +288,7 @@ func NetdevdParseJSONFromHTTPReq(req *http.Request) error {
 	unitName := fmt.Sprintf("25-%s.netdev", netdev.Name)
 	unitPath := filepath.Join(NetworkdUnitPath, unitName)
 
-	share.WriteFullFile(unitPath, config)
-
-	return nil
-
+	return share.WriteFullFile(unitPath, config)
 }
 
 func ConfigureNetDevFile(rw http.ResponseWriter, req *http.Request) {

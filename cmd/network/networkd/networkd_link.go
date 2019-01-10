@@ -86,7 +86,6 @@ func (link *Link) CreateLinkMatchSectionConfig() string {
 		break
 	}
 
-	fmt.Println(conf)
 	return conf
 }
 

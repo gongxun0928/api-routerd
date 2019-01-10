@@ -65,7 +65,12 @@ func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
 		return err
 	}
 
-	property := SysNet{Path: req.Path, Property: req.Property, Value: line, Link: req.Link}
+	property := SysNet{
+		Path: req.Path,
+		Property: req.Property,
+		Value: line,
+		Link:req.Link,
+	}
 
 	return share.JsonResponse(property, rw)
 }
@@ -76,10 +81,5 @@ func (req *SysNet) SetSysNet(rw http.ResponseWriter) error {
 		return err
 	}
 
-	err = share.WriteOneLineFile(path, req.Value)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return share.WriteOneLineFile(path, req.Value)
 }

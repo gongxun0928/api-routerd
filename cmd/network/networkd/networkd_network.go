@@ -5,12 +5,13 @@ package networkd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/RestGW/api-routerd/cmd/share"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"path/filepath"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )
