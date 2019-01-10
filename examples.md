@@ -246,6 +246,10 @@ $ curl --header "Content-Type: application/json" --request POST --data '{"action
 11: test-br: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default
     link/ether 12:00:9a:65:36:6d brd ff:ff:ff:ff:ff:ff
 
+Create a bond and enslave two links
+```
+$ curl --header "Content-Type: application/json" --request POST --data '{"action":"add-link-bond", "link":"test-bond", "enslave":["dummy","dummy1"]}' --header "X-Session-Token: secret" http://localhost:17999/api/network/link/add
+
 ```
 
 Delete a link

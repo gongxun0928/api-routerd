@@ -20,6 +20,7 @@ type Link struct {
 	Link    string   `json:"link"`
 	MTU     string   `json:"mtu"`
 	Kind    string   `json:"kind"`
+	Mode    string    `json:"mode"`
 	Enslave []string `json:"enslave"`
 }
 
@@ -72,7 +73,7 @@ func (req *Link) LinkCreateBridge() error {
 		bridge := &netlink.Bridge{LinkAttrs: netlink.LinkAttrs{Name: req.Link}}
 		err = netlink.LinkAdd(bridge)
 		if err != nil {
-			log.Errorf("Failed to create bride %s: %s", req.Link, err)
+			log.Errorf("Failed to create bridge %s: %s", req.Link, err)
 			return err
 		}
 
@@ -80,6 +81,49 @@ func (req *Link) LinkCreateBridge() error {
 	}
 
 	return req.LinkSetMasterBridge()
+}
+
+func (req *Link) LinkSetMasterBond() error {
+	bond, err := netlink.LinkByName(req.Link)
+	if err != nil {
+		log.Errorf("Failed to find bond link %s: %s", req.Link, err)
+		return err
+	}
+
+	for _, n := range req.Enslave {
+		link, err := netlink.LinkByName(n)
+		if err != nil {
+			log.Errorf("Failed to find slave link %s: %s", n, err)
+			continue
+		}
+
+		err = netlink.LinkSetBondSlave(link, &netlink.Bond{LinkAttrs: *bond.Attrs()})
+		if err != nil {
+			log.Errorf("Failed to set link %s master device %s: %s", n, req.Link, err)
+		}
+	}
+
+	return nil
+}
+
+func (req *Link) LinkCreateBond() error {
+	_, err := netlink.LinkByName(req.Link)
+	if err == nil {
+		log.Infof("Bond link %s exists. Using the bond", req.Link)
+	} else {
+
+		bond := netlink.NewLinkBond(netlink.LinkAttrs{Name: req.Link})
+		bond.Mode = netlink.StringToBondModeMap[req.Mode]
+		err = netlink.LinkAdd(bond)
+		if err != nil {
+			log.Errorf("Failed to create bond %s: %s", req.Link, err)
+			return err
+		}
+
+		log.Debugf("Successfully create bond link: %s", req.Link)
+	}
+
+	return req.LinkSetMasterBond()
 }
 
 func LinkSetUp(link string) error {
@@ -218,6 +262,8 @@ func CreateLink(r *http.Request) error {
 	switch req.Action {
 	case "add-link-bridge":
 		return req.LinkCreateBridge()
+	case "add-link-bond":
+		return req.LinkCreateBond()
 	}
 
 	return nil
