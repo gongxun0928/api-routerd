@@ -20,6 +20,8 @@ api-routerd is a cloud-enabled, mobile-ready, a super light weight remote manage
 - An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS
 - Minimal data transfer using JSON.
 
+- Plugin based Architechture. See how to write plugin section for more information.
+
 # Features!
 
 - systemd socket activation support
@@ -193,6 +195,16 @@ $ curl --header "X-Session-Token: secret" --request GET https://localhost:8080/a
 
 Refer usecase document [use cases](https://github.com/RestGW/api-routerd/blob/master/examples.md)
 
+### How to write your own plugin ?
+
+api-routerd is designed with plugin based architecture in mind and can act as a thin client. You can always add and remove modules to it with minimal effort
+
+* Choose namespace under cmd directory ( network, proc, system etc) whare you want to put your module. 
+* Write sub router see for example ```api-routerd/cmd/system/login```
+* Write your module ```module.go``` and  ```module_router.go```
+* Write ```RegisterRouterModule```
+* Register ```RegisterRouterModule``` with parent router for example for ```login``` registered with
+  ```RegisterRouterSystem``` under ```system``` namespace as ```login.RegisterRouterLogin(n)```
 
 ### Todos
 
