@@ -62,7 +62,10 @@ func SystemdState(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "SystemState", Value: v.Value().(string)}
+	prop := Property{
+		Property: "SystemState",
+		Value: v.Value().(string),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -73,7 +76,10 @@ func SystemdVersion(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Version", Value: v.Value().(string)}
+	prop := Property{
+		Property: "Version",
+		Value: v.Value().(string),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -84,7 +90,10 @@ func SystemdVirtualization(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Virtualization", Value: v.Value().(string)}
+	prop := Property{
+		Property: "Virtualization",
+		Value: v.Value().(string),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -95,7 +104,10 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Architecture", Value: v.Value().(string)}
+	prop := Property{
+		Property: "Architecture",
+		Value: v.Value().(string),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -106,7 +118,10 @@ func SystemdFeatures(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "Features", Value: v.Value().(string)}
+	prop := Property{
+		Property: "Features",
+		Value: v.Value().(string),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -117,7 +132,10 @@ func SystemdNFailedUnits(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "NFailedUnits", Value: fmt.Sprint(v.Value().(uint32))}
+	prop := Property{
+		Property: "NFailedUnits",
+		Value: fmt.Sprint(v.Value().(uint32)),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -128,7 +146,10 @@ func SystemdNNames(w http.ResponseWriter) error {
 		return err
 	}
 
-	prop := Property{Property: "NNames", Value: fmt.Sprint(v.Value().(uint32))}
+	prop := Property{
+		Property: "NNames",
+		Value: fmt.Sprint(v.Value().(uint32)),
+	}
 
 	return share.JsonResponse(prop, w)
 }
@@ -254,7 +275,11 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 		return err
 	}
 
-	status := UnitStatus{Status: units[0].ActiveState, Unit: u.Unit}
+	status := UnitStatus{
+		Status: units[0].ActiveState,
+		Unit: u.Unit,
+	}
+
 	json.NewEncoder(w).Encode(status)
 
 	return nil
@@ -282,18 +307,15 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 
 			return share.JsonResponse(prop, w)
 		}
-	} else {
-
-		p, err := conn.GetUnitProperties(u.Unit)
-		if err != nil {
-			log.Errorf("Failed to get service properties: %s", err)
-			return err
-		}
-
-		return share.JsonResponse(p, w)
 	}
 
-	return nil
+	p, err := conn.GetUnitProperties(u.Unit)
+	if err != nil {
+		log.Errorf("Failed to get service properties: %s", err)
+		return err
+	}
+
+	return share.JsonResponse(p, w)
 }
 
 func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {

@@ -191,7 +191,7 @@ $ curl --header "X-Session-Token: secret" --request GET https://localhost:8080/a
 ```
 ## Use cases
 
-Refer usecase document [usecases](https://github.com/RestGW/api-routerd/blob/master/examples.md)
+Refer usecase document [use cases](https://github.com/RestGW/api-routerd/blob/master/examples.md)
 
 
 ### Todos

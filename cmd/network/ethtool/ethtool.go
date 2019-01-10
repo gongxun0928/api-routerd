@@ -3,102 +3,164 @@
 package ethtool
 
 import (
-	"syscall"
+	"errors"
+	"net/http"
 	"unsafe"
+
+	"github.com/RestGW/api-routerd/cmd/share"
+
+	"github.com/safchain/ethtool"
+	log "github.com/sirupsen/logrus"
 )
 
-const (
-	IFNAMSIZ = 16
-)
-
-const (
-	SIOCETHTOOL = 0x8946
-)
-
-const (
-	ETHTOOL_GDRVINFO = 0x00000003
-)
-
-type EthTool struct {
-	fd int
+type Ethtool struct {
+	Action string `json:"action"`
+	Link   string `json:"link"`
 }
 
-type ifreq struct {
-	ifr_name [IFNAMSIZ]byte
-	ifr_data uintptr
-}
-
-type EthtoolDrvInfo struct {
-	Cmd         uint32   `json:"cmd"`
-	Driver      [32]byte `json:"driver"`
-	Version     [32]byte `json:"version"`
-	FwVersion   [32]byte `json:"fw_version"`
-	BusInfo     [32]byte `json:"bus_info"`
-	EromVersion [32]byte `json:"erom_version"`
-	Reserved2   [12]byte `json:"reserved2"`
-	NPrivFlags  uint32   `json:"n_priv_flags"`
-	NStats      uint32   `json:"n_stats"`
-	TestinfoLen uint32   `json:"testinfo_len"`
-	EedumpLen   uint32   `json:"eedump_len"`
-	RegdumpLen  uint32   `json:"regdump_len"`
-}
-
-func NewEthTool() (*EthTool, error) {
-	e := new(EthTool)
-
-	err := e.EthtoolConnect()
-	if err != nil {
-		return nil, err
+func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
+	link := share.LinkExists(req.Link)
+	if !link {
+		log.Errorf("Failed to get link: %s", req.Link)
+		return errors.New("Link not found")
 	}
 
-	return e, nil
-}
+	e, err := ethtool.NewEthtool()
+	if err != nil {
+		log.Errorf("Failed to init ethtool for link %s: %s", err, req.Link)
+		return err
+	}
+	defer e.Close()
 
-func (e *EthTool) Close() {
-	syscall.Close(e.fd)
-}
+	switch req.Action {
+	case "get-link-stat":
+		stats, err := e.Stats(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool statitics for link %s: %s", err, req.Link)
+			return err
+		}
 
-func (e *EthTool) EthtoolConnect() error {
-	if e.fd < 1 {
-		err := e.SocketIoctlFd()
+		return share.JsonResponse(stats, rw)
+
+	case "get-link-features":
+
+		features, err := e.Features(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool features for link %s: %s", err, req.Link)
+			return err
+		}
+
+		return share.JsonResponse(features, rw)
+
+	case "get-link-bus":
+
+		bus, err := e.BusInfo(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool bus for link %s: %s", err, req.Link)
+			return err
+		}
+
+		b := struct {
+			Bus string
+		}{
+			bus,
+		}
+
+		return share.JsonResponse(b, rw)
+
+	case "get-link-driver-name":
+
+		driver, err := e.DriverName(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool driver name for link %s: %s", err, req.Link)
+			return err
+		}
+
+		d := struct {
+			Driver string
+		}{
+			driver,
+		}
+
+		return share.JsonResponse(d, rw)
+
+	case "get-link-driver-info":
+
+		e, err := NewEthTool()
+		if err != nil {
+			log.Errorf("Failed to init ethtool for link %s: %s", err, req.Link)
+			return err
+		}
+		defer e.Close()
+
+		drvinfo := EthtoolDrvInfo{
+			Cmd: ETHTOOL_GDRVINFO,
+		}
+
+		err = e.Ioctl(req.Link, uintptr(unsafe.Pointer(&drvinfo)))
 		if err != nil {
 			return err
 		}
-	}
 
-	return nil
-}
+		return share.JsonResponse(drvinfo, rw)
 
-// SocketIoctlFd returns a new fd
-func (e *EthTool) SocketIoctlFd() error {
-	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_DGRAM|syscall.SOCK_CLOEXEC, syscall.IPPROTO_IP)
-	if err != nil {
-		fd, err := syscall.Socket(syscall.AF_NETLINK, syscall.SOCK_RAW|syscall.SOCK_CLOEXEC, syscall.NETLINK_GENERIC)
+	case "get-link-permaddr":
+
+		permaddr, err := e.PermAddr(req.Link)
 		if err != nil {
+			log.Errorf("Failed to get ethtool Perm Addr for link %s: %s", err, req.Link)
 			return err
 		}
-		e.fd = fd
 
-		return nil
-	}
+		p := struct {
+			PermAddr string
+		}{
+			permaddr,
+		}
 
-	e.fd = fd
+		return share.JsonResponse(p, rw)
 
-	return nil
-}
+	case "get-link-eeprom":
 
-func (e *EthTool) Ioctl(intf string, data uintptr) error {
-	var name [IFNAMSIZ]byte
-	copy(name[:], []byte(intf))
+		eeprom, err := e.ModuleEepromHex(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool eeprom for link %s: %s", err, req.Link)
+			return err
+		}
 
-	ifr := ifreq{
-		ifr_name: name,
-		ifr_data: data,
-	}
+		e := struct {
+			ModuleEeprom string
+		}{
+			eeprom,
+		}
 
-	_, _, ep := syscall.Syscall(syscall.SYS_IOCTL, uintptr(e.fd), SIOCETHTOOL, uintptr(unsafe.Pointer(&ifr)))
-	if ep != 0 {
-		return syscall.Errno(ep)
+		return share.JsonResponse(e, rw)
+
+	case "get-link-msglvl":
+
+		msglvl, err := e.MsglvlGet(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			return err
+		}
+
+		g := struct {
+			ModuleMsglv uint32
+		}{
+			msglvl,
+		}
+
+		return share.JsonResponse(g, rw)
+
+	case "get-link-mapped":
+
+		mapped, err := e.CmdGetMapped(req.Link)
+		if err != nil {
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			return err
+		}
+
+		return share.JsonResponse(mapped, rw)
 	}
 
 	return nil
