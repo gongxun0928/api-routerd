@@ -20,7 +20,7 @@ type Link struct {
 	Link    string   `json:"link"`
 	MTU     string   `json:"mtu"`
 	Kind    string   `json:"kind"`
-	Mode    string    `json:"mode"`
+	Mode    string   `json:"mode"`
 	Enslave []string `json:"enslave"`
 }
 
@@ -70,7 +70,11 @@ func (req *Link) LinkCreateBridge() error {
 		log.Infof("Bridge link %s exists. Using the bridge", req.Link)
 	} else {
 
-		bridge := &netlink.Bridge{LinkAttrs: netlink.LinkAttrs{Name: req.Link}}
+		bridge := &netlink.Bridge{
+			LinkAttrs: netlink.LinkAttrs{
+				Name: req.Link,
+			},
+		}
 		err = netlink.LinkAdd(bridge)
 		if err != nil {
 			log.Errorf("Failed to create bridge %s: %s", req.Link, err)
@@ -112,7 +116,12 @@ func (req *Link) LinkCreateBond() error {
 		log.Infof("Bond link %s exists. Using the bond", req.Link)
 	} else {
 
-		bond := netlink.NewLinkBond(netlink.LinkAttrs{Name: req.Link})
+		bond := netlink.NewLinkBond(
+			netlink.LinkAttrs{
+				Name: req.Link,
+			},
+		)
+
 		bond.Mode = netlink.StringToBondModeMap[req.Mode]
 		err = netlink.LinkAdd(bond)
 		if err != nil {
@@ -208,14 +217,7 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 			return err
 		}
 
-		j, err := json.Marshal(l)
-		if err != nil {
-			log.Errorf("Failed to encode json linkInfo for link %s: %s", link, err)
-			return err
-		}
-
-		rw.WriteHeader(http.StatusOK)
-		rw.Write(j)
+		return share.JsonResponse(l, rw)
 
 	} else {
 
