@@ -94,6 +94,8 @@ func (e *EthTool) EthtoolConnect() error {
 func (e *EthTool) Close() {
 	syscall.Close(e.fd)
 	e.fd = -1
+
+	manager = nil
 }
 
 func NewEthTool() (*EthTool, error) {

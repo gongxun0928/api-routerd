@@ -38,6 +38,7 @@ api-routerd is a cloud-enabled, mobile-ready, a super light weight remote manage
 - configure timdate
 - configure nameserver ```/etc/resolv.conf```
 - configure timesynd
+- configure systemd-machined
 - configure journald.conf
 - configure system.conf
 - configure coredump.conf

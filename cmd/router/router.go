@@ -6,6 +6,7 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
+	"github.com/RestGW/api-routerd/cmd/container"
 	"github.com/RestGW/api-routerd/cmd/network"
 	"github.com/RestGW/api-routerd/cmd/proc"
 	"github.com/RestGW/api-routerd/cmd/share"
@@ -28,6 +29,7 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	s := r.PathPrefix("/api").Subrouter()
 
 	// Register services
+	container.RegisterRouterContainer(s)
 	network.RegisterRouterNetwork(s)
 	proc.RegisterRouterProc(s)
 	systemd.RegisterRouterSystemd(s)

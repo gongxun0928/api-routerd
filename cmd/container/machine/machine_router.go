@@ -1,0 +1,36 @@
+// SPDX-License-Identifier: Apache-2.0
+
+package machine
+
+import (
+	"net/http"
+	"github.com/gorilla/mux"
+)
+
+func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	path := vars["command"]
+	property := vars["property"]
+
+	switch r.Method {
+	case "GET":
+
+		m := Machine{
+			Path: path,
+			Property: property,
+		}
+
+		err := m.MachineMethodGet(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
+func RegisterRouterMachine(n *mux.Router) {
+	m := n.PathPrefix("/machine").Subrouter().StrictSlash(false)
+
+	m.HandleFunc("/list/{command}", RouterMachineGet)
+	m.HandleFunc("/get/{command}/{property}", RouterMachineGet)
+}

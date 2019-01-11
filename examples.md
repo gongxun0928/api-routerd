@@ -491,6 +491,16 @@ Supported Property (Methods) for setting hostname. For example: ```'{"property":
         "SetLocation"
 ```
 
+##### systemd-machined
+
+```sh
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-machines
+[{"Name":".host","Class":"host","Service":"","JobPath":"/org/freedesktop/machine1/machine/_2ehost"}]
+
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-images
+[{"Name":".host","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/_2ehost"},{"Name":"rawhide","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/rawhide"},{"Name":"f29","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/f29"}]
+```
+
 ##### systemd-logind
 
 Supported methods
