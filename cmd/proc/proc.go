@@ -11,6 +11,7 @@ import (
 	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/shirou/gopsutil/cpu"
+	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
@@ -68,6 +69,23 @@ func GetPlatformInformation(rw http.ResponseWriter) error {
 	}
 
 	return share.JsonResponse(p, rw)
+}
+
+func GetVirtualization(rw http.ResponseWriter) error {
+	system, role, err := host.Virtualization()
+	if err != nil {
+		return err
+	}
+
+	v := struct {
+		System string
+		Role string
+	}{
+		system,
+		role,
+	}
+
+	return share.JsonResponse(v, rw)
 }
 
 func GetUserStat(rw http.ResponseWriter) error {
@@ -183,6 +201,33 @@ func GetAvgStat(rw http.ResponseWriter) error {
 	}
 
 	return share.JsonResponse(avgstat, rw)
+}
+
+func GetPartitions(rw http.ResponseWriter) error {
+	p, r := disk.Partitions(true)
+	if r != nil {
+		return r
+	}
+
+	return share.JsonResponse(p, rw)
+}
+
+func GetIOCounters(rw http.ResponseWriter) error {
+	i, r := disk.IOCounters()
+	if r != nil {
+		return r
+	}
+
+	return share.JsonResponse(i, rw)
+}
+
+func GetDiskUsage(rw http.ResponseWriter) error {
+	u, r := disk.Usage("/")
+	if r != nil {
+		return r
+	}
+
+	return share.JsonResponse(u, rw)
 }
 
 func GetMisc(rw http.ResponseWriter) error {

@@ -115,7 +115,9 @@ Use case:
   - userstat
   - temperaturestat
   - platform
-
+  - diskusage
+  - iocounters
+  - partitions
 /proc examples:
 
 ```sh
