@@ -43,31 +43,7 @@ type EthtoolDrvInfo struct {
 	RegdumpLen  uint32   `json:"regdump_len"`
 }
 
-func NewEthTool() (*EthTool, error) {
-	e := new(EthTool)
-
-	err := e.EthtoolConnect()
-	if err != nil {
-		return nil, err
-	}
-
-	return e, nil
-}
-
-func (e *EthTool) Close() {
-	syscall.Close(e.fd)
-}
-
-func (e *EthTool) EthtoolConnect() error {
-	if e.fd < 1 {
-		err := e.SocketIoctlFd()
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
+var manager *EthTool
 
 // SocketIoctlFd returns a new fd
 func (e *EthTool) SocketIoctlFd() error {
@@ -102,4 +78,34 @@ func (e *EthTool) Ioctl(intf string, data uintptr) error {
 	}
 
 	return nil
+}
+
+func (e *EthTool) EthtoolConnect() error {
+	if e.fd < 1 {
+		err := e.SocketIoctlFd()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (e *EthTool) Close() {
+	syscall.Close(e.fd)
+	e.fd = -1
+}
+
+func NewEthTool() (*EthTool, error) {
+	if manager == nil {
+		manager = new(EthTool)
+		manager.fd = -1
+	}
+
+	err := manager.EthtoolConnect()
+	if err != nil {
+		return nil, err
+	}
+
+	return manager, nil
 }

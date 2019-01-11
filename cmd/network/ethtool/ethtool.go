@@ -20,25 +20,25 @@ type Ethtool struct {
 	Value    string `json:"Value"`
 }
 
-func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
-	link := share.LinkExists(req.Link)
+func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
+	link := share.LinkExists(r.Link)
 	if !link {
-		log.Errorf("Failed to get link: %s", req.Link)
+		log.Errorf("Failed to get link: %s", r.Link)
 		return errors.New("Link not found")
 	}
 
 	e, err := ethtool.NewEthtool()
 	if err != nil {
-		log.Errorf("Failed to init ethtool for link %s: %s", err, req.Link)
+		log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
 		return err
 	}
 	defer e.Close()
 
-	switch req.Action {
+	switch r.Action {
 	case "get-link-stat":
-		stats, err := e.Stats(req.Link)
+		stats, err := e.Stats(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool statitics for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool statitics for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -46,9 +46,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-features":
 
-		features, err := e.Features(req.Link)
+		features, err := e.Features(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool features for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool features for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -56,9 +56,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-bus":
 
-		bus, err := e.BusInfo(req.Link)
+		bus, err := e.BusInfo(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool bus for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool bus for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -72,9 +72,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-driver-name":
 
-		driver, err := e.DriverName(req.Link)
+		driver, err := e.DriverName(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool driver name for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool driver name for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -90,7 +90,7 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		e, err := NewEthTool()
 		if err != nil {
-			log.Errorf("Failed to init ethtool for link %s: %s", err, req.Link)
+			log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
 			return err
 		}
 		defer e.Close()
@@ -99,7 +99,7 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			Cmd: ETHTOOL_GDRVINFO,
 		}
 
-		err = e.Ioctl(req.Link, uintptr(unsafe.Pointer(&drvinfo)))
+		err = e.Ioctl(r.Link, uintptr(unsafe.Pointer(&drvinfo)))
 		if err != nil {
 			return err
 		}
@@ -108,9 +108,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-permaddr":
 
-		permaddr, err := e.PermAddr(req.Link)
+		permaddr, err := e.PermAddr(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool Perm Addr for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool Perm Addr for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -124,9 +124,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-eeprom":
 
-		eeprom, err := e.ModuleEepromHex(req.Link)
+		eeprom, err := e.ModuleEepromHex(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool eeprom for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool eeprom for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -140,9 +140,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-msglvl":
 
-		msglvl, err := e.MsglvlGet(req.Link)
+		msglvl, err := e.MsglvlGet(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, r.Link)
 			return err
 		}
 
@@ -156,9 +156,9 @@ func (req *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	case "get-link-mapped":
 
-		mapped, err := e.CmdGetMapped(req.Link)
+		mapped, err := e.CmdGetMapped(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, req.Link)
+			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, r.Link)
 			return err
 		}
 
