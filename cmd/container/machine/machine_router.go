@@ -28,9 +28,32 @@ func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func RouterMachineConfigure(rw http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	path := vars["command"]
+	property := vars["property"]
+
+	switch r.Method {
+	case "POST":
+
+		m := Machine{
+			Path: path,
+			Property: property,
+		}
+
+		err := m.MachineMethodConfigure(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
+}
+
 func RegisterRouterMachine(n *mux.Router) {
 	m := n.PathPrefix("/machine").Subrouter().StrictSlash(false)
 
 	m.HandleFunc("/list/{command}", RouterMachineGet)
 	m.HandleFunc("/get/{command}/{property}", RouterMachineGet)
+	m.HandleFunc("/configure/{command}/{property}", RouterMachineConfigure)
+
 }

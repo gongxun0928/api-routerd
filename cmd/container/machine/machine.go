@@ -93,6 +93,30 @@ func (m *Machine) MachineMethodGet(rw http.ResponseWriter) error {
 	return nil
 }
 
+func (m *Machine) MachineMethodConfigure(rw http.ResponseWriter) error {
+	c, err := machine1.New()
+	if err != nil {
+		return err
+	}
+
+	b := MachineMethods.Contains(m.Path)
+	if !b {
+		return fmt.Errorf("Failed to call method machine: %s not found", m.Path)
+	}
+
+	switch m.Path {
+	case "terminate-machine":
+		err := c.TerminateMachine(m.Property)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return nil
+}
+
 func InitMachine() error {
 	MachineMethods = share.NewSet()
 
@@ -103,6 +127,7 @@ func InitMachine() error {
 	MachineMethods.Add("get-machine-by-pid")
 	MachineMethods.Add("get-machine-address")
 	MachineMethods.Add("describe-machine")
+	MachineMethods.Add("terminate-machine")
 
 	return nil
 }

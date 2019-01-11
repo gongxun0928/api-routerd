@@ -3,7 +3,6 @@
 package proc
 
 import (
-	"encoding/json"
 	"net/http"
 	"path"
 
@@ -30,7 +29,7 @@ func (req *VM) GetVM(rw http.ResponseWriter) error {
 		Value:    line,
 	}
 
-	return json.NewEncoder(rw).Encode(vmProperty)
+	return share.JsonResponse(vmProperty, rw)
 }
 
 func (req *VM) SetVM(rw http.ResponseWriter) error {
@@ -49,5 +48,5 @@ func (req *VM) SetVM(rw http.ResponseWriter) error {
 		Value:    line,
 	}
 
-	return json.NewEncoder(rw).Encode(vmProperty)
+	return share.JsonResponse(vmProperty, rw)
 }

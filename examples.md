@@ -499,6 +499,19 @@ $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/a
 
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-images
 [{"Name":".host","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/_2ehost"},{"Name":"rawhide","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/rawhide"},{"Name":"f29","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/f29"}]
+$ curl --header "X-Session-Token: secret" --request POST http://localhost:17999/api/container/machine/configure/terminate-machine/rawhide
+```
+
+supported command
+```sh
+list-images
+list-machines
+get-machine
+describe-machine
+get-image
+get-machine-by-pid
+get-machine-address
+terminate-machine
 ```
 
 ##### systemd-logind
