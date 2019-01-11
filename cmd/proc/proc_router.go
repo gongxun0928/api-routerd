@@ -37,6 +37,17 @@ func GetProcVersion(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetProcPlatformInformation(rw http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		err := GetPlatformInformation(rw)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+		}
+		break
+	}
+}
+
 func GetProcUserStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -285,6 +296,7 @@ func RegisterRouterProc(router *mux.Router) {
 	n.HandleFunc("/net/arp", GetProcNetArp)
 	n.HandleFunc("/netdev", GetProcNetDev)
 	n.HandleFunc("/netstat/{protocol}", GetProcNetStat)
+	n.HandleFunc("/platform", GetProcPlatformInformation)
 	n.HandleFunc("/process/{pid}/{property}/", GetProcProcess)
 	n.HandleFunc("/proto-counter-stat", GetProcProtoCountersStat)
 	n.HandleFunc("/proto-pid-stat/{pid}/{protocol}", GetProcPidNetStat)

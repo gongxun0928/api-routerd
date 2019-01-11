@@ -51,6 +51,25 @@ func GetVersion(rw http.ResponseWriter) error {
 	return share.JsonResponse(infostat, rw)
 }
 
+func GetPlatformInformation(rw http.ResponseWriter) error {
+	platform ,family, version, err := host.PlatformInformation()
+	if err != nil {
+		return err
+	}
+
+	p := struct {
+		Platform string
+		Family string
+		Version string
+	}{
+		platform,
+		family,
+		version,
+	}
+
+	return share.JsonResponse(p, rw)
+}
+
 func GetUserStat(rw http.ResponseWriter) error {
 	userstat, err := host.Users()
 	if err != nil {

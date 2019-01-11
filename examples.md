@@ -114,6 +114,7 @@ Use case:
   - modules
   - userstat
   - temperaturestat
+  - platform
 
 /proc examples:
 
@@ -133,6 +134,7 @@ $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/ap
 $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/misc
 $ curl --request GET --header "X-Session-Token: secret" https://localhost:8080/api/proc/net/arp
 $ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/modules
+$ curl --request GET --header "X-Session-Token: secret" http://localhost:8080/api/proc/platform
 ```
 
 information by pid request = "GET"

@@ -17,7 +17,7 @@ A RestAPI MicroService GateWay for Linux
 api-routerd is a cloud-enabled, mobile-ready, a super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
 - Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan ...) from any OS (Linux, IOS, Android, Windows ...)
-- An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS
+- An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS [Source Code](https://github.com/RestGW/iDevOps)
 - Minimal data transfer using JSON.
 - Plugin based Architechture. See how to write plugin section for more information.
 
@@ -225,4 +225,4 @@ Apache 2.0
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
-   [git-repo-url]: <git@github.com:RestGW/api-routerd.git>
+   [git-repo-url]: <https://github.com/RestGW/api-routerd.git>

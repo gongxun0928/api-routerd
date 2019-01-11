@@ -69,7 +69,7 @@ func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
 		Path: req.Path,
 		Property: req.Property,
 		Value: line,
-		Link:req.Link,
+		Link: req.Link,
 	}
 
 	return share.JsonResponse(property, rw)
