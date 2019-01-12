@@ -17,46 +17,37 @@ A RestAPI MicroService GateWay for Linux
 api-routerd is a cloud-enabled, mobile-ready, a super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
 - Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan ...) from any OS (Linux, IOS, Android, Windows ...)
-- An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS [Source Code](https://github.com/RestGW/iDevOps)
+- An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS . See [Source Code](https://github.com/RestGW/iDevOps) .
 - Minimal data transfer using JSON.
 - Plugin based Architechture. See how to write plugin section for more information.
 
 # Features!
 
-- systemd socket activation support
-- systemd
-  - systemd informations
-  - services (start, stop, restart, status)
-  - service properties for example CPUShares
-  - See service logs.
-- networkd config
-  - .network
-  - .netdev
-  - .link
-- configure hostnamed
-- configure users using login (list-sessions, list-users and terminate-user etc)
-- configure timdate
-- configure nameserver ```/etc/resolv.conf```
-- configure timesynd
-- configure systemd-machined
-- configure journald.conf
-- configure system.conf
-- configure coredump.conf
-- configure systemd-resolved.conf
-- configure kernel modules (modprobe, lsmod, rmmod)
-- configure network (netlink)
-  - Link: mtu, up, down
-  - Create bridge and enslave links
-  - Create bond and enslave links
-  - Adddress: Set, Get, Delete
-  - Gateway: Default Gateway Add and Delete
-- configure group add/delete/modify
-- configure users add/delete/modify (requires newuser)
-- configure sysctl add/delete/modify and apply
-- see information from /proc such as netstat, netdev, memory and much more
-- configure ```/proc/sys/net``` (core/ipv4/ipv6), VM
-- See ethtool information and configure offload features
-- See sudoers and sshd conf
+|Feature| Details |
+| ------ | ------ |
+| socket activation | supports systemd socket activation 
+systemd  | information, services (start, stop, restart, status), service properties for example CPUShares
+networkd |config (.network, .netdev, .link)
+hostnamed | set hostname
+logind |(list-sessions, list-users and terminate-user etc)
+timdate| set time, zone
+nameserver | add/delete/modify ```/etc/resolv.conf```
+timesynd | set configs
+systemd-machined | see info about images/machines. start stop machines
+journald | ```journald.conf```
+systemd conf | ```system.conf```
+coredumpd |```coredump.conf```
+systemd-resolved |```systemd-resolved.conf```
+kernel modules |(modprobe, lsmod, rmmod)
+network | via netlink . Link: mtu, up, down, Create bridge and enslave links, Create bond and enslave links, Adddress: Set, Get, Delete, Gateway: Default Gateway Add and Delete 
+group | add/delete/modify
+users |add/delete/modify (requires newuser)
+sysctl |add/delete/modify and apply
+see information from ```/proc``` fs| netstat, netdev, memory and much more
+configure ```/proc/sys/net``` | (core/ipv4/ipv6), VM
+ethtool | see information and configure offload features
+See confs | sudoers and sshd conf 
+
 
 ### api-routerd JSON APIs
 
