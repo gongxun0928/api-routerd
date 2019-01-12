@@ -493,22 +493,6 @@ Supported Property (Methods) for setting hostname. For example: ```'{"property":
 
 ##### systemd-machined
 
-Supported methods
-```sh
-      list-images
-      list-machines
-      get-machine
-      get-image
-      get-machine-by-pid
-      get-machine-address
-      describe-machine
-      terminate-machine
-      get-machine-osrelease
-      rename-image
-      remove-image
-```
-
-
 ```sh
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-machines
 [{"Name":".host","Class":"host","Service":"","JobPath":"/org/freedesktop/machine1/machine/_2ehost"}]
@@ -531,6 +515,9 @@ get-image
 get-machine-by-pid
 get-machine-address
 terminate-machine
+get-machine-osrelease
+rename-image
+remove-image
 ```
 
 ##### systemd-logind
