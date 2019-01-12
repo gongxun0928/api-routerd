@@ -3,6 +3,9 @@
 package share
 
 import (
+	"os"
+	"strconv"
+
 	"github.com/godbus/dbus"
 )
 
@@ -12,7 +15,10 @@ func GetSystemBusPrivateConn() (*dbus.Conn, error) {
 		return nil, err
 	}
 
-	if err = conn.Auth(nil); err != nil {
+	methods := []dbus.Auth{dbus.AuthExternal(strconv.Itoa(os.Getuid()))}
+
+	err = conn.Auth(methods)
+	if err != nil {
 		conn.Close()
 		conn = nil
 		return conn, err

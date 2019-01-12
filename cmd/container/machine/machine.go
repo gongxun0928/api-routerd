@@ -15,6 +15,8 @@ type Machine struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
 	Value    string `json:"value"`
+	Old      string `json:"old"`
+	New      string `json:"new"`
 }
 
 var MachineMethods *share.Set
@@ -88,6 +90,13 @@ func (m *Machine) MachineMethodGet(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(addr, rw)
+	case "get-machine-osrelease":
+		addr, err := GetMachineOSRelease(m.Property)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(addr, rw)
 	}
 
 	return nil
@@ -112,6 +121,27 @@ func (m *Machine) MachineMethodConfigure(rw http.ResponseWriter) error {
 		}
 
 		return nil
+	case "clone-image":
+		err := CloneImage(m.Old, m.New)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	case "rename-image":
+		err := RenameImage(m.Old, m.New)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	case "remove-image":
+		err := RemoveImage(m.Old)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
 
 	return nil
@@ -128,6 +158,9 @@ func InitMachine() error {
 	MachineMethods.Add("get-machine-address")
 	MachineMethods.Add("describe-machine")
 	MachineMethods.Add("terminate-machine")
+	MachineMethods.Add("get-machine-osrelease")
+	MachineMethods.Add("rename-image")
+	MachineMethods.Add("remove-image")
 
 	return nil
 }

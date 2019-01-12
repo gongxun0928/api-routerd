@@ -493,6 +493,22 @@ Supported Property (Methods) for setting hostname. For example: ```'{"property":
 
 ##### systemd-machined
 
+Supported methods
+```sh
+      list-images
+      list-machines
+      get-machine
+      get-image
+      get-machine-by-pid
+      get-machine-address
+      describe-machine
+      terminate-machine
+      get-machine-osrelease
+      rename-image
+      remove-image
+```
+
+
 ```sh
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-machines
 [{"Name":".host","Class":"host","Service":"","JobPath":"/org/freedesktop/machine1/machine/_2ehost"}]
@@ -500,6 +516,9 @@ $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/a
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/container/machine/list/list-images
 [{"Name":".host","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/_2ehost"},{"Name":"rawhide","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/rawhide"},{"Name":"f29","ImageType":"directory","Readonly":false,"CreateTime":0,"ModifyTime":0,"DiskUsage":18446744073709551615,"JobPath":"/org/freedesktop/machine1/image/f29"}]
 $ curl --header "X-Session-Token: secret" --request POST http://localhost:17999/api/container/machine/configure/terminate-machine/rawhide
+$ curl --header "X-Session-Token: secret" --request POST --data '{"old":"rawhidetest","new":"test123"}' http://localhost:17999/api/container/machine/configure/rename-image
+$ curl --header "X-Session-Token: secret" --request POST --data '{"old":"rawhidetest","new":"test123"}' http://localhost:17999/api/container/machine/configure/clone-image
+
 ```
 
 supported command

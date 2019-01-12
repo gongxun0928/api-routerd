@@ -3,7 +3,9 @@
 package machine
 
 import (
+	"encoding/json"
 	"net/http"
+
 	"github.com/gorilla/mux"
 )
 
@@ -16,7 +18,7 @@ func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
 	case "GET":
 
 		m := Machine{
-			Path: path,
+			Path:     path,
 			Property: property,
 		}
 
@@ -36,12 +38,17 @@ func RouterMachineConfigure(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 
-		m := Machine{
-			Path: path,
-			Property: property,
+		m := new(Machine)
+		err := json.NewDecoder(r.Body).Decode(&m)
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
 		}
 
-		err := m.MachineMethodConfigure(rw)
+		m.Path = path
+		m.Property = property
+
+		err = m.MachineMethodConfigure(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -55,5 +62,4 @@ func RegisterRouterMachine(n *mux.Router) {
 	m.HandleFunc("/list/{command}", RouterMachineGet)
 	m.HandleFunc("/get/{command}/{property}", RouterMachineGet)
 	m.HandleFunc("/configure/{command}/{property}", RouterMachineConfigure)
-
 }
