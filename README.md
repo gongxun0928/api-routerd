@@ -25,7 +25,7 @@ api-routerd is a cloud-enabled, mobile-ready, a super light weight remote manage
 
 |Feature| Details |
 | ------ | ------ |
-| socket activation | supports systemd socket activation 
+| socket activation | supports systemd socket activation
 systemd  | information, services (start, stop, restart, status), service properties for example CPUShares
 networkd |config (.network, .netdev, .link)
 hostnamed | set hostname
@@ -39,14 +39,15 @@ systemd conf | ```system.conf```
 coredumpd |```coredump.conf```
 systemd-resolved |```systemd-resolved.conf```
 kernel modules |(modprobe, lsmod, rmmod)
-network | via netlink . Link: mtu, up, down, Create bridge and enslave links, Create bond and enslave links, Adddress: Set, Get, Delete, Gateway: Default Gateway Add and Delete 
+network | via netlink . Link: mtu, up, down, Create bridge and enslave links, Create bond and enslave links, Adddress: Set, Get, Delete, Gateway: Default Gateway Add and Delete
 group | add/delete/modify
 users |add/delete/modify (requires newuser)
 sysctl |add/delete/modify and apply
 see information from ```/proc``` fs| netstat, netdev, memory and much more
 configure ```/proc/sys/net``` | (core/ipv4/ipv6), VM
 ethtool | see information and configure offload features
-See confs | sudoers and sshd conf 
+firewalls | see and configure firewalld
+See confs | sudoers and sshd conf
 
 
 ### api-routerd JSON APIs

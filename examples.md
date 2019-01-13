@@ -691,3 +691,13 @@ $ curl --header "Content-Type: application/json" --request POST --data '{"key":"
 $ curl --header "Content-Type: application/json" --request POST --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"1"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/modify
 $ curl --header "Content-Type: application/json" --request DELETE --data '{"key":"net.ipv4.conf.all.rp_filter", "value":"0"}' --header "X-Session-Token: secret" http://localhost:8080/api/system/sysctl/delete
 ```
+
+##### firewalld
+
+```sh
+
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-zone-settings/public
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/list-services
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-default-zone
+
+```

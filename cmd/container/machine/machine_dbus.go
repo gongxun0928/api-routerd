@@ -19,8 +19,9 @@ type Conn struct {
 	object dbus.BusObject
 }
 
-func NewMachineConnection() (*Conn, error) {
+func NewConn() (*Conn, error) {
 	c := new(Conn)
+
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
 		return nil, err
@@ -37,7 +38,7 @@ func (c *Conn) Close() {
 }
 
 func GetMachineOSRelease(machine string) (dbus.ObjectPath, error) {
-	conn, err := NewMachineConnection()
+	conn, err := NewConn()
 	if err != nil {
 		return "", fmt.Errorf("Failed to get systemd bus connection: %s", err)
 	}
@@ -58,7 +59,7 @@ func GetMachineOSRelease(machine string) (dbus.ObjectPath, error) {
 }
 
 func CloneImage(image string, newImage string) error {
-	conn, err := NewMachineConnection()
+	conn, err := NewConn()
 	if err != nil {
 		return fmt.Errorf("Failed to get systemd bus connection: %s", err)
 	}
@@ -74,7 +75,7 @@ func CloneImage(image string, newImage string) error {
 }
 
 func RenameImage(image string, newImage string) error {
-	conn, err := NewMachineConnection()
+	conn, err := NewConn()
 	if err != nil {
 		return fmt.Errorf("Failed to get systemd bus connection: %s", err)
 	}
@@ -90,7 +91,7 @@ func RenameImage(image string, newImage string) error {
 }
 
 func RemoveImage(image string) error {
-	conn, err := NewMachineConnection()
+	conn, err := NewConn()
 	if err != nil {
 		return fmt.Errorf("Failed to get systemd bus connection: %s", err)
 	}

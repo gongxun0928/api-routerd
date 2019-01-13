@@ -7,6 +7,7 @@ import (
 
 	"github.com/RestGW/api-routerd/cmd/system/conf"
 	"github.com/RestGW/api-routerd/cmd/system/coredump"
+	"github.com/RestGW/api-routerd/cmd/system/firewalld"
 	"github.com/RestGW/api-routerd/cmd/system/group"
 	"github.com/RestGW/api-routerd/cmd/system/hostname"
 	"github.com/RestGW/api-routerd/cmd/system/journal"
@@ -20,6 +21,7 @@ import (
 	"github.com/RestGW/api-routerd/cmd/system/user"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 func RouterConfigureJournalConf(rw http.ResponseWriter, r *http.Request) {
@@ -195,6 +197,15 @@ func RegisterRouterSystem(router *mux.Router) {
 
 	// login
 	login.RegisterRouterLogin(n)
+
+	// firewalld
+	err := firewalld.Init()
+	if err != nil {
+		log.Errorf("Failed to init firewalld: %s", err)
+		return
+	}
+
+	firewalld.RegisterRouterFirewalld(n)
 
 	// conf
 	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)
