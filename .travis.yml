@@ -16,4 +16,3 @@ notifications:
 
 script:
   - go build -v
-  - go test -v -race ./...
