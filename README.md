@@ -46,7 +46,7 @@ sysctl |add/delete/modify and apply
 see information from ```/proc``` fs| netstat, netdev, memory and much more
 configure ```/proc/sys/net``` | (core/ipv4/ipv6), VM
 ethtool | see information and configure offload features
-firewalls | see and configure firewalld
+firewalld | see and configure firewalld
 See confs | sudoers and sshd conf
 
 

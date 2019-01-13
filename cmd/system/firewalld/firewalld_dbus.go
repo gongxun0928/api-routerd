@@ -25,6 +25,17 @@ type ZoneSettings struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Services    []string `json:"services"`
+	Interfaces  []string `json:"interfaces"`
+}
+
+type ServiceSettings struct {
+	Version      string            `json:"version"`
+	Name         string            `json:"name"`
+	Description  string            `json:"description"`
+	Ports        [][]interface{}   `json:"ports"`
+	Destinations map[string]string `json:"destinations"`
+	Protocols    []string          `json:"protocols"`
+	SourcePorts  [][]interface{}   `json:"source_ports"`
 }
 
 func NewConn() (*Conn, error) {
@@ -78,20 +89,78 @@ func (c *Conn) GetZoneSettings(zone string) (*ZoneSettings, error) {
 	z := new(ZoneSettings)
 	for i, el := range out {
 		switch i {
-		case 0:
-			continue
 		case 1:
 			z.Name = el.(string)
 			break
 		case 2:
 			z.Description = el.(string)
 			break
-		case 3, 4:
-			continue
 		case 5:
 			z.Services = el.([]string)
+			break
+		case 10:
+			z.Interfaces = el.([]string)
 		}
 	}
 
 	return z, nil
+}
+
+func (c *Conn) GetServiceSettings(zone string) (*ServiceSettings, error) {
+	out := []interface{}{}
+
+	err := c.object.Call(dbusInterface+".getServiceSettings", 0, zone).Store(&out)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(out)
+	s := new(ServiceSettings)
+	for i, el := range out {
+		switch i {
+		case 1:
+			s.Name = el.(string)
+			break
+		case 2:
+			s.Description = el.(string)
+			break
+		case 3:
+			s.Ports = el.([][]interface{})
+			break
+		case 5:
+			s.Destinations = el.(map[string]string)
+			break
+		case 6:
+			s.Protocols = el.([]string)
+			break
+		case 7:
+			s.SourcePorts = el.([][]interface{})
+			break
+		}
+	}
+
+	return s, nil
+
+}
+
+func (c *Conn) AddPort(zone string, port string, protocol string) (string, error) {
+	 var r string
+
+	err := c.object.Call(dbusInterface+".zone.addPort", 0, zone, port, protocol, 0).Store(&r)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
+}
+
+func (c *Conn) RemovePort(zone string, port string, protocol string) (string, error) {
+	var r string
+
+	err := c.object.Call(dbusInterface+".zone.removePort", 0, zone, port, protocol).Store(&r)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
 }

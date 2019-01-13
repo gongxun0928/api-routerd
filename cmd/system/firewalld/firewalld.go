@@ -14,6 +14,10 @@ import (
 type Firewall struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
+
+	Zone    string `json:"zone"`
+	Port    string `json:"port"`
+	Protocol  string `json:"protocol"`
 }
 
 var FirewalldMethods *share.Set
@@ -56,6 +60,68 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(z, rw)
+
+	case "get-service-settings":
+		z, err := c.GetServiceSettings(f.Value)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+	}
+
+	return nil
+}
+
+func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
+	c, err := NewConn()
+	if err != nil {
+		return err
+	}
+	defer c.Close()
+
+	b := FirewalldMethods.Contains(f.Property)
+	if !b {
+		return fmt.Errorf("Failed to call method firewalld: %s not found", f.Property)
+	}
+
+	log.Debugf("Set Firewalld passthrough: %s", f.Property)
+
+	switch f.Property {
+	case "add-port":
+		z, err := c.AddPort(f.Zone, f.Port, f.Protocol)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+	}
+
+	return nil
+}
+
+func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
+	c, err := NewConn()
+	if err != nil {
+		return err
+	}
+	defer c.Close()
+
+	b := FirewalldMethods.Contains(f.Property)
+	if !b {
+		return fmt.Errorf("Failed to call method firewalld: %s not found", f.Property)
+	}
+
+	log.Debugf("Delete Firewalld passthrough: %s", f.Property)
+
+	switch f.Property {
+	case "remove-port":
+		z, err := c.RemovePort(f.Zone, f.Port, f.Protocol)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
 	}
 
 	return nil
@@ -67,6 +133,9 @@ func Init() error {
 	FirewalldMethods.Add("list-services")
 	FirewalldMethods.Add("get-default-zone")
 	FirewalldMethods.Add("get-zone-settings")
+	FirewalldMethods.Add("get-service-settings")
+	FirewalldMethods.Add("add-port")
+	FirewalldMethods.Add("remove-port")
 
 	return nil
 }
