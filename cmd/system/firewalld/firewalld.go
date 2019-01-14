@@ -37,6 +37,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 
 	log.Debugf("Get Firewalld passthrough: %s", f.Property)
 
+	fmt.Println(f)
 	switch f.Property {
 	case "list-services":
 		services, err := c.ListServices()
@@ -45,6 +46,30 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(services, rw)
+
+	case "get-zones":
+		z, err := c.GetZones()
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+
+	case "list-all-zones":
+		z, err := c.ListAllZones()
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+
+	case "list-ports":
+		z, err := c.ListPorts(f.Value)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
 
 	case "get-default-zone":
 		z, err := c.GetDefaultZone()
@@ -146,6 +171,9 @@ func Init() error {
 	FirewalldMethods = share.NewSet()
 
 	FirewalldMethods.Add("list-services")
+	FirewalldMethods.Add("get-zones")
+	FirewalldMethods.Add("list-all-zones")
+	FirewalldMethods.Add("list-ports")
 	FirewalldMethods.Add("get-default-zone")
 	FirewalldMethods.Add("get-zone-settings")
 	FirewalldMethods.Add("get-service-settings")

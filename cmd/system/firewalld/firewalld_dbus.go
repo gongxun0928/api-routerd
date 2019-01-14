@@ -13,6 +13,8 @@ import (
 const (
 	dbusInterface  = "org.fedoraproject.FirewallD1"
 	dbusPath       = "/org/fedoraproject/FirewallD1"
+
+	dbusInterfaceConfig  = "org.fedoraproject.FirewallD1.config"
 	dbusPathConfig = "/org/fedoraproject/FirewallD1/config"
 )
 
@@ -69,6 +71,29 @@ func (c *Conn) getZonePathbyName(zone string) (string, error) {
 	return r, nil
 }
 
+func (c *Conn) GetZones() ([]string, error) {
+	var z []string
+
+	err := c.object.Call(dbusInterface+".zone.getZones", 0).Store(&z)
+	if err != nil {
+		return nil, err
+	}
+
+	return z, nil
+}
+
+func (c *Conn) ListAllZones() ([]string, error) {
+	var z []string
+
+	c.object = c.conn.Object(dbusInterface, dbus.ObjectPath(dbusPathConfig))
+	err := c.object.Call(dbusInterfaceConfig+".listZones", 0).Store(&z)
+	if err != nil {
+		return nil, err
+	}
+
+	return z, nil
+}
+
 func (c *Conn) ListServices() ([]string, error) {
 	var services []string
 
@@ -89,6 +114,17 @@ func (c *Conn) GetDefaultZone() (string, error) {
 	}
 
 	return zone, nil
+}
+
+func (c *Conn) ListPorts(zone string) ([][]string, error) {
+	var ports [][]string
+
+	err := c.object.Call(dbusInterface+".zone.getPorts", 0, zone).Store(&ports)
+	if err != nil {
+		return nil, err
+	}
+
+	return ports, nil
 }
 
 func (c *Conn) GetZoneSettings(zone string) (*ZoneSettings, error) {
@@ -127,7 +163,6 @@ func (c *Conn) GetServiceSettings(zone string) (*ServiceSettings, error) {
 		return nil, err
 	}
 
-	fmt.Println(out)
 	s := new(ServiceSettings)
 	for i, el := range out {
 		switch i {
