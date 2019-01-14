@@ -11,8 +11,9 @@ import (
 )
 
 const (
-	dbusInterface = "org.fedoraproject.FirewallD1"
-	dbusPath      = "/org/fedoraproject/FirewallD1"
+	dbusInterface  = "org.fedoraproject.FirewallD1"
+	dbusPath       = "/org/fedoraproject/FirewallD1"
+	dbusPathConfig = "/org/fedoraproject/FirewallD1/config"
 )
 
 type Conn struct {
@@ -54,6 +55,18 @@ func NewConn() (*Conn, error) {
 
 func (c *Conn) Close() {
 	c.conn.Close()
+}
+
+func (c *Conn) getZonePathbyName(zone string) (string, error) {
+	var r string
+
+	c.object = c.conn.Object(dbusInterface, dbus.ObjectPath(dbusPathConfig))
+	err := c.object.Call(dbusInterface+".config.getZoneByName", 0, zone).Store(&r)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
 }
 
 func (c *Conn) ListServices() ([]string, error) {
@@ -144,9 +157,10 @@ func (c *Conn) GetServiceSettings(zone string) (*ServiceSettings, error) {
 }
 
 func (c *Conn) AddPort(zone string, port string, protocol string) (string, error) {
-	 var r string
+	var r string
+	var err error
 
-	err := c.object.Call(dbusInterface+".zone.addPort", 0, zone, port, protocol, 0).Store(&r)
+	err = c.object.Call(dbusInterface+".zone.addPort", 0, zone, port, protocol, 0).Store(&r)
 	if err != nil {
 		return r, err
 	}
@@ -158,6 +172,36 @@ func (c *Conn) RemovePort(zone string, port string, protocol string) (string, er
 	var r string
 
 	err := c.object.Call(dbusInterface+".zone.removePort", 0, zone, port, protocol).Store(&r)
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
+}
+
+func (c *Conn) AddPortPermanent(zone string, port string, protocol string) (string, error) {
+	r, err := c.getZonePathbyName(zone)
+	if err != nil {
+		return r, err
+	}
+
+	c.object = c.conn.Object(dbusInterface, dbus.ObjectPath(r))
+	err = c.object.Call(dbusInterface+".config.zone.addPort", 0, port, protocol).Err
+	if err != nil {
+		return r, err
+	}
+
+	return r, nil
+}
+
+func (c *Conn) RemovePortPermanent(zone string, port string, protocol string) (string, error) {
+	r, err := c.getZonePathbyName(zone)
+	if err != nil {
+		return r, err
+	}
+
+	c.object = c.conn.Object(dbusInterface, dbus.ObjectPath(r))
+	err = c.object.Call(dbusInterface+".config.zone.removePort", 0, port, protocol).Err
 	if err != nil {
 		return r, err
 	}

@@ -15,9 +15,10 @@ type Firewall struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 
-	Zone    string `json:"zone"`
-	Port    string `json:"port"`
+	Zone      string `json:"zone"`
+	Port      string `json:"port"`
 	Protocol  string `json:"protocol"`
+	Permanent bool   `json:"permanent,omitempty"`
 }
 
 var FirewalldMethods *share.Set
@@ -89,12 +90,19 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 
 	switch f.Property {
 	case "add-port":
-		z, err := c.AddPort(f.Zone, f.Port, f.Protocol)
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.AddPortPermanent(f.Zone, f.Port, f.Protocol)
+		} else {
+			r, err = c.AddPort(f.Zone, f.Port, f.Protocol)
+		}
+
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JsonResponse(r, rw)
 	}
 
 	return nil
@@ -116,12 +124,19 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 
 	switch f.Property {
 	case "remove-port":
-		z, err := c.RemovePort(f.Zone, f.Port, f.Protocol)
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.RemovePortPermanent(f.Zone, f.Port, f.Protocol)
+		} else {
+			r, err = c.RemovePort(f.Zone, f.Port, f.Protocol)
+		}
+
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JsonResponse(r, rw)
 	}
 
 	return nil

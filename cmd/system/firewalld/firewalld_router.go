@@ -27,8 +27,6 @@ func RouterGetFirewalld(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		break
 	}
 }
 
@@ -61,8 +59,6 @@ func RouterConfigureFirewalld(rw http.ResponseWriter, r *http.Request) {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
-		break
 	}
 }
 

@@ -697,6 +697,7 @@ $ curl --header "Content-Type: application/json" --request DELETE --data '{"key"
 - add-port to a zone
 - remove port from the zone
 
+Runtime
 ```sh
 
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-zone-settings/public
@@ -705,4 +706,12 @@ $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/a
 
 $ curl --header "X-Session-Token: secret" --request POST --data '{"zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/set/add-port
 $ curl --header "X-Session-Token: secret" --request DELETE --data '{"zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/delete/remove-port
+```
+
+Permanent
+```sh
+
+$ curl --header "X-Session-Token: secret" --request POST --data '{"permanent": true, "zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/set/add-port
+$ curl --header "X-Session-Token: secret" --request DELETE --data '{"permanent": true, "zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/delete/remove-port
+
 ```
