@@ -18,6 +18,7 @@ type Firewall struct {
 	Zone      string `json:"zone"`
 	Port      string `json:"port"`
 	Protocol  string `json:"protocol"`
+	Interface string `json:"interface"`
 	Permanent bool   `json:"permanent,omitempty"`
 }
 
@@ -87,7 +88,22 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 
 		return share.JsonResponse(z, rw)
 
+	case "get-zone-settings-permanent":
+		z, err := c.GetZoneSettingsPermanent(f.Value)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+
 	case "get-service-settings":
+		z, err := c.GetServiceSettings(f.Value)
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(z, rw)
+	case "get-service-settings-permanent":
 		z, err := c.GetServiceSettings(f.Value)
 		if err != nil {
 			return err
@@ -121,6 +137,34 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 			r, err = c.AddPortPermanent(f.Zone, f.Port, f.Protocol)
 		} else {
 			r, err = c.AddPort(f.Zone, f.Port, f.Protocol)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(r, rw)
+	case "add-protocol":
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.AddProtocolPermanent(f.Zone, f.Protocol)
+		} else {
+			r, err = c.AddProtocol(f.Zone, f.Protocol)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(r, rw)
+	case "add-interface":
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.AddInterfacePermanent(f.Zone, f.Interface)
+		} else {
+			r, err = c.AddInterface(f.Zone, f.Interface)
 		}
 
 		if err != nil {
@@ -162,6 +206,34 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 		}
 
 		return share.JsonResponse(r, rw)
+	case "remove-protocol":
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.RemoveProtocolPermanent(f.Zone, f.Protocol)
+		} else {
+			r, err = c.RemoveProtocol(f.Zone, f.Protocol)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(r, rw)
+	case "remove-interface":
+		var r string
+
+		if f.Permanent == true {
+			r, err = c.RemoveInterfacePermanent(f.Zone, f.Interface)
+		} else {
+			r, err = c.RemoveInterface(f.Zone, f.Interface)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		return share.JsonResponse(r, rw)
 	}
 
 	return nil
@@ -176,9 +248,15 @@ func Init() error {
 	FirewalldMethods.Add("list-ports")
 	FirewalldMethods.Add("get-default-zone")
 	FirewalldMethods.Add("get-zone-settings")
+	FirewalldMethods.Add("get-zone-settings-permanent")
 	FirewalldMethods.Add("get-service-settings")
+	FirewalldMethods.Add("get-service-settings-permanent")
 	FirewalldMethods.Add("add-port")
 	FirewalldMethods.Add("remove-port")
+	FirewalldMethods.Add("add-protocol")
+	FirewalldMethods.Add("remove-protocol")
+	FirewalldMethods.Add("add-interface")
+	FirewalldMethods.Add("remove-interface")
 
 	return nil
 }

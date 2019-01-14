@@ -706,9 +706,15 @@ $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/a
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/list-ports/public
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-zones
 $ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/list-all-zones
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-zone-settings-permanent/public
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-service-settings/dhcp
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/system/firewalld/get/get-service-settings-permanent/dhcp
 
 $ curl --header "X-Session-Token: secret" --request POST --data '{"zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/set/add-port
 $ curl --header "X-Session-Token: secret" --request DELETE --data '{"zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/delete/remove-port
+
+$ curl --header "X-Session-Token: secret" --request POST --data '{"permanent": true, "zone":"public","protocol":"sctp"}' http://localhost:17999/api/system/firewalld/set/add-protocol
+$ curl --header "X-Session-Token: secret" --request DELETE --data '{"zone":"public","protocol":"tcp"}' http://localhost:17999/api/system/firewalld/delete/remove-protocol
 ```
 
 Permanent
