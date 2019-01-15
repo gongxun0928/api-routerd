@@ -14,6 +14,7 @@ const (
 	defaultLogFile = "api-router.log"
 )
 
+//InitLog inits the logger
 func InitLog() error {
 	log := logrus.New()
 

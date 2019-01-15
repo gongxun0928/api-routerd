@@ -50,14 +50,14 @@ func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(users, rw)
+		return share.JSONResponse(users, rw)
 	case "ListSessions":
 		sessions, err := c.ListSessions()
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(sessions, rw)
+		return share.JSONResponse(sessions, rw)
 	}
 
 	return nil

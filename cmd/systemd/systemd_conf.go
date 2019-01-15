@@ -118,7 +118,7 @@ func GetSystemConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(SystemConfig, rw)
+	return share.JSONResponse(SystemConfig, rw)
 }
 
 func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
@@ -153,5 +153,5 @@ func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return share.JsonResponse(SystemConfig, rw)
+	return share.JSONResponse(SystemConfig, rw)
 }

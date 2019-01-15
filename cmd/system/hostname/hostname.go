@@ -100,7 +100,7 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 	}
 
 	if property == "" {
-		return share.JsonResponse(hostNameInfo, rw)
+		return share.JSONResponse(hostNameInfo, rw)
 	}
 
 	host := Hostname{
@@ -108,5 +108,5 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 		Value:    hostNameInfo[property],
 	}
 
-	return share.JsonResponse(host, rw)
+	return share.JSONResponse(host, rw)
 }

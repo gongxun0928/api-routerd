@@ -160,7 +160,7 @@ func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return share.JsonResponse(routes, rw)
+	return share.JSONResponse(routes, rw)
 }
 
 func ConfigureRoutes(r *http.Request) error {

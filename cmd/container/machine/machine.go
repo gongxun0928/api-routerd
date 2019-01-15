@@ -41,7 +41,7 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(images, rw)
+		return share.JSONResponse(images, rw)
 
 	case "list-machines":
 		machines, err := c.ListMachines()
@@ -49,7 +49,7 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(machines, rw)
+		return share.JSONResponse(machines, rw)
 
 	case "get-machine":
 		machine, err := c.GetMachine(m.Property)
@@ -57,14 +57,14 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(machine, rw)
+		return share.JSONResponse(machine, rw)
 	case "describe-machine":
 		machine, err := c.GetMachine(m.Property)
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(machine, rw)
+		return share.JSONResponse(machine, rw)
 
 	case "get-image":
 		image, err := c.GetImage(m.Property)
@@ -72,7 +72,7 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(image, rw)
+		return share.JSONResponse(image, rw)
 	case "get-machine-by-pid":
 		pid, err := strconv.ParseInt(m.Property, 10, 32)
 		if err != nil {
@@ -84,21 +84,21 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(p, rw)
+		return share.JSONResponse(p, rw)
 	case "get-machine-address":
 		addr, err := c.GetMachineAddresses(m.Property)
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(addr, rw)
+		return share.JSONResponse(addr, rw)
 	case "get-machine-osrelease":
 		addr, err := GetMachineOSRelease(m.Property)
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(addr, rw)
+		return share.JSONResponse(addr, rw)
 	}
 
 	return nil

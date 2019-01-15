@@ -9,6 +9,7 @@ import (
 	"github.com/godbus/dbus"
 )
 
+//GetSystemBusPrivateConn get a DBUS private connection
 func GetSystemBusPrivateConn() (*dbus.Conn, error) {
 	conn, err := dbus.SystemBusPrivate()
 	if err != nil {

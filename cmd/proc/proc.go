@@ -52,7 +52,7 @@ func GetVersion(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(infostat, rw)
+	return share.JSONResponse(infostat, rw)
 }
 
 //GetPlatformInformation read platform info
@@ -72,7 +72,7 @@ func GetPlatformInformation(rw http.ResponseWriter) error {
 		version,
 	}
 
-	return share.JsonResponse(p, rw)
+	return share.JSONResponse(p, rw)
 }
 
 //GetVirtualization read virt info
@@ -90,7 +90,7 @@ func GetVirtualization(rw http.ResponseWriter) error {
 		role,
 	}
 
-	return share.JsonResponse(v, rw)
+	return share.JSONResponse(v, rw)
 }
 
 //GetUserStat active users
@@ -100,7 +100,7 @@ func GetUserStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(userstat, rw)
+	return share.JSONResponse(userstat, rw)
 }
 
 //GetTemperatureStat read temp of HW
@@ -110,7 +110,7 @@ func GetTemperatureStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(tempstat, rw)
+	return share.JSONResponse(tempstat, rw)
 }
 
 //GetNetStat read netstat from proc tcp/udp/sctp
@@ -120,7 +120,7 @@ func GetNetStat(rw http.ResponseWriter, protocol string) error {
 		return err
 	}
 
-	return share.JsonResponse(conn, rw)
+	return share.JSONResponse(conn, rw)
 }
 
 //GetNetStatPid connection by the pid
@@ -135,7 +135,7 @@ func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) erro
 		return err
 	}
 
-	return share.JsonResponse(conn, rw)
+	return share.JSONResponse(conn, rw)
 }
 
 //GetProtoCountersStat protocol specific statitics
@@ -147,7 +147,7 @@ func GetProtoCountersStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(proto, rw)
+	return share.JSONResponse(proto, rw)
 }
 
 //GetNetDev network device stat
@@ -157,7 +157,7 @@ func GetNetDev(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(netdev, rw)
+	return share.JSONResponse(netdev, rw)
 }
 
 //GetInterfaceStat network interface stat
@@ -167,7 +167,7 @@ func GetInterfaceStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(interfaces, rw)
+	return share.JSONResponse(interfaces, rw)
 }
 
 //GetSwapMemoryStat swap memory info
@@ -177,7 +177,7 @@ func GetSwapMemoryStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(swap, rw)
+	return share.JSONResponse(swap, rw)
 }
 
 //GetVirtualMemoryStat VM information
@@ -187,7 +187,7 @@ func GetVirtualMemoryStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(virt, rw)
+	return share.JSONResponse(virt, rw)
 }
 
 //GetCPUInfo CPU info
@@ -197,7 +197,7 @@ func GetCPUInfo(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(cpus, rw)
+	return share.JSONResponse(cpus, rw)
 }
 
 //GetCPUTimeStat read CPU time
@@ -207,7 +207,7 @@ func GetCPUTimeStat(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(cpus, rw)
+	return share.JSONResponse(cpus, rw)
 }
 
 //GetAvgStat read avg stat
@@ -217,7 +217,7 @@ func GetAvgStat(rw http.ResponseWriter) error {
 		return r
 	}
 
-	return share.JsonResponse(avgstat, rw)
+	return share.JSONResponse(avgstat, rw)
 }
 
 //GetPartitions read all partitions
@@ -227,7 +227,7 @@ func GetPartitions(rw http.ResponseWriter) error {
 		return r
 	}
 
-	return share.JsonResponse(p, rw)
+	return share.JSONResponse(p, rw)
 }
 
 //GetIOCounters read IO counters
@@ -237,7 +237,7 @@ func GetIOCounters(rw http.ResponseWriter) error {
 		return r
 	}
 
-	return share.JsonResponse(i, rw)
+	return share.JSONResponse(i, rw)
 }
 
 //GetDiskUsage read disk usage
@@ -247,7 +247,7 @@ func GetDiskUsage(rw http.ResponseWriter) error {
 		return r
 	}
 
-	return share.JsonResponse(u, rw)
+	return share.JSONResponse(u, rw)
 }
 
 //GetMisc read /proc/misc
@@ -269,7 +269,7 @@ func GetMisc(rw http.ResponseWriter) error {
 		miscMap[deviceNum] = fields[1]
 	}
 
-	return share.JsonResponse(miscMap, rw)
+	return share.JSONResponse(miscMap, rw)
 }
 
 //GetNetArp get ARP info
@@ -298,7 +298,7 @@ func GetNetArp(rw http.ResponseWriter) error {
 		netarp[i-1] = arp
 	}
 
-	return share.JsonResponse(netarp, rw)
+	return share.JSONResponse(netarp, rw)
 }
 
 // GetModules Get all installed modules
@@ -338,7 +338,7 @@ func GetModules(rw http.ResponseWriter) error {
 		modules[i] = module
 	}
 
-	return share.JsonResponse(modules, rw)
+	return share.JSONResponse(modules, rw)
 }
 
 //GetProcessInfo get process information from proc
@@ -360,7 +360,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(conn, rw)
+		return share.JSONResponse(conn, rw)
 
 	case "pid-rlimit":
 		rlimit, err := p.Rlimit()
@@ -368,7 +368,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(rlimit, rw)
+		return share.JSONResponse(rlimit, rw)
 
 	case "pid-rlimit-usage":
 		rlimit, err := p.RlimitUsage(true)
@@ -376,7 +376,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(rlimit, rw)
+		return share.JSONResponse(rlimit, rw)
 
 	case "pid-status":
 		s, err := p.Status()
@@ -384,7 +384,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(s, rw)
+		return share.JSONResponse(s, rw)
 
 	case "pid-username":
 		u, err := p.Username()
@@ -392,7 +392,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(u, rw)
+		return share.JSONResponse(u, rw)
 
 	case "pid-open-files":
 		f, err := p.OpenFiles()
@@ -400,7 +400,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(f, rw)
+		return share.JSONResponse(f, rw)
 
 	case "pid-fds":
 		f, err := p.NumFDs()
@@ -408,7 +408,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(f, rw)
+		return share.JSONResponse(f, rw)
 
 	case "pid-name":
 		n, err := p.Name()
@@ -416,7 +416,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(n, rw)
+		return share.JSONResponse(n, rw)
 
 	case "pid-memory-percent":
 		m, err := p.MemoryPercent()
@@ -424,7 +424,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(m, rw)
+		return share.JSONResponse(m, rw)
 
 	case "pid-memory-maps":
 		m, err := p.MemoryMaps(true)
@@ -432,7 +432,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(m, rw)
+		return share.JSONResponse(m, rw)
 
 	case "pid-memory-info":
 		m, err := p.MemoryInfo()
@@ -440,7 +440,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(m, rw)
+		return share.JSONResponse(m, rw)
 
 	case "pid-io-counters":
 		m, err := p.IOCounters()
@@ -448,7 +448,7 @@ func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error 
 			return err
 		}
 
-		return share.JsonResponse(m, rw)
+		return share.JSONResponse(m, rw)
 	}
 
 	return nil

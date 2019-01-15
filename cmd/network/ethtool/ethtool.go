@@ -42,7 +42,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(stats, rw)
+		return share.JSONResponse(stats, rw)
 
 	case "get-link-features":
 
@@ -52,7 +52,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(features, rw)
+		return share.JSONResponse(features, rw)
 
 	case "get-link-bus":
 
@@ -68,7 +68,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			bus,
 		}
 
-		return share.JsonResponse(b, rw)
+		return share.JSONResponse(b, rw)
 
 	case "get-link-driver-name":
 
@@ -84,7 +84,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			driver,
 		}
 
-		return share.JsonResponse(d, rw)
+		return share.JSONResponse(d, rw)
 
 	case "get-link-driver-info":
 
@@ -104,7 +104,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(drvinfo, rw)
+		return share.JSONResponse(drvinfo, rw)
 
 	case "get-link-permaddr":
 
@@ -120,7 +120,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			permaddr,
 		}
 
-		return share.JsonResponse(p, rw)
+		return share.JSONResponse(p, rw)
 
 	case "get-link-eeprom":
 
@@ -136,7 +136,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			eeprom,
 		}
 
-		return share.JsonResponse(e, rw)
+		return share.JSONResponse(e, rw)
 
 	case "get-link-msglvl":
 
@@ -152,7 +152,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			msglvl,
 		}
 
-		return share.JsonResponse(g, rw)
+		return share.JSONResponse(g, rw)
 
 	case "get-link-mapped":
 
@@ -162,7 +162,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(mapped, rw)
+		return share.JSONResponse(mapped, rw)
 	}
 
 	return nil

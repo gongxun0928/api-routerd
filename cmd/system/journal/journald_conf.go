@@ -97,7 +97,7 @@ func GetConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(journalConfig, rw)
+	return share.JSONResponse(journalConfig, rw)
 }
 
 //UpdateConf update the journal conf
@@ -133,5 +133,5 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return share.JsonResponse(journalConfig, rw)
+	return share.JSONResponse(journalConfig, rw)
 }

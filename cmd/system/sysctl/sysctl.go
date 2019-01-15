@@ -93,7 +93,7 @@ func Get(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(sysctl, rw)
+	return share.JSONResponse(sysctl, rw)
 }
 
 // Update update sysctl file

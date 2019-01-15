@@ -67,7 +67,7 @@ func SystemdState(w http.ResponseWriter) error {
 		Value: v.Value().(string),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdVersion(w http.ResponseWriter) error {
@@ -81,7 +81,7 @@ func SystemdVersion(w http.ResponseWriter) error {
 		Value: v.Value().(string),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdVirtualization(w http.ResponseWriter) error {
@@ -95,7 +95,7 @@ func SystemdVirtualization(w http.ResponseWriter) error {
 		Value: v.Value().(string),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdArchitecture(w http.ResponseWriter) error {
@@ -109,7 +109,7 @@ func SystemdArchitecture(w http.ResponseWriter) error {
 		Value: v.Value().(string),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdFeatures(w http.ResponseWriter) error {
@@ -123,7 +123,7 @@ func SystemdFeatures(w http.ResponseWriter) error {
 		Value: v.Value().(string),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdNFailedUnits(w http.ResponseWriter) error {
@@ -137,7 +137,7 @@ func SystemdNFailedUnits(w http.ResponseWriter) error {
 		Value: fmt.Sprint(v.Value().(uint32)),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func SystemdNNames(w http.ResponseWriter) error {
@@ -151,7 +151,7 @@ func SystemdNNames(w http.ResponseWriter) error {
 		Value: fmt.Sprint(v.Value().(uint32)),
 	}
 
-	return share.JsonResponse(prop, w)
+	return share.JSONResponse(prop, w)
 }
 
 func ListUnits(w http.ResponseWriter) error {
@@ -168,7 +168,7 @@ func ListUnits(w http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(units, w)
+	return share.JSONResponse(units, w)
 }
 
 func (u *Unit) StartUnit() error {
@@ -305,7 +305,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 			cpu := strconv.FormatUint(p.Value.Value().(uint64), 10)
 			prop := Property{Property: p.Name, Value: cpu}
 
-			return share.JsonResponse(prop, w)
+			return share.JSONResponse(prop, w)
 		}
 	}
 
@@ -315,7 +315,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(p, w)
+	return share.JSONResponse(p, w)
 }
 
 func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
@@ -363,5 +363,5 @@ func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(p, w)
+	return share.JSONResponse(p, w)
 }

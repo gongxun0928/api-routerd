@@ -93,7 +93,7 @@ func GetConf(rw http.ResponseWriter) error {
 		return err
 	}
 
-	return share.JsonResponse(conf, rw)
+	return share.JSONResponse(conf, rw)
 }
 
 //UpdateConf update timesync conf
@@ -155,7 +155,7 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return share.JsonResponse(conf, rw)
+	return share.JSONResponse(conf, rw)
 }
 
 //DeleteConf remove conf from file
@@ -218,5 +218,5 @@ func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return share.JsonResponse(conf, rw)
+	return share.JSONResponse(conf, rw)
 }

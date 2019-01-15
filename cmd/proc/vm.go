@@ -29,7 +29,7 @@ func (req *VM) GetVM(rw http.ResponseWriter) error {
 		Value:    line,
 	}
 
-	return share.JsonResponse(vmProperty, rw)
+	return share.JSONResponse(vmProperty, rw)
 }
 
 func (req *VM) SetVM(rw http.ResponseWriter) error {
@@ -48,5 +48,5 @@ func (req *VM) SetVM(rw http.ResponseWriter) error {
 		Value:    line,
 	}
 
-	return share.JsonResponse(vmProperty, rw)
+	return share.JSONResponse(vmProperty, rw)
 }

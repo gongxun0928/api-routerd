@@ -5,7 +5,8 @@ import (
 	"net/http"
 )
 
-func JsonResponse(response interface{}, w http.ResponseWriter) error {
+//JSONResponse form a JSON respose from a interface and send
+func JSONResponse(response interface{}, w http.ResponseWriter) error {
 	json, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

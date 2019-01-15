@@ -45,7 +45,7 @@ func GetSudoers(rw http.ResponseWriter) error {
 
 	sshdconf := SudoersConf{Sudoers: sudoers}
 
-	return share.JsonResponse(sshdconf, rw)
+	return share.JSONResponse(sshdconf, rw)
 }
 
 // SSHConfFileRead read sshd configuration file
@@ -63,5 +63,5 @@ func SSHConfFileRead(rw http.ResponseWriter) error {
 		sshdConfMap[paramName] = fields[1]
 	}
 
-	return share.JsonResponse(sshdConfMap, rw)
+	return share.JSONResponse(sshdConfMap, rw)
 }

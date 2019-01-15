@@ -48,7 +48,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(services, rw)
+		return share.JSONResponse(services, rw)
 
 	case "get-zones":
 		z, err := c.GetZones()
@@ -56,7 +56,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "list-all-zones":
 		z, err := c.ListAllZones()
@@ -64,7 +64,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "list-ports":
 		z, err := c.ListPorts(f.Value)
@@ -72,7 +72,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "get-default-zone":
 		z, err := c.GetDefaultZone()
@@ -80,7 +80,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "get-zone-settings":
 		z, err := c.GetZoneSettings(f.Value)
@@ -88,7 +88,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "get-zone-settings-permanent":
 		z, err := c.GetZoneSettingsPermanent(f.Value)
@@ -96,7 +96,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 
 	case "get-service-settings":
 		z, err := c.GetServiceSettings(f.Value)
@@ -104,14 +104,14 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 	case "get-service-settings-permanent":
 		z, err := c.GetServiceSettings(f.Value)
 		if err != nil {
 			return err
 		}
 
-		return share.JsonResponse(z, rw)
+		return share.JSONResponse(z, rw)
 	}
 
 	return nil
@@ -146,7 +146,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	case "add-protocol":
 		var r string
 
@@ -160,7 +160,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	case "add-interface":
 		var r string
 
@@ -174,7 +174,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	}
 
 	return nil
@@ -209,7 +209,7 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	case "remove-protocol":
 		var r string
 
@@ -223,7 +223,7 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	case "remove-interface":
 		var r string
 
@@ -237,7 +237,7 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 			return err
 		}
 
-		return share.JsonResponse(r, rw)
+		return share.JSONResponse(r, rw)
 	}
 
 	return nil

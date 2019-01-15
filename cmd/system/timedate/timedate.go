@@ -165,7 +165,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 	}
 
 	if property == "" {
-		return share.JsonResponse(TimeInfo, rw)
+		return share.JSONResponse(TimeInfo, rw)
 	}
 
 	t := TimeDate{
@@ -173,5 +173,5 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 		Value:    TimeInfo[property],
 	}
 
-	return share.JsonResponse(t, rw)
+	return share.JSONResponse(t, rw)
 }

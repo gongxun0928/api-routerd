@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+//CheckBinaryExists verifies if binary exists
 func CheckBinaryExists(binary string) error {
 	_, err := exec.LookPath(binary)
 	if err != nil {

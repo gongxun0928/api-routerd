@@ -102,7 +102,7 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 			return err
 		}
 
-		return share.JsonResponse(addrs, rw)
+		return share.JSONResponse(addrs, rw)
 	}
 
 	addrs, err := netlink.AddrList(nil, netlink.FAMILY_ALL)
@@ -111,5 +111,5 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 		return err
 	}
 
-	return share.JsonResponse(addrs, rw)
+	return share.JSONResponse(addrs, rw)
 }

@@ -75,7 +75,7 @@ func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
 		Link:     req.Link,
 	}
 
-	return share.JsonResponse(property, rw)
+	return share.JSONResponse(property, rw)
 }
 
 //SetSysNet sets a value to proc

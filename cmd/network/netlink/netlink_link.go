@@ -217,7 +217,7 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 			return err
 		}
 
-		return share.JsonResponse(l, rw)
+		return share.JSONResponse(l, rw)
 
 	}
 
@@ -226,7 +226,7 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 		return err
 	}
 
-	return share.JsonResponse(links, rw)
+	return share.JSONResponse(links, rw)
 }
 
 func DeleteLink(r *http.Request) error {
