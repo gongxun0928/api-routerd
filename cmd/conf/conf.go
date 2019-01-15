@@ -4,11 +4,10 @@ package conf
 
 import (
 	"flag"
-	"path"
 
 	"github.com/RestGW/api-routerd/cmd/share"
 
-	"github.com/BurntSushi/toml"
+	"github.com/spf13/viper"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,7 +15,7 @@ import (
 const (
 	Version  = "0.1"
 	ConfPath = "/etc/api-routerd"
-	ConfFile = "api-routerd.toml"
+	ConfFile = "api-routerd"
 	TLSCert  = "tls/server.crt"
 	TLSKey   = "tls/server.key"
 )
@@ -27,8 +26,8 @@ var (
 	PortFlag string
 )
 
-type tomlConfig struct {
-	Server Network `toml:"Network"`
+type Config struct {
+	Server Network `mapstructure:"Network"`
 }
 
 type Network struct {
@@ -46,14 +45,20 @@ func init() {
 	flag.StringVar(&PortFlag, "port", defaultPort, "The server port.")
 }
 
-func ParseConfFile() (tomlConfig, error) {
-	var conf tomlConfig
+func ParseConfFile() (Config, error) {
+	var conf Config
 
-	confFile := path.Join(ConfPath, ConfFile)
-	_, err := toml.DecodeFile(confFile, &conf)
+	viper.SetConfigName(ConfFile)
+	viper.AddConfigPath(ConfPath)
+
+	err := viper.ReadInConfig()
 	if err != nil {
-		log.Errorf("Fail to read conf file '%s': %v", ConfPath, err)
-		return conf, err
+		log.Fatalf("Error reading config file, %s", err)
+	}
+
+	err = viper.Unmarshal(&conf)
+	if err != nil {
+		log.Fatalf("unable to decode into struct, %v", err)
 	}
 
 	_, err = share.ParseIP(conf.Server.IPAddress)
@@ -64,7 +69,7 @@ func ParseConfFile() (tomlConfig, error) {
 
 	_, err = share.ParsePort(conf.Server.Port)
 	if err != nil {
-		log.Errorf("Failed to parse Conf file Port=%s", conf.Server.Port)
+		log.Errorf("Failed to parse conf file Port=%s", conf.Server.Port)
 		return conf, err
 	}
 

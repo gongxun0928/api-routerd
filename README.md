@@ -59,15 +59,15 @@ See confs | sudoers and sshd conf
 
 api-routerd uses a number of open source projects to work properly:
 
-* [logrus](github.com/sirupsen/logrus)
-* [gorilla mux](github.com/gorilla/mux)
-* [netlink](github.com/vishvananda/netlink)
-* [gopsutil](github.com/shirou/gopsutil)
-* [coreos go-systemd](github.com/coreos/go-systemd)
-* [dbus](github.com/godbus/dbus)
-* [ethtool](github.com/safchain/ethtool)
-* [BurntSushi toml](github.com/BurntSushi/toml)
-* [go-ini](github.com/go-ini/ini)
+* [logrus](https://github.com/sirupsen/logrus)
+* [gorilla mux](https://github.com/gorilla/mux)
+* [netlink](https://github.com/vishvananda/netlink)
+* [gopsutil](https://github.com/shirou/gopsutil)
+* [coreos go-systemd](https://github.com/coreos/go-systemd)
+* [dbus](https://github.com/godbus/dbus)
+* [ethtool](https://github.com/safchain/ethtool)
+* [viper](https://github.com/spf13/viper)
+* [go-ini](https://github.com/go-ini/ini)
 
 
 And of course api-routerd itself is open source with a [public repository][git-repo-url]

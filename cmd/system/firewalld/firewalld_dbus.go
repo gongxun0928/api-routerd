@@ -11,11 +11,11 @@ import (
 )
 
 const (
-	dbusInterface  = "org.fedoraproject.FirewallD1"
-	dbusPath       = "/org/fedoraproject/FirewallD1"
+	dbusInterface = "org.fedoraproject.FirewallD1"
+	dbusPath      = "/org/fedoraproject/FirewallD1"
 
-	dbusInterfaceConfig  = "org.fedoraproject.FirewallD1.config"
-	dbusPathConfig = "/org/fedoraproject/FirewallD1/config"
+	dbusInterfaceConfig = "org.fedoraproject.FirewallD1.config"
+	dbusPathConfig      = "/org/fedoraproject/FirewallD1/config"
 )
 
 type Conn struct {
