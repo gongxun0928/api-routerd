@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//RegisterRouterContainer register with mux
 func RegisterRouterContainer(router *mux.Router) {
 	n := router.PathPrefix("/container").Subrouter()
 

@@ -124,14 +124,14 @@ func GetSystemConf(rw http.ResponseWriter) error {
 func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	conf := make(map[string]string)
 	err = json.Unmarshal([]byte(body), &conf)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
@@ -149,7 +149,7 @@ func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 
 	err = WriteSystemConfig()
 	if err != nil {
-		log.Errorf("Failed Write to system conf: %s", err)
+		log.Errorf("Failed Write to system conf: %v", err)
 		return err
 	}
 

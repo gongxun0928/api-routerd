@@ -34,25 +34,25 @@ func DecodeAddressJSONRequest(r *http.Request) (Address, error) {
 func AddAddress(r *http.Request) error {
 	address, err := DecodeAddressJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed decode Address Json request: %s", err)
+		log.Errorf("Failed decode Address Json request: %v", err)
 		return err
 	}
 
 	link, err := netlink.LinkByName(address.Link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", err, address.Link)
+		log.Errorf("Failed to find link %v: %s", err, address.Link)
 		return err
 	}
 
 	addr, err := netlink.ParseAddr(address.Address)
 	if err != nil {
-		log.Errorf("Failed to parse address %s: %s", err, address.Address)
+		log.Errorf("Failed to parse address %v: %s", err, address.Address)
 		return err
 	}
 
 	err = netlink.AddrAdd(link, addr)
 	if err != nil {
-		log.Errorf("Failed to add Address %s to link %s: %s", err, addr, link)
+		log.Errorf("Failed to add Address %v to link %s: %s", err, addr, link)
 		return err
 	}
 
@@ -68,19 +68,19 @@ func DelAddress(r *http.Request) error {
 
 	link, err := netlink.LinkByName(address.Link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", err, address.Link)
+		log.Errorf("Failed to find link %v: %s", err, address.Link)
 		return err
 	}
 
 	addr, err := netlink.ParseAddr(address.Address)
 	if err != nil {
-		log.Errorf("Failed to parse address %s: %s", err, addr)
+		log.Errorf("Failed to parse address %v: %s", err, addr)
 		return err
 	}
 
 	err = netlink.AddrDel(link, addr)
 	if err != nil {
-		log.Errorf("Failed to add address %s: %s, %s", err, addr, link)
+		log.Errorf("Failed to add address %v: %s, %s", err, addr, link)
 		return err
 	}
 
@@ -92,13 +92,13 @@ func GetAddress(rw http.ResponseWriter, link string) error {
 	if l != "" {
 		link, err := netlink.LinkByName(l)
 		if err != nil {
-			log.Errorf("Failed to get link %s: %s", l, err)
+			log.Errorf("Failed to get link %v: %s", l, err)
 			return err
 		}
 
 		addrs, err := netlink.AddrList(link, netlink.FAMILY_ALL)
 		if err != nil {
-			log.Errorf("Could not get addresses for link %s: %s", l, err)
+			log.Errorf("Could not get addresses for link %s: %v", l, err)
 			return err
 		}
 

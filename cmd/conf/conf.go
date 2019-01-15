@@ -7,8 +7,8 @@ import (
 
 	"github.com/RestGW/api-routerd/cmd/share"
 
-	"github.com/spf13/viper"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 // App Version
@@ -26,10 +26,12 @@ var (
 	PortFlag string
 )
 
+//Config config file key value
 type Config struct {
 	Server Network `mapstructure:"Network"`
 }
 
+//Network IP Address and Port
 type Network struct {
 	IPAddress string
 	Port      string
@@ -45,7 +47,7 @@ func init() {
 	flag.StringVar(&PortFlag, "port", defaultPort, "The server port.")
 }
 
-func ParseConfFile() (Config, error) {
+func parseConfFile() (Config, error) {
 	var conf Config
 
 	viper.SetConfigName(ConfFile)
@@ -53,12 +55,12 @@ func ParseConfFile() (Config, error) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+		log.Errorf("Faild to parse  config file, %v", err)
 	}
 
 	err = viper.Unmarshal(&conf)
 	if err != nil {
-		log.Fatalf("unable to decode into struct, %v", err)
+		log.Errorf("Failed to decode config into struct, %v", err)
 	}
 
 	_, err = share.ParseIP(conf.Server.IPAddress)
@@ -81,9 +83,9 @@ func ParseConfFile() (Config, error) {
 // InitConf Init the config from conf file
 func InitConf() error {
 
-	conf, err := ParseConfFile()
+	conf, err := parseConfFile()
 	if err != nil {
-		log.Fatalf("Failed to read conf file of '%s'. Using defaults: %s", ConfFile, err)
+		log.Fatalf("Failed to read conf file of '%s'. Using defaults: %v", ConfFile, err)
 		flag.Parse()
 	} else {
 		IPFlag = conf.Server.IPAddress

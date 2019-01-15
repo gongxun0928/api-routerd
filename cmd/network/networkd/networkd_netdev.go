@@ -273,7 +273,7 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 func NetdevdParseJSONFromHTTPReq(req *http.Request) error {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 

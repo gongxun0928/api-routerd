@@ -9,10 +9,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterSysctlGet(rw http.ResponseWriter, r *http.Request) {
+func routerSysctlGet(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		err := GetSysctl(rw)
+		err := Get(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -20,7 +20,7 @@ func RouterSysctlGet(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterSysctlUpdate(rw http.ResponseWriter, r *http.Request) {
+func routerSysctlUpdate(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST", "PUT":
 		s := new(Sysctl)
@@ -30,7 +30,7 @@ func RouterSysctlUpdate(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = s.UpdateSysctl()
+		err = s.Update()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -41,7 +41,7 @@ func RouterSysctlUpdate(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterSysctlDelete(rw http.ResponseWriter, r *http.Request) {
+func routerSysctlDelete(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "DELETE":
 		s := new(Sysctl)
@@ -51,7 +51,7 @@ func RouterSysctlDelete(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = s.DeleteSysctl()
+		err = s.Delete()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -62,11 +62,12 @@ func RouterSysctlDelete(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+//RegisterRouterSysctl register with mux
 func RegisterRouterSysctl(router *mux.Router) {
 	s := router.PathPrefix("/sysctl").Subrouter().StrictSlash(false)
 
-	s.HandleFunc("/get", RouterSysctlGet)
-	s.HandleFunc("/add", RouterSysctlUpdate)
-	s.HandleFunc("/modify", RouterSysctlUpdate)
-	s.HandleFunc("/delete", RouterSysctlDelete)
+	s.HandleFunc("/get", routerSysctlGet)
+	s.HandleFunc("/add", routerSysctlUpdate)
+	s.HandleFunc("/modify", routerSysctlUpdate)
+	s.HandleFunc("/delete", routerSysctlDelete)
 }

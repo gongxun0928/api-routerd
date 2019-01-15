@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	SysctlPath = "/etc/sysctl.conf"
+	sysctlPath = "/etc/sysctl.conf"
 )
 
+//Sysctl json request
 type Sysctl struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
@@ -24,7 +25,7 @@ type Sysctl struct {
 }
 
 // Apply sysctl conf to system
-func (s *Sysctl) ApplySysctl() error {
+func (s *Sysctl) apply() error {
 	b, err := share.ParseBool(s.Apply)
 	if err != nil {
 		return fmt.Errorf("Failed to apply: %s", s.Key)
@@ -50,8 +51,8 @@ func (s *Sysctl) ApplySysctl() error {
 }
 
 // Read sysctl config to a map
-func ReadSysctlConfig() (map[string]string, error) {
-	lines, err := share.ReadFullFile(SysctlPath)
+func readConfig() (map[string]string, error) {
+	lines, err := share.ReadFullFile(sysctlPath)
 	if err != nil {
 		return nil, err
 	}
@@ -72,8 +73,8 @@ func ReadSysctlConfig() (map[string]string, error) {
 	return sysctl, nil
 }
 
-// WriteSysctlConfig: write config to file
-func WriteSysctlConfig(sysctl map[string]string) error {
+//WriteConfig write config to file
+func writeConfig(sysctl map[string]string) error {
 	var lines []string
 	var line string
 
@@ -82,12 +83,12 @@ func WriteSysctlConfig(sysctl map[string]string) error {
 		lines = append(lines, line)
 	}
 
-	return share.WriteFullFile(SysctlPath, lines)
+	return share.WriteFullFile(sysctlPath, lines)
 }
 
-// GetSysctl read sysctl file
-func GetSysctl(rw http.ResponseWriter) error {
-	sysctl, err := ReadSysctlConfig()
+// Get read sysctl file
+func Get(rw http.ResponseWriter) error {
+	sysctl, err := readConfig()
 	if err != nil {
 		return err
 	}
@@ -95,26 +96,26 @@ func GetSysctl(rw http.ResponseWriter) error {
 	return share.JsonResponse(sysctl, rw)
 }
 
-// UpdateSysctl update sysctl file
-func (s *Sysctl) UpdateSysctl() error {
-	sysctl, err := ReadSysctlConfig()
+// Update update sysctl file
+func (s *Sysctl) Update() error {
+	sysctl, err := readConfig()
 	if err != nil {
 		return err
 	}
 
 	sysctl[s.Key] = s.Value
 
-	err = WriteSysctlConfig(sysctl)
+	err = writeConfig(sysctl)
 	if err != nil {
 		return err
 	}
 
-	return s.ApplySysctl()
+	return s.apply()
 }
 
-// DeleteSysctl delete sysctl value in file
-func (s *Sysctl) DeleteSysctl() error {
-	sysctl, err := ReadSysctlConfig()
+// Delete delete sysctl value in file
+func (s *Sysctl) Delete() error {
+	sysctl, err := readConfig()
 	if err != nil {
 		return err
 	}
@@ -125,10 +126,10 @@ func (s *Sysctl) DeleteSysctl() error {
 	}
 
 	delete(sysctl, s.Key)
-	err = WriteSysctlConfig(sysctl)
+	err = writeConfig(sysctl)
 	if err != nil {
 		return err
 	}
 
-	return s.ApplySysctl()
+	return s.apply()
 }

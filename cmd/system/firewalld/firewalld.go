@@ -11,6 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+//Firewall Json request
 type Firewall struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
@@ -22,8 +23,9 @@ type Firewall struct {
 	Permanent bool   `json:"permanent,omitempty"`
 }
 
-var FirewalldMethods *share.Set
+var firewalldMethods *share.Set
 
+//GetFirewalld wraps all FW get commands
 func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -31,7 +33,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 	}
 	defer c.Close()
 
-	b := FirewalldMethods.Contains(f.Property)
+	b := firewalldMethods.Contains(f.Property)
 	if !b {
 		return fmt.Errorf("Failed to call method firewalld: %s not found", f.Property)
 	}
@@ -115,6 +117,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
+//AddFirewalld wrap all firewalld add
 func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -122,7 +125,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 	}
 	defer c.Close()
 
-	b := FirewalldMethods.Contains(f.Property)
+	b := firewalldMethods.Contains(f.Property)
 	if !b {
 		return fmt.Errorf("Failed to call method firewalld: %s not found", f.Property)
 	}
@@ -177,6 +180,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
+//DeleteFirewalld wrap all delete commands
 func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -184,7 +188,7 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 	}
 	defer c.Close()
 
-	b := FirewalldMethods.Contains(f.Property)
+	b := firewalldMethods.Contains(f.Property)
 	if !b {
 		return fmt.Errorf("Failed to call method firewalld: %s not found", f.Property)
 	}
@@ -239,24 +243,25 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
+//Init Init the FW module
 func Init() error {
-	FirewalldMethods = share.NewSet()
+	firewalldMethods = share.NewSet()
 
-	FirewalldMethods.Add("list-services")
-	FirewalldMethods.Add("get-zones")
-	FirewalldMethods.Add("list-all-zones")
-	FirewalldMethods.Add("list-ports")
-	FirewalldMethods.Add("get-default-zone")
-	FirewalldMethods.Add("get-zone-settings")
-	FirewalldMethods.Add("get-zone-settings-permanent")
-	FirewalldMethods.Add("get-service-settings")
-	FirewalldMethods.Add("get-service-settings-permanent")
-	FirewalldMethods.Add("add-port")
-	FirewalldMethods.Add("remove-port")
-	FirewalldMethods.Add("add-protocol")
-	FirewalldMethods.Add("remove-protocol")
-	FirewalldMethods.Add("add-interface")
-	FirewalldMethods.Add("remove-interface")
+	firewalldMethods.Add("list-services")
+	firewalldMethods.Add("get-zones")
+	firewalldMethods.Add("list-all-zones")
+	firewalldMethods.Add("list-ports")
+	firewalldMethods.Add("get-default-zone")
+	firewalldMethods.Add("get-zone-settings")
+	firewalldMethods.Add("get-zone-settings-permanent")
+	firewalldMethods.Add("get-service-settings")
+	firewalldMethods.Add("get-service-settings-permanent")
+	firewalldMethods.Add("add-port")
+	firewalldMethods.Add("remove-port")
+	firewalldMethods.Add("add-protocol")
+	firewalldMethods.Add("remove-protocol")
+	firewalldMethods.Add("add-interface")
+	firewalldMethods.Add("remove-interface")
 
 	return nil
 }

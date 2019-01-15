@@ -14,9 +14,10 @@ import (
 )
 
 const (
-	UserFile = "/run/api-routerd-users"
+	userFile = "/run/api-routerd-users"
 )
 
+//User Json request
 type User struct {
 	UID           string   `json:"uid"`
 	Gid           string   `json:"gid"`
@@ -28,7 +29,8 @@ type User struct {
 	Password      string   `json:"password"`
 }
 
-func (r *User) UserAdd() error {
+//Add add user
+func (r *User) Add() error {
 	u, err := user.Lookup(r.Username)
 	if err != nil {
 		_, ok := err.(user.UnknownUserError)
@@ -58,7 +60,7 @@ func (r *User) UserAdd() error {
 	//<Username>:<Password>:<UID>:<GID>:<User Info>:<Home Dir>:<Default Shell>
 	line := r.Username + ":" + r.Password + ":" + r.UID + ":" + r.Gid + ":" + r.Comment + ":" + r.HomeDirectory + ":" + r.Shell
 
-	err = share.WriteOneLineFile(UserFile, line)
+	err = share.WriteOneLineFile(userFile, line)
 	if err != nil {
 		return err
 	}
@@ -68,17 +70,18 @@ func (r *User) UserAdd() error {
 		return err
 	}
 
-	cmd := exec.Command(path, UserFile)
+	cmd := exec.Command(path, userFile)
 	stdout, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Errorf("Failed to add user %s: %s", r.Username, stdout)
 		return fmt.Errorf("Failed to add user '%s': %s", r.Username, stdout)
 	}
 
-	return os.Remove(UserFile)
+	return os.Remove(userFile)
 }
 
-func (r *User) UserDel() error {
+//Del delete user
+func (r *User) Del() error {
 	g, err := user.Lookup(r.Username)
 	if err != nil {
 		_, ok := err.(user.UnknownUserError)
@@ -106,7 +109,8 @@ func (r *User) UserDel() error {
 	return nil
 }
 
-func (r *User) UserModify() error {
+//Modify user
+func (r *User) Modify() error {
 	g, err := user.Lookup(r.Username)
 	if err != nil {
 		_, ok := err.(user.UnknownUserError)

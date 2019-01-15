@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
+func routerMachineGet(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	path := vars["command"]
 	property := vars["property"]
@@ -22,7 +22,7 @@ func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
 			Property: property,
 		}
 
-		err := m.MachineMethodGet(rw)
+		err := m.MethodGet(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -30,7 +30,7 @@ func RouterMachineGet(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterMachineConfigure(rw http.ResponseWriter, r *http.Request) {
+func routerMachineConfigure(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	path := vars["command"]
 	property := vars["property"]
@@ -48,7 +48,7 @@ func RouterMachineConfigure(rw http.ResponseWriter, r *http.Request) {
 		m.Path = path
 		m.Property = property
 
-		err = m.MachineMethodConfigure(rw)
+		err = m.MethodConfigure(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -56,10 +56,11 @@ func RouterMachineConfigure(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterMachine register with mux
 func RegisterRouterMachine(n *mux.Router) {
 	m := n.PathPrefix("/machine").Subrouter().StrictSlash(false)
 
-	m.HandleFunc("/list/{command}", RouterMachineGet)
-	m.HandleFunc("/get/{command}/{property}", RouterMachineGet)
-	m.HandleFunc("/configure/{command}/{property}", RouterMachineConfigure)
+	m.HandleFunc("/list/{command}", routerMachineGet)
+	m.HandleFunc("/get/{command}/{property}", routerMachineGet)
+	m.HandleFunc("/configure/{command}/{property}", routerMachineConfigure)
 }

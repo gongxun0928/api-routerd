@@ -46,7 +46,7 @@ func NewConn() (*Conn, error) {
 
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to connect to system bus:", err)
+		return nil, fmt.Errorf("Failed to connect to system bus: %v", err)
 	}
 
 	c.conn = conn
@@ -356,6 +356,7 @@ func (c *Conn) AddProtocolPermanent(zone string, protocol string) (string, error
 	return r, nil
 }
 
+//RemoveProtocolPermanent removes a protcol from a zone in permanent configuration
 func (c *Conn) RemoveProtocolPermanent(zone string, protocol string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -371,6 +372,7 @@ func (c *Conn) RemoveProtocolPermanent(zone string, protocol string) (string, er
 	return r, nil
 }
 
+//AddInterface Add a interface to a zone in runtime configuration
 func (c *Conn) AddInterface(zone string, intf string) (string, error) {
 	var r string
 	var err error
@@ -383,6 +385,7 @@ func (c *Conn) AddInterface(zone string, intf string) (string, error) {
 	return r, nil
 }
 
+//RemoveInterface Remove a interface from a zone in runtime configuration
 func (c *Conn) RemoveInterface(zone string, intf string) (string, error) {
 	var r string
 
@@ -394,6 +397,7 @@ func (c *Conn) RemoveInterface(zone string, intf string) (string, error) {
 	return r, nil
 }
 
+//AddInterfacePermanent Add a interface to a zone in permanent configuration
 func (c *Conn) AddInterfacePermanent(zone string, intf string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -409,6 +413,7 @@ func (c *Conn) AddInterfacePermanent(zone string, intf string) (string, error) {
 	return r, nil
 }
 
+//RemoveInterfacePermanent Remove a interface from a zone in permanent configuration
 func (c *Conn) RemoveInterfacePermanent(zone string, intf string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {

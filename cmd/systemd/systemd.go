@@ -37,7 +37,7 @@ type UnitStatus struct {
 func SystemdProperty(property string) (dbus.Variant, error) {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		log.Error("Failed to get dbus connection: ", err)
+		log.Errorf("Failed to get dbus connection: %v", err)
 		return dbus.Variant{}, err
 	}
 	defer conn.Close()
@@ -164,7 +164,7 @@ func ListUnits(w http.ResponseWriter) error {
 
 	units, err := conn.ListUnits()
 	if err != nil {
-		log.Errorf("Failed ListUnits: %s", err)
+		log.Errorf("Failed ListUnits: %v", err)
 		return err
 	}
 
@@ -174,7 +174,7 @@ func ListUnits(w http.ResponseWriter) error {
 func (u *Unit) StartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -182,7 +182,7 @@ func (u *Unit) StartUnit() error {
 	reschan := make(chan string)
 	_, err = conn.StartUnit(u.Unit, "replace", reschan)
 	if err != nil {
-		log.Errorf("Failed to start unit %s: %s", u.Unit, err)
+		log.Errorf("Failed to start unit %s: %v", u.Unit, err)
 		return err
 	}
 
@@ -200,7 +200,7 @@ func (u *Unit) StopUnit() error {
 	reschan := make(chan string)
 	_, err = conn.StopUnit(u.Unit, "fail", reschan)
 	if err != nil {
-		log.Errorf("Failed to stop unit %s: %s", u.Unit, err)
+		log.Errorf("Failed to stop unit %s: %v", u.Unit, err)
 		return err
 	}
 
@@ -210,7 +210,7 @@ func (u *Unit) StopUnit() error {
 func (u *Unit) RestartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -218,7 +218,7 @@ func (u *Unit) RestartUnit() error {
 	reschan := make(chan string)
 	_, err = conn.RestartUnit(u.Unit, "replace", reschan)
 	if err != nil {
-		log.Errorf("Failed to restart unit %s: %s", u.Unit, err)
+		log.Errorf("Failed to restart unit %s: %v", u.Unit, err)
 		return err
 	}
 
@@ -235,7 +235,7 @@ func (u *Unit) ReloadUnit() error {
 
 	err = conn.Reload()
 	if err != nil {
-		log.Errorf("Failed to reload unit %s: %s", u.Unit, err)
+		log.Errorf("Failed to reload unit %s: %v", u.Unit, err)
 		return err
 	}
 
@@ -245,7 +245,7 @@ func (u *Unit) ReloadUnit() error {
 func (u *Unit) KillUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -264,14 +264,14 @@ func (u *Unit) KillUnit() error {
 func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
 
 	units, err := conn.ListUnitsByNames([]string{u.Unit})
 	if err != nil {
-		log.Errorf("Failed get unit '%s' status: %s", u.Unit, err)
+		log.Errorf("Failed get unit '%s' status: %v", u.Unit, err)
 		return err
 	}
 
@@ -288,7 +288,7 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -296,7 +296,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	if u.Property != "" {
 		p, err := conn.GetServiceProperty(u.Unit, u.Property)
 		if err != nil {
-			log.Errorf("Failed to get service property: %s", err)
+			log.Errorf("Failed to get service property: %v", err)
 			return err
 		}
 
@@ -311,7 +311,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 
 	p, err := conn.GetUnitProperties(u.Unit)
 	if err != nil {
-		log.Errorf("Failed to get service properties: %s", err)
+		log.Errorf("Failed to get service properties: %v", err)
 		return err
 	}
 
@@ -321,7 +321,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -330,13 +330,17 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	case "CPUShares":
 		n, err := strconv.ParseInt(u.Value, 10, 64)
 		if err != nil {
-			log.Errorf("Failed to parse CPUShares: %s", err)
+			log.Errorf("Failed to parse CPUShares: %v", err)
 			return err
 		}
 
-		err = conn.SetUnitProperties(u.Unit, true, sd.Property{"CPUShares", dbus.MakeVariant(uint64(n))})
+		p := sd.Property{
+			Name: "CPUShares",
+			Value: dbus.MakeVariant(uint64(n)),
+		}
+		err = conn.SetUnitProperties(u.Unit, true, p)
 		if err != nil {
-			log.Errorf("Failed to set CPUShares %s: %s", u.Value, err)
+			log.Errorf("Failed to set CPUShares %s: %v", u.Value, err)
 			return err
 		}
 		break
@@ -348,14 +352,14 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
-		log.Errorf("Failed to get systemd bus connection: %s", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
 
 	p, err := conn.GetUnitTypeProperties(u.Unit, u.UnitType)
 	if err != nil {
-		log.Errorf("Failed to get unit type properties: %s", err)
+		log.Errorf("Failed to get unit type properties: %v", err)
 		return err
 	}
 

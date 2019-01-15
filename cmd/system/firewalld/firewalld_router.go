@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterGetFirewalld(rw http.ResponseWriter, r *http.Request) {
+func routerGetFirewalld(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	property := vars["property"]
 	value := vars["value"]
@@ -30,7 +30,7 @@ func RouterGetFirewalld(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterConfigureFirewalld(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureFirewalld(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	property := vars["property"]
 
@@ -62,11 +62,12 @@ func RouterConfigureFirewalld(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterFirewalld register with mux
 func RegisterRouterFirewalld(router *mux.Router) {
 	f := router.PathPrefix("/firewalld").Subrouter().StrictSlash(false)
 
-	f.HandleFunc("/get/{property}", RouterGetFirewalld)
-	f.HandleFunc("/get/{property}/{value}", RouterGetFirewalld)
-	f.HandleFunc("/set/{property}", RouterConfigureFirewalld)
-	f.HandleFunc("/delete/{property}", RouterConfigureFirewalld)
+	f.HandleFunc("/get/{property}", routerGetFirewalld)
+	f.HandleFunc("/get/{property}/{value}", routerGetFirewalld)
+	f.HandleFunc("/set/{property}", routerConfigureFirewalld)
+	f.HandleFunc("/delete/{property}", routerConfigureFirewalld)
 }

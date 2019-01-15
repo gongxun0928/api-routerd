@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterGetHostname(rw http.ResponseWriter, r *http.Request) {
+func routerGetHostname(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	property := vars["property"]
 
@@ -31,7 +31,7 @@ func RouterGetHostname(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterSetHostname(rw http.ResponseWriter, r *http.Request) {
+func routerSetHostname(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "PUT":
 
@@ -51,9 +51,10 @@ func RouterSetHostname(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterHostname registers with mux
 func RegisterRouterHostname(router *mux.Router) {
 	s := router.PathPrefix("/hostname").Subrouter().StrictSlash(false)
-	s.HandleFunc("", RouterGetHostname)
-	s.HandleFunc("/get/{property}", RouterGetHostname)
-	s.HandleFunc("/set", RouterSetHostname)
+	s.HandleFunc("", routerGetHostname)
+	s.HandleFunc("/get/{property}", routerGetHostname)
+	s.HandleFunc("/set", routerSetHostname)
 }

@@ -44,7 +44,7 @@ type TimeDate struct {
 func (t *TimeDate) SetTimeDate() error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		log.Error("Failed to get systemd bus connection: ", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -83,7 +83,7 @@ func (t *TimeDate) SetTimeDate() error {
 func GetTimeDate(rw http.ResponseWriter, property string) error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		log.Error("Failed to get dbus connection: ", err)
+		log.Errorf("Failed to get dbus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
@@ -170,7 +170,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 
 	t := TimeDate{
 		Property: property,
-		Value: TimeInfo[property],
+		Value:    TimeInfo[property],
 	}
 
 	return share.JsonResponse(t, rw)

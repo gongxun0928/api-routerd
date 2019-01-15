@@ -11,6 +11,7 @@ import (
 	"github.com/coreos/go-systemd/machine1"
 )
 
+//Machine Json request
 type Machine struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
@@ -19,15 +20,16 @@ type Machine struct {
 	New      string `json:"new"`
 }
 
-var MachineMethods *share.Set
+var machineMethods *share.Set
 
-func (m *Machine) MachineMethodGet(rw http.ResponseWriter) error {
+//MethodGet retrives info from machined via dbus
+func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 	c, err := machine1.New()
 	if err != nil {
 		return err
 	}
 
-	b := MachineMethods.Contains(m.Path)
+	b := machineMethods.Contains(m.Path)
 	if !b {
 		return fmt.Errorf("Failed to call method machine: %s not found", m.Path)
 	}
@@ -102,13 +104,14 @@ func (m *Machine) MachineMethodGet(rw http.ResponseWriter) error {
 	return nil
 }
 
-func (m *Machine) MachineMethodConfigure(rw http.ResponseWriter) error {
+//MethodConfigure Post methods
+func (m *Machine) MethodConfigure(rw http.ResponseWriter) error {
 	c, err := machine1.New()
 	if err != nil {
 		return err
 	}
 
-	b := MachineMethods.Contains(m.Path)
+	b := machineMethods.Contains(m.Path)
 	if !b {
 		return fmt.Errorf("Failed to call method machine: %s not found", m.Path)
 	}
@@ -147,20 +150,21 @@ func (m *Machine) MachineMethodConfigure(rw http.ResponseWriter) error {
 	return nil
 }
 
+//InitMachine init machine package
 func InitMachine() error {
-	MachineMethods = share.NewSet()
+	machineMethods = share.NewSet()
 
-	MachineMethods.Add("list-images")
-	MachineMethods.Add("list-machines")
-	MachineMethods.Add("get-machine")
-	MachineMethods.Add("get-image")
-	MachineMethods.Add("get-machine-by-pid")
-	MachineMethods.Add("get-machine-address")
-	MachineMethods.Add("describe-machine")
-	MachineMethods.Add("terminate-machine")
-	MachineMethods.Add("get-machine-osrelease")
-	MachineMethods.Add("rename-image")
-	MachineMethods.Add("remove-image")
+	machineMethods.Add("list-images")
+	machineMethods.Add("list-machines")
+	machineMethods.Add("get-machine")
+	machineMethods.Add("get-image")
+	machineMethods.Add("get-machine-by-pid")
+	machineMethods.Add("get-machine-address")
+	machineMethods.Add("describe-machine")
+	machineMethods.Add("terminate-machine")
+	machineMethods.Add("get-machine-osrelease")
+	machineMethods.Add("rename-image")
+	machineMethods.Add("remove-image")
 
 	return nil
 }

@@ -38,7 +38,7 @@ func DecodeLinkJSONRequest(r *http.Request) (Link, error) {
 func (req *Link) LinkSetMasterBridge() error {
 	bridge, err := netlink.LinkByName(req.Link)
 	if err != nil {
-		log.Errorf("Failed to find bridge link %s: %s", req.Link, err)
+		log.Errorf("Failed to find bridge link %s: %v", req.Link, err)
 		return err
 	}
 
@@ -51,13 +51,13 @@ func (req *Link) LinkSetMasterBridge() error {
 	for _, n := range req.Enslave {
 		link, err := netlink.LinkByName(n)
 		if err != nil {
-			log.Errorf("Failed to find slave link %s: %s", n, err)
+			log.Errorf("Failed to find slave link %s: %v", n, err)
 			continue
 		}
 
 		err = netlink.LinkSetMaster(link, br)
 		if err != nil {
-			log.Errorf("Failed to set link %s master device %s: %s", n, req.Link, err)
+			log.Errorf("Failed to set link %s master device %s: %v", n, req.Link, err)
 		}
 	}
 
@@ -77,7 +77,7 @@ func (req *Link) LinkCreateBridge() error {
 		}
 		err = netlink.LinkAdd(bridge)
 		if err != nil {
-			log.Errorf("Failed to create bridge %s: %s", req.Link, err)
+			log.Errorf("Failed to create bridge %s: %v", req.Link, err)
 			return err
 		}
 
@@ -90,20 +90,20 @@ func (req *Link) LinkCreateBridge() error {
 func (req *Link) LinkSetMasterBond() error {
 	bond, err := netlink.LinkByName(req.Link)
 	if err != nil {
-		log.Errorf("Failed to find bond link %s: %s", req.Link, err)
+		log.Errorf("Failed to find bond link %s: %v", req.Link, err)
 		return err
 	}
 
 	for _, n := range req.Enslave {
 		link, err := netlink.LinkByName(n)
 		if err != nil {
-			log.Errorf("Failed to find slave link %s: %s", n, err)
+			log.Errorf("Failed to find slave link %s: %v", n, err)
 			continue
 		}
 
 		err = netlink.LinkSetBondSlave(link, &netlink.Bond{LinkAttrs: *bond.Attrs()})
 		if err != nil {
-			log.Errorf("Failed to set link %s master device %s: %s", n, req.Link, err)
+			log.Errorf("Failed to set link %s master device %s: %v", n, req.Link, err)
 		}
 	}
 
@@ -125,7 +125,7 @@ func (req *Link) LinkCreateBond() error {
 		bond.Mode = netlink.StringToBondModeMap[req.Mode]
 		err = netlink.LinkAdd(bond)
 		if err != nil {
-			log.Errorf("Failed to create bond %s: %s", req.Link, err)
+			log.Errorf("Failed to create bond %s: %v", req.Link, err)
 			return err
 		}
 
@@ -138,13 +138,13 @@ func (req *Link) LinkCreateBond() error {
 func LinkSetUp(link string) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", link, err)
+		log.Errorf("Failed to find link %s: %v", link, err)
 		return err
 	}
 
 	err = netlink.LinkSetUp(l)
 	if err != nil {
-		log.Errorf("Failed to set link %s up: %s", l, err)
+		log.Errorf("Failed to set link %s up: %v", l, err)
 		return err
 	}
 
@@ -154,13 +154,13 @@ func LinkSetUp(link string) error {
 func LinkSetDown(link string) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", link, err)
+		log.Errorf("Failed to find link %s: %v", link, err)
 		return err
 	}
 
 	err = netlink.LinkSetDown(l)
 	if err != nil {
-		log.Errorf("Failed to set link down %s: %s", l, err)
+		log.Errorf("Failed to set link down %s: %v", l, err)
 		return err
 	}
 
@@ -170,13 +170,13 @@ func LinkSetDown(link string) error {
 func LinkSetMTU(link string, mtu int) error {
 	l, err := netlink.LinkByName(link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", link, err)
+		log.Errorf("Failed to find link %s: %v", link, err)
 		return err
 	}
 
 	err = netlink.LinkSetMTU(l, mtu)
 	if err != nil {
-		log.Errorf("Failed to set link %s MTU %d: %s", link, mtu, err)
+		log.Errorf("Failed to set link %s MTU %d: %v", link, mtu, err)
 		return err
 	}
 
@@ -186,7 +186,7 @@ func LinkSetMTU(link string, mtu int) error {
 func SetLink(r *http.Request) error {
 	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed to decode JSON: %s", err)
+		log.Errorf("Failed to decode JSON: %v", err)
 		return err
 	}
 
@@ -199,7 +199,7 @@ func SetLink(r *http.Request) error {
 
 		mtu, err := strconv.ParseInt(strings.TrimSpace(req.MTU), 10, 64)
 		if err != nil {
-			log.Errorf("Failed to parse received link %s MTU %s: %s", req.Link, req.MTU, err)
+			log.Errorf("Failed to parse received link %s MTU %s: %v", req.Link, req.MTU, err)
 			return err
 		}
 
@@ -213,41 +213,38 @@ func GetLink(rw http.ResponseWriter, r *http.Request, link string) error {
 	if link != "" {
 		l, err := netlink.LinkByName(link)
 		if err != nil {
-			log.Errorf("Failed to find link %s: %s", link, err)
+			log.Errorf("Failed to find link %s: %v", link, err)
 			return err
 		}
 
 		return share.JsonResponse(l, rw)
 
-	} else {
-
-		links, err := netlink.LinkList()
-		if err != nil {
-			return err
-		}
-
-		return share.JsonResponse(links, rw)
 	}
 
-	return nil
+	links, err := netlink.LinkList()
+	if err != nil {
+		return err
+	}
+
+	return share.JsonResponse(links, rw)
 }
 
 func DeleteLink(r *http.Request) error {
 	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed to decode JSON: %s", err)
+		log.Errorf("Failed to decode JSON: %v", err)
 		return err
 	}
 
 	l, err := netlink.LinkByName(req.Link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", req.Link, err)
+		log.Errorf("Failed to find link %s: %v", req.Link, err)
 		return err
 	}
 
 	err = netlink.LinkDel(l)
 	if err != nil {
-		log.Errorf("Failed to delete link %s up: %s", l, err)
+		log.Errorf("Failed to delete link %s up: %v", l, err)
 		return err
 	}
 
@@ -257,7 +254,7 @@ func DeleteLink(r *http.Request) error {
 func CreateLink(r *http.Request) error {
 	req, err := DecodeLinkJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed to decode JSON: %s", err)
+		log.Errorf("Failed to decode JSON: %v", err)
 		return err
 	}
 

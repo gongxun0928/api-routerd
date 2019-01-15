@@ -9,13 +9,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+//Info Json request
 type Info struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
-func RouterGetProcNetDev(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcNetDev(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetNetDev(rw)
@@ -26,7 +27,7 @@ func RouterGetProcNetDev(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcVersion(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcVersion(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetVersion(rw)
@@ -37,7 +38,7 @@ func RouterGetProcVersion(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcPlatformInformation(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcPlatformInformation(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetPlatformInformation(rw)
@@ -48,7 +49,7 @@ func RouterGetProcPlatformInformation(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcVirtualization(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcVirtualization(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetVirtualization(rw)
@@ -59,7 +60,7 @@ func RouterGetProcVirtualization(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcUserStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcUserStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetUserStat(rw)
@@ -70,7 +71,7 @@ func RouterGetProcUserStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcTemperatureStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcTemperatureStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetTemperatureStat(rw)
@@ -81,7 +82,7 @@ func RouterGetProcTemperatureStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcNetStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcNetStat(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	protocol := vars["protocol"]
 
@@ -95,7 +96,7 @@ func RouterGetProcNetStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcPidNetStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcPidNetStat(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	protocol := vars["protocol"]
 	pid := vars["pid"]
@@ -110,7 +111,7 @@ func RouterGetProcPidNetStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcInterfaceStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcInterfaceStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetInterfaceStat(rw)
@@ -121,7 +122,7 @@ func RouterGetProcInterfaceStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcProtoCountersStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcProtoCountersStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetProtoCountersStat(rw)
@@ -132,7 +133,7 @@ func RouterGetProcProtoCountersStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcGetSwapMemoryStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcGetSwapMemoryStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetSwapMemoryStat(rw)
@@ -143,7 +144,7 @@ func RouterGetProcGetSwapMemoryStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcVirtualMemoryStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcVirtualMemoryStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetVirtualMemoryStat(rw)
@@ -154,7 +155,7 @@ func RouterGetProcVirtualMemoryStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcCPUInfo(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcCPUInfo(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetCPUInfo(rw)
@@ -165,7 +166,7 @@ func RouterGetProcCPUInfo(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcCPUTimeStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcCPUTimeStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetCPUTimeStat(rw)
@@ -176,7 +177,7 @@ func RouterGetProcCPUTimeStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcAvgStat(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcAvgStat(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetAvgStat(rw)
@@ -187,7 +188,7 @@ func RouterGetProcAvgStat(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
+func configureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 	var err error
 
 	vars := mux.Vars(r)
@@ -217,7 +218,7 @@ func ConfigureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureProcSysNet(rw http.ResponseWriter, r *http.Request) {
+func configureProcSysNet(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	proc := SysNet{Path: vars["path"], Property: vars["conf"], Link: vars["link"]}
 
@@ -246,7 +247,7 @@ func ConfigureProcSysNet(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcMisc(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcMisc(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetMisc(rw)
@@ -257,7 +258,7 @@ func RouterGetProcMisc(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcNetArp(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcNetArp(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetNetArp(rw)
@@ -268,7 +269,7 @@ func RouterGetProcNetArp(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcModules(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcModules(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetModules(rw)
@@ -279,7 +280,7 @@ func RouterGetProcModules(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetProcProcess(rw http.ResponseWriter, r *http.Request) {
+func routerGetProcProcess(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	pid := vars["pid"]
 	property := vars["property"]
@@ -295,7 +296,7 @@ func RouterGetProcProcess(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetPartitions(rw http.ResponseWriter, r *http.Request) {
+func routerGetPartitions(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetPartitions(rw)
@@ -305,7 +306,7 @@ func RouterGetPartitions(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetIOCounters(rw http.ResponseWriter, r *http.Request) {
+func routerGetIOCounters(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetIOCounters(rw)
@@ -315,7 +316,7 @@ func RouterGetIOCounters(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterGetDiskUsage(rw http.ResponseWriter, r *http.Request) {
+func routerGetDiskUsage(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := GetDiskUsage(rw)
@@ -325,31 +326,32 @@ func RouterGetDiskUsage(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterProc register with mux
 func RegisterRouterProc(router *mux.Router) {
 	n := router.PathPrefix("/proc").Subrouter().StrictSlash(false)
 
-	n.HandleFunc("/avgstat", RouterGetProcAvgStat)
-	n.HandleFunc("/cpuinfo", RouterGetProcCPUInfo)
-	n.HandleFunc("/cputimestat", RouterGetProcCPUTimeStat)
-	n.HandleFunc("/diskusage", RouterGetDiskUsage)
-	n.HandleFunc("/interface-stat", RouterGetProcInterfaceStat)
-	n.HandleFunc("/iocounters", RouterGetIOCounters)
-	n.HandleFunc("/misc", RouterGetProcMisc)
-	n.HandleFunc("/modules", RouterGetProcModules)
-	n.HandleFunc("/net/arp", RouterGetProcNetArp)
-	n.HandleFunc("/netdev", RouterGetProcNetDev)
-	n.HandleFunc("/netstat/{protocol}", RouterGetProcNetStat)
-	n.HandleFunc("/partitions", RouterGetPartitions)
-	n.HandleFunc("/platform", RouterGetProcPlatformInformation)
-	n.HandleFunc("/process/{pid}/{property}/", RouterGetProcProcess)
-	n.HandleFunc("/proto-counter-stat", RouterGetProcProtoCountersStat)
-	n.HandleFunc("/proto-pid-stat/{pid}/{protocol}", RouterGetProcPidNetStat)
-	n.HandleFunc("/swap-memory", RouterGetProcGetSwapMemoryStat)
-	n.HandleFunc("/sys/net/{path}/{link}/{conf}", ConfigureProcSysNet)
-	n.HandleFunc("/sys/vm/{path}", ConfigureProcSysVM)
-	n.HandleFunc("/temperaturestat", RouterGetProcTemperatureStat)
-	n.HandleFunc("/userstat", RouterGetProcUserStat)
-	n.HandleFunc("/version", RouterGetProcVersion)
-	n.HandleFunc("/virtual-memory", RouterGetProcVirtualMemoryStat)
-	n.HandleFunc("/virtualization", RouterGetProcVirtualization)
+	n.HandleFunc("/avgstat", routerGetProcAvgStat)
+	n.HandleFunc("/cpuinfo", routerGetProcCPUInfo)
+	n.HandleFunc("/cputimestat", routerGetProcCPUTimeStat)
+	n.HandleFunc("/diskusage", routerGetDiskUsage)
+	n.HandleFunc("/interface-stat", routerGetProcInterfaceStat)
+	n.HandleFunc("/iocounters", routerGetIOCounters)
+	n.HandleFunc("/misc", routerGetProcMisc)
+	n.HandleFunc("/modules", routerGetProcModules)
+	n.HandleFunc("/net/arp", routerGetProcNetArp)
+	n.HandleFunc("/netdev", routerGetProcNetDev)
+	n.HandleFunc("/netstat/{protocol}", routerGetProcNetStat)
+	n.HandleFunc("/partitions", routerGetPartitions)
+	n.HandleFunc("/platform", routerGetProcPlatformInformation)
+	n.HandleFunc("/process/{pid}/{property}/", routerGetProcProcess)
+	n.HandleFunc("/proto-counter-stat", routerGetProcProtoCountersStat)
+	n.HandleFunc("/proto-pid-stat/{pid}/{protocol}", routerGetProcPidNetStat)
+	n.HandleFunc("/swap-memory", routerGetProcGetSwapMemoryStat)
+	n.HandleFunc("/sys/net/{path}/{link}/{conf}", configureProcSysNet)
+	n.HandleFunc("/sys/vm/{path}", configureProcSysVM)
+	n.HandleFunc("/temperaturestat", routerGetProcTemperatureStat)
+	n.HandleFunc("/userstat", routerGetProcUserStat)
+	n.HandleFunc("/version", routerGetProcVersion)
+	n.HandleFunc("/virtual-memory", routerGetProcVirtualMemoryStat)
+	n.HandleFunc("/virtualization", routerGetProcVirtualization)
 }

@@ -686,7 +686,7 @@ func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
 
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Errorf("Failed to parse HTTP request: %s", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 

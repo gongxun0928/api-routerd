@@ -16,9 +16,10 @@ import (
 )
 
 const (
-	TimeSyncdConfPath = "/etc/systemd/timesyncd.conf"
+	timeSyncdConfPath = "/etc/systemd/timesyncd.conf"
 )
 
+//TimeSyncConfig Json request
 type TimeSyncConfig struct {
 	NTP                []string `json:"NTP"`
 	FallbackNTP        []string `json:"FallbackNTP"`
@@ -27,8 +28,8 @@ type TimeSyncConfig struct {
 	PollIntervalMaxSec string   `json:"PollIntervalMaxSec"`
 }
 
-func (t *TimeSyncConfig) WriteTimeSyncConf() error {
-	f, err := os.OpenFile(TimeSyncdConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func (t *TimeSyncConfig) writeConf() error {
+	f, err := os.OpenFile(timeSyncdConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -68,8 +69,8 @@ func (t *TimeSyncConfig) WriteTimeSyncConf() error {
 	return nil
 }
 
-func ReadTimeSyncConf() (*TimeSyncConfig, error) {
-	cfg, err := ini.Load(TimeSyncdConfPath)
+func readConf() (*TimeSyncConfig, error) {
+	cfg, err := ini.Load(timeSyncdConfPath)
 	if err != nil {
 		return nil, err
 	}
@@ -85,8 +86,9 @@ func ReadTimeSyncConf() (*TimeSyncConfig, error) {
 	return conf, nil
 }
 
-func GetTimeSyncConf(rw http.ResponseWriter) error {
-	conf, err := ReadTimeSyncConf()
+//GetConf read from file and send response
+func GetConf(rw http.ResponseWriter) error {
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -94,7 +96,8 @@ func GetTimeSyncConf(rw http.ResponseWriter) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
+//UpdateConf update timesync conf
+func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
 		NTP:         []string{""},
 		FallbackNTP: []string{""},
@@ -102,17 +105,17 @@ func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &t)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadTimeSyncConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -146,16 +149,17 @@ func UpdateTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
 	}
 
-	err = conf.WriteTimeSyncConf()
+	err = conf.writeConf()
 	if err != nil {
-		log.Errorf("Failed Write to time sync conf: %s", err)
+		log.Errorf("Failed Write to time sync conf: %v", err)
 		return err
 	}
 
 	return share.JsonResponse(conf, rw)
 }
 
-func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
+//DeleteConf remove conf from file
+func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
 		NTP:         []string{""},
 		FallbackNTP: []string{""},
@@ -163,17 +167,17 @@ func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &t)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadTimeSyncConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -208,9 +212,9 @@ func DeleteTimeSyncConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.PollIntervalMaxSec = "t.PollIntervalMaxSec"
 	}
 
-	err = conf.WriteTimeSyncConf()
+	err = conf.writeConf()
 	if err != nil {
-		log.Errorf("Failed Write to time sync conf: %s", err)
+		log.Errorf("Failed Write to time sync conf: %v", err)
 		return err
 	}
 

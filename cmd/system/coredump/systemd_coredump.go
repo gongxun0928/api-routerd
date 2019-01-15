@@ -6,20 +6,22 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/RestGW/api-routerd/cmd/share"
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
 )
 
 const (
-	CoreDumpConfPath = "/etc/systemd/coredump.conf"
+	confPath = "/etc/systemd/coredump.conf"
 )
 
-type CoreDumpConfig struct {
+//Config Json request
+type Config struct {
 	Storage         string `json:"Storage"`
 	Compress        string `json:"Compress"`
 	ProcessSizeMax  string `json:"ProcessSizeMax"`
@@ -27,8 +29,8 @@ type CoreDumpConfig struct {
 	JournalSizeMax  string `json:"JournalSizeMax"`
 }
 
-func (c *CoreDumpConfig) WriteCoreDumpConfig() error {
-	f, err := os.OpenFile(CoreDumpConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func (c *Config) writeConfig() error {
+	f, err := os.OpenFile(confPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -74,13 +76,13 @@ func (c *CoreDumpConfig) WriteCoreDumpConfig() error {
 	return nil
 }
 
-func ReadCoreDumpConf() (*CoreDumpConfig, error) {
-	cfg, err := ini.Load(CoreDumpConfPath)
+func readConf() (*Config, error) {
+	cfg, err := ini.Load(confPath)
 	if err != nil {
 		return nil, err
 	}
 
-	conf := new(CoreDumpConfig)
+	conf := new(Config)
 	conf.Storage = cfg.Section("Coredump").Key("Storage").String()
 	conf.Compress = cfg.Section("Coredump").Key("Compress").String()
 	conf.JournalSizeMax = cfg.Section("Coredump").Key("JournalSizeMax").String()
@@ -90,8 +92,9 @@ func ReadCoreDumpConf() (*CoreDumpConfig, error) {
 	return conf, nil
 }
 
-func GetCoreDumpConf(rw http.ResponseWriter) error {
-	conf, err := ReadCoreDumpConf()
+//GetConf read conf
+func GetConf(rw http.ResponseWriter) error {
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -99,22 +102,23 @@ func GetCoreDumpConf(rw http.ResponseWriter) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func UpdateCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
-	c := new(CoreDumpConfig)
+//UpdateConf update conf
+func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
+	c := new(Config)
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &c)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadCoreDumpConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -139,7 +143,7 @@ func UpdateCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.ProcessSizeMax = c.ProcessSizeMax
 	}
 
-	err = conf.WriteCoreDumpConfig()
+	err = conf.writeConfig()
 	if err != nil {
 		log.Errorf("Failed Write to resolv conf: %s", err)
 		return err
@@ -148,22 +152,23 @@ func UpdateCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func DeleteCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
-	c := new(CoreDumpConfig)
+//DeleteConf remove conf from file
+func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
+	c := new(Config)
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &c)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadCoreDumpConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -188,19 +193,11 @@ func DeleteCoreDumpConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.ProcessSizeMax = ""
 	}
 
-	err = conf.WriteCoreDumpConfig()
+	err = conf.writeConfig()
 	if err != nil {
-		log.Errorf("Failed Write to coredump conf: %s", err)
+		log.Errorf("Failed Write to coredump conf: %v", err)
 		return err
 	}
 
-	j, err := json.Marshal(conf)
-	if err != nil {
-		log.Errorf("Failed to encode json for coredump %s", err)
-		return err
-	}
-
-	rw.Write(j)
-
-	return nil
+	return share.JsonResponse(conf, rw)
 }

@@ -17,16 +17,17 @@ import (
 )
 
 const (
-	ResolvConfPath = "/etc/resolv.conf"
+	resolvConfPath = "/etc/resolv.conf"
 )
 
+//DNSConfig Json Request
 type DNSConfig struct {
 	Servers []string `json:"servers"`
 	Search  []string `json:"search"`
 }
 
-func (conf *DNSConfig) WriteResolvConfig() error {
-	f, err := os.OpenFile(ResolvConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func (conf *DNSConfig) writeConfig() error {
+	f, err := os.OpenFile(resolvConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -48,10 +49,10 @@ func (conf *DNSConfig) WriteResolvConfig() error {
 	return nil
 }
 
-func ReadResolvConf() (*DNSConfig, error) {
-	lines, err := share.ReadFullFile(ResolvConfPath)
+func readConf() (*DNSConfig, error) {
+	lines, err := share.ReadFullFile(resolvConfPath)
 	if err != nil {
-		log.Errorf("Failed to read: %s", ResolvConfPath)
+		log.Errorf("Failed to read: %s", resolvConfPath)
 		return nil, err
 	}
 
@@ -88,8 +89,9 @@ func ReadResolvConf() (*DNSConfig, error) {
 	return conf, nil
 }
 
-func GetResolvConf(rw http.ResponseWriter) error {
-	conf, err := ReadResolvConf()
+//GetConf read resolv.conf and send response
+func GetConf(rw http.ResponseWriter) error {
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -97,7 +99,8 @@ func GetResolvConf(rw http.ResponseWriter) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
+//UpdateConf update resolv.conf
+func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		Servers: []string{""},
 		Search:  []string{""},
@@ -115,7 +118,7 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	conf, err := ReadResolvConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -137,7 +140,7 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.Search = append(conf.Search, s)
 	}
 
-	err = conf.WriteResolvConfig()
+	err = conf.writeConfig()
 	if err != nil {
 		log.Errorf("Failed Write to resolv conf: %s", err)
 		return err
@@ -146,7 +149,8 @@ func UpdateResolvConf(rw http.ResponseWriter, r *http.Request) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
+//DeleteConf delete conf from file
+func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		Servers: []string{""},
 		Search:  []string{""},
@@ -164,7 +168,7 @@ func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	conf, err := ReadResolvConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -187,7 +191,7 @@ func DeleteResolvConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.Search, _ = share.StringDeleteSlice(conf.Search, s)
 	}
 
-	err = conf.WriteResolvConfig()
+	err = conf.writeConfig()
 	if err != nil {
 		log.Errorf("Failed Write to resolv conf: %s", err)
 		return err

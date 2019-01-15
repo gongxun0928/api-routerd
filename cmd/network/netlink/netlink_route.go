@@ -36,20 +36,20 @@ func DecodeRouteJSONRequest(r *http.Request) (Route, error) {
 func (route *Route) AddDefaultGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", err, route.Link)
+		log.Errorf("Failed to find link %s: %v", err, route.Link)
 		return err
 	}
 
 	ipAddr, _, err := net.ParseCIDR(route.Gateway)
 	if err != nil {
-		log.Errorf("Failed to parse default GateWay address %s: %s", route.Gateway, err)
+		log.Errorf("Failed to parse default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
 	onlink := 0
 	b, err := share.ParseBool(strings.TrimSpace(route.OnLink))
 	if err != nil {
-		log.Errorf("Failed to parse GatewayOnlink %s: %s", err, route.OnLink)
+		log.Errorf("Failed to parse GatewayOnlink %s: %v", route.OnLink, err)
 	} else {
 		if b == true {
 			onlink |= syscall.RTNH_F_ONLINK
@@ -66,7 +66,7 @@ func (route *Route) AddDefaultGateWay() error {
 
 	err = netlink.RouteAdd(rt)
 	if err != nil {
-		log.Errorf("Failed to add default GateWay address %s: %s", route.Gateway, err)
+		log.Errorf("Failed to add default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
@@ -82,14 +82,14 @@ func (route *Route) ReplaceDefaultGateWay() error {
 
 	ipAddr, _, err := net.ParseCIDR(route.Gateway)
 	if err != nil {
-		log.Errorf("Failed to parse default GateWay address %s: %s", route.Gateway, err)
+		log.Errorf("Failed to parse default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
 	onlink := 0
 	b, err := share.ParseBool(strings.TrimSpace(route.OnLink))
 	if err != nil {
-		log.Errorf("Failed to parse GatewayOnlink %s: %s", err, route.OnLink)
+		log.Errorf("Failed to parse GatewayOnlink %s: %v", route.OnLink, err)
 	} else {
 		if b == true {
 			onlink |= syscall.RTNH_F_ONLINK
@@ -106,7 +106,7 @@ func (route *Route) ReplaceDefaultGateWay() error {
 
 	err = netlink.RouteReplace(rt)
 	if err != nil {
-		log.Errorf("Failed to replace default GateWay address %s: %s", route.Gateway, err)
+		log.Errorf("Failed to replace default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
@@ -116,19 +116,19 @@ func (route *Route) ReplaceDefaultGateWay() error {
 func DeleteGateWay(r *http.Request) error {
 	route, err := DecodeRouteJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed to decode route JSON request %s", err)
+		log.Errorf("Failed to decode route JSON request %v", err)
 		return err
 	}
 
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
-		log.Errorf("Failed to delete default gateway %s: %s", link, err)
+		log.Errorf("Failed to delete default gateway %s: %v", link, err)
 		return err
 	}
 
 	ipAddr, _, err := net.ParseCIDR(route.Gateway)
 	if err != nil {
-		log.Errorf("Failed to parse default GateWay address %s: %s", route.Gateway, err)
+		log.Errorf("Failed to parse default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
@@ -144,7 +144,7 @@ func DeleteGateWay(r *http.Request) error {
 
 		err = netlink.RouteDel(rt)
 		if err != nil {
-			log.Errorf("Failed to delete default GateWay address %s: %s", ipAddr, err)
+			log.Errorf("Failed to delete default GateWay address %s: %v", ipAddr, err)
 			return err
 		}
 		break
@@ -156,7 +156,7 @@ func DeleteGateWay(r *http.Request) error {
 func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
 	routes, err := netlink.RouteList(nil, 0)
 	if err != nil {
-		log.Errorf("Failed to get routes %s", err)
+		log.Errorf("Failed to get routes %v", err)
 		return err
 	}
 
@@ -166,7 +166,7 @@ func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
 func ConfigureRoutes(r *http.Request) error {
 	route, err := DecodeRouteJSONRequest(r)
 	if err != nil {
-		log.Errorf("Failed to decode route JSON request %s", err)
+		log.Errorf("Failed to decode route JSON request %v", err)
 		return err
 	}
 

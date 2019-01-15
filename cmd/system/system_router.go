@@ -24,17 +24,17 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func RouterConfigureJournalConf(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureJournalConf(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		err := journal.GetJournalConf(rw)
+		err := journal.GetConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
 		break
 
 	case "POST":
-		err := journal.UpdateJournalConf(rw, r)
+		err := journal.UpdateConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
@@ -42,11 +42,11 @@ func RouterConfigureJournalConf(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureResolv(rw http.ResponseWriter, r *http.Request) {
+func configureResolv(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := resolv.GetResolvConf(rw)
+		err := resolv.GetConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -54,7 +54,7 @@ func ConfigureResolv(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := resolv.UpdateResolvConf(rw, r)
+		err := resolv.UpdateConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -62,7 +62,7 @@ func ConfigureResolv(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := resolv.DeleteResolvConf(rw, r)
+		err := resolv.DeleteConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -71,11 +71,11 @@ func ConfigureResolv(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
+func configureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := resolved.GetResolveConf(rw)
+		err := resolved.GetConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -83,7 +83,7 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := resolved.UpdateResolveConf(rw, r)
+		err := resolved.UpdateConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -91,7 +91,7 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := resolved.DeleteResolveConf(rw, r)
+		err := resolved.DeleteConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -100,11 +100,11 @@ func ConfigureSystemdResolved(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
+func configureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := timesyncd.GetTimeSyncConf(rw)
+		err := timesyncd.GetConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -112,7 +112,7 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := timesyncd.UpdateTimeSyncConf(rw, r)
+		err := timesyncd.UpdateConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -120,7 +120,7 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := timesyncd.DeleteTimeSyncConf(rw, r)
+		err := timesyncd.DeleteConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -129,11 +129,11 @@ func ConfigureSystemdTimeSyncd(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ConfigureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
+func configureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
-		err := coredump.GetCoreDumpConf(rw)
+		err := coredump.GetConf(rw)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -141,7 +141,7 @@ func ConfigureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "POST":
 
-		err := coredump.UpdateCoreDumpConf(rw, r)
+		err := coredump.UpdateConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -149,7 +149,7 @@ func ConfigureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
 		break
 	case "DELETE":
 
-		err := coredump.DeleteCoreDumpConf(rw, r)
+		err := coredump.DeleteConf(rw, r)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -158,7 +158,7 @@ func ConfigureSystemdCoreDump(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ReadSudoersConfig(rw http.ResponseWriter, req *http.Request) {
+func readSudoersConfig(rw http.ResponseWriter, req *http.Request) {
 	err := conf.GetSudoers(rw)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -166,7 +166,7 @@ func ReadSudoersConfig(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func ReadSSHConfig(rw http.ResponseWriter, req *http.Request) {
+func readSSHConfig(rw http.ResponseWriter, req *http.Request) {
 	err := conf.SSHConfFileRead(rw)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -174,6 +174,7 @@ func ReadSSHConfig(rw http.ResponseWriter, req *http.Request) {
 	}
 }
 
+//RegisterRouterSystem register with mux
 func RegisterRouterSystem(router *mux.Router) {
 	n := router.PathPrefix("/system").Subrouter()
 
@@ -208,34 +209,34 @@ func RegisterRouterSystem(router *mux.Router) {
 	firewalld.RegisterRouterFirewalld(n)
 
 	// conf
-	n.HandleFunc("/journal/conf", RouterConfigureJournalConf)
-	n.HandleFunc("/journal/conf/update", RouterConfigureJournalConf)
+	n.HandleFunc("/journal/conf", routerConfigureJournalConf)
+	n.HandleFunc("/journal/conf/update", routerConfigureJournalConf)
 
 	// resolv.conf
-	n.HandleFunc("/resolv", ConfigureResolv)
-	n.HandleFunc("/resolv/get", ConfigureResolv)
-	n.HandleFunc("/resolv/add", ConfigureResolv)
-	n.HandleFunc("/resolv/delete", ConfigureResolv)
+	n.HandleFunc("/resolv", configureResolv)
+	n.HandleFunc("/resolv/get", configureResolv)
+	n.HandleFunc("/resolv/add", configureResolv)
+	n.HandleFunc("/resolv/delete", configureResolv)
 
 	// systemd-resolved
-	n.HandleFunc("/systemdresolved", ConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/get", ConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/add", ConfigureSystemdResolved)
-	n.HandleFunc("/systemdresolved/delete", ConfigureSystemdResolved)
+	n.HandleFunc("/systemdresolved", configureSystemdResolved)
+	n.HandleFunc("/systemdresolved/get", configureSystemdResolved)
+	n.HandleFunc("/systemdresolved/add", configureSystemdResolved)
+	n.HandleFunc("/systemdresolved/delete", configureSystemdResolved)
 
 	// systemd-timesyncd
-	n.HandleFunc("/systemdtimesyncd", ConfigureSystemdTimeSyncd)
-	n.HandleFunc("/systemdtimesyncd/get", ConfigureSystemdTimeSyncd)
-	n.HandleFunc("/systemdtimesyncd/add", ConfigureSystemdTimeSyncd)
-	n.HandleFunc("/systemdtimesyncd/delete", ConfigureSystemdTimeSyncd)
+	n.HandleFunc("/systemdtimesyncd", configureSystemdTimeSyncd)
+	n.HandleFunc("/systemdtimesyncd/get", configureSystemdTimeSyncd)
+	n.HandleFunc("/systemdtimesyncd/add", configureSystemdTimeSyncd)
+	n.HandleFunc("/systemdtimesyncd/delete", configureSystemdTimeSyncd)
 
 	// coredump.conf
-	n.HandleFunc("/coredump", ConfigureSystemdCoreDump)
-	n.HandleFunc("/coredump/get", ConfigureSystemdCoreDump)
-	n.HandleFunc("/coredump/add", ConfigureSystemdCoreDump)
-	n.HandleFunc("/coredump/delete", ConfigureSystemdCoreDump)
+	n.HandleFunc("/coredump", configureSystemdCoreDump)
+	n.HandleFunc("/coredump/get", configureSystemdCoreDump)
+	n.HandleFunc("/coredump/add", configureSystemdCoreDump)
+	n.HandleFunc("/coredump/delete", configureSystemdCoreDump)
 
 	// Generic system confs
-	n.HandleFunc("/conf/sudoers", ReadSudoersConfig)
-	n.HandleFunc("/conf/sshd", ReadSSHConfig)
+	n.HandleFunc("/conf/sudoers", readSudoersConfig)
+	n.HandleFunc("/conf/sshd", readSSHConfig)
 }

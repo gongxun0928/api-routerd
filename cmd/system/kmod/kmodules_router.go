@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterGetModules(rw http.ResponseWriter, r *http.Request) {
+func routerGetModules(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		err := LsMod(rw)
@@ -20,7 +20,7 @@ func RouterGetModules(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterModProbe(rw http.ResponseWriter, r *http.Request) {
+func routerModProbe(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 
@@ -42,7 +42,7 @@ func RouterModProbe(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterRmMod(rw http.ResponseWriter, r *http.Request) {
+func routerRmMod(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "DELETE":
 
@@ -64,10 +64,11 @@ func RouterRmMod(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+//RegisterRouterKMod register with mux
 func RegisterRouterKMod(router *mux.Router) {
 	s := router.PathPrefix("/kmod").Subrouter().StrictSlash(false)
 
-	s.HandleFunc("/lsmod", RouterGetModules)
-	s.HandleFunc("/modprobe", RouterModProbe)
-	s.HandleFunc("/rmmod", RouterRmMod)
+	s.HandleFunc("/lsmod", routerGetModules)
+	s.HandleFunc("/modprobe", routerModProbe)
+	s.HandleFunc("/rmmod", routerRmMod)
 }

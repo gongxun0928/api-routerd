@@ -21,7 +21,7 @@ type Match struct {
 func InitNetworkd() error {
 	err := share.CreateDirectory(NetworkdUnitPath, 0777)
 	if err != nil {
-		log.Errorf("Failed create network unit path %s: %s", NetworkdUnitPath, err)
+		log.Errorf("Failed create network unit path %s: %v", NetworkdUnitPath, err)
 		return err
 	}
 

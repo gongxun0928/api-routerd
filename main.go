@@ -27,7 +27,7 @@ func main() {
 
 	err = router.StartRouter(conf.IPFlag, conf.PortFlag, path.Join(conf.ConfPath, conf.TLSCert), path.Join(conf.ConfPath, conf.TLSKey))
 	if err != nil {
-		log.Fatalf("Failed to init api-routerd: %s", err)
+		log.Fatalf("Failed to init api-routerd: %v", err)
 		os.Exit(1)
 	}
 }

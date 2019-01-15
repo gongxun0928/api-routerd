@@ -17,7 +17,7 @@ const (
 	dbusPath      = "/org/freedesktop/hostname1"
 )
 
-var HostNameInfo = map[string]string{
+var hostNameInfo = map[string]string{
 	"Hostname":                  "",
 	"StaticHostname":            "",
 	"PrettyHostname":            "",
@@ -33,7 +33,7 @@ var HostNameInfo = map[string]string{
 	"HomeURL":                   "",
 }
 
-var HostMethodInfo = map[string]string{
+var hostMethodInfo = map[string]string{
 	"SetHostname":       "",
 	"SetStaticHostname": "",
 	"SetPrettyHostname": "",
@@ -43,20 +43,22 @@ var HostMethodInfo = map[string]string{
 	"SetLocation":       "",
 }
 
+//Hostname commands
 type Hostname struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
+//SetHostname set hostname via dbus
 func (hostname *Hostname) SetHostname() error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		log.Error("Failed to get systemd bus connection: ", err)
+		log.Errorf("Failed to get systemd bus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
 
-	_, k := HostMethodInfo[hostname.Property]
+	_, k := hostMethodInfo[hostname.Property]
 	if !k {
 		return fmt.Errorf("Failed to set hostname property: %s not found", hostname.Property)
 	}
@@ -64,23 +66,24 @@ func (hostname *Hostname) SetHostname() error {
 	h := conn.Object(dbusInterface, dbusPath)
 	r := h.Call(dbusInterface+"."+hostname.Property, 0, hostname.Value, false).Err
 	if r != nil {
-		log.Errorf("Failed to set hostname: %s", r)
+		log.Errorf("Failed to set hostname: %v", r)
 		return errors.New("Failed to set hostname")
 	}
 
 	return nil
 }
 
+//GetHostname retrives properties from hostnamed via dbus
 func GetHostname(rw http.ResponseWriter, property string) error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
-		log.Error("Failed to get dbus connection: ", err)
+		log.Errorf("Failed to get dbus connection: %v", err)
 		return err
 	}
 	defer conn.Close()
 
 	h := conn.Object(dbusInterface, dbusPath)
-	for k, _ := range HostNameInfo {
+	for k := range hostNameInfo {
 		p, perr := h.GetProperty(dbusInterface + "." + k)
 		if perr != nil {
 			log.Errorf("Failed to get org.freedesktop.hostname1.%s", k)
@@ -89,20 +92,20 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 
 		hv, b := p.Value().(string)
 		if !b {
-			log.Error("Received unexpected type as value, expected string got :", property, hv)
+			log.Errorf("Received unexpected type as value, %s expected string got: %s", property, hv)
 			continue
 		}
 
-		HostNameInfo[k] = hv
+		hostNameInfo[k] = hv
 	}
 
 	if property == "" {
-		return share.JsonResponse(HostNameInfo, rw)
+		return share.JsonResponse(hostNameInfo, rw)
 	}
 
 	host := Hostname{
 		Property: property,
-		Value: HostNameInfo[property],
+		Value:    hostNameInfo[property],
 	}
 
 	return share.JsonResponse(host, rw)

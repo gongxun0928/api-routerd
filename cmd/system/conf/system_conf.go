@@ -3,29 +3,32 @@
 package conf
 
 import (
-	"github.com/RestGW/api-routerd/cmd/share"
 	"net/http"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	log "github.com/sirupsen/logrus"
 )
 
 const (
-	SudoersPath   = "/etc/sudoers"
-	SSHConfigFile = "/etc/ssh/sshd_config"
+	sudoersPath   = "/etc/sudoers"
+	sshConfigFile = "/etc/ssh/sshd_config"
 )
 
+//SudoersConf Json response
 type SudoersConf struct {
 	Sudoers []string `json:"sudoers"`
 }
 
+//SSHdConf sshd json response
 type SSHdConf struct {
 	Value string `json:"value"`
 }
 
 // GetSudoers read sudoers file
 func GetSudoers(rw http.ResponseWriter) error {
-	lines, err := share.ReadFullFile(SudoersPath)
+	lines, err := share.ReadFullFile(sudoersPath)
 	if err != nil {
 		return err
 	}
@@ -47,9 +50,9 @@ func GetSudoers(rw http.ResponseWriter) error {
 
 // SSHConfFileRead read sshd configuration file
 func SSHConfFileRead(rw http.ResponseWriter) error {
-	lines, err := share.ReadFullFile(SSHConfigFile)
+	lines, err := share.ReadFullFile(sshConfigFile)
 	if err != nil {
-		log.Errorf("Failed to read: %s, %s", SSHConfigFile, err)
+		log.Errorf("Failed to read: %s, %v", sshConfigFile, err)
 		return err
 	}
 

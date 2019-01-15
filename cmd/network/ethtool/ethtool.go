@@ -29,7 +29,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 	e, err := ethtool.NewEthtool()
 	if err != nil {
-		log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
+		log.Errorf("Failed to init ethtool for link %v: %s", err, r.Link)
 		return err
 	}
 	defer e.Close()
@@ -38,7 +38,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	case "get-link-stat":
 		stats, err := e.Stats(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool statitics for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool statitics for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -48,7 +48,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		features, err := e.Features(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool features for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool features for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -58,7 +58,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		bus, err := e.BusInfo(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool bus for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool bus for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -74,7 +74,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		driver, err := e.DriverName(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool driver name for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool driver name for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -90,7 +90,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		e, err := NewEthTool()
 		if err != nil {
-			log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
+			log.Errorf("Failed to init ethtool for link %v: %s", err, r.Link)
 			return err
 		}
 		defer e.Close()
@@ -110,7 +110,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		permaddr, err := e.PermAddr(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool Perm Addr for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool Perm Addr for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -126,7 +126,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		eeprom, err := e.ModuleEepromHex(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool eeprom for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool eeprom for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -142,7 +142,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		msglvl, err := e.MsglvlGet(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool msglvl for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -158,7 +158,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 
 		mapped, err := e.CmdGetMapped(r.Link)
 		if err != nil {
-			log.Errorf("Failed to get ethtool msglvl for link %s: %s", err, r.Link)
+			log.Errorf("Failed to get ethtool msglvl for link %v: %s", err, r.Link)
 			return err
 		}
 
@@ -177,7 +177,7 @@ func (r *Ethtool) SetEthTool(rw http.ResponseWriter) error {
 
 	e, err := ethtool.NewEthtool()
 	if err != nil {
-		log.Errorf("Failed to init ethtool for link %s: %s", err, r.Link)
+		log.Errorf("Failed to init ethtool for link %v: %s", err, r.Link)
 		return err
 	}
 	defer e.Close()

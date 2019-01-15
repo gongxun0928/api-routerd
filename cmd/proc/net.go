@@ -11,12 +11,13 @@ import (
 )
 
 const (
-	SysNetPath     = "/proc/sys/net"
-	SysNetPathCore = "core"
-	SysNetPathIPv4 = "ipv4"
-	SysNetPathIPv6 = "ipv6"
+	sysNetPath     = "/proc/sys/net"
+	sysNetPathCore = "core"
+	sysNetPathIPv4 = "ipv4"
+	sysNetPathIPv6 = "ipv6"
 )
 
+//SysNet Json request
 type SysNet struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
@@ -24,27 +25,28 @@ type SysNet struct {
 	Link     string `json:"link"`
 }
 
-func (req *SysNet) GetSysNetPath() (string, error) {
+//getPath read info from proc
+func (req *SysNet) getPath() (string, error) {
 	var procPath string
 
 	switch req.Path {
-	case SysNetPathCore:
-		procPath = path.Join(path.Join(SysNetPath, SysNetPathCore), req.Property)
+	case sysNetPathCore:
+		procPath = path.Join(path.Join(sysNetPath, sysNetPathCore), req.Property)
 		break
-	case SysNetPathIPv4:
+	case sysNetPathIPv4:
 
 		if req.Link != "" {
-			procPath = path.Join(path.Join(path.Join(path.Join(SysNetPath, SysNetPathIPv4), "conf"), req.Link), req.Property)
+			procPath = path.Join(path.Join(path.Join(path.Join(sysNetPath, sysNetPathIPv4), "conf"), req.Link), req.Property)
 		} else {
-			procPath = path.Join(path.Join(SysNetPath, SysNetPathIPv4), req.Property)
+			procPath = path.Join(path.Join(sysNetPath, sysNetPathIPv4), req.Property)
 		}
 		break
-	case SysNetPathIPv6:
+	case sysNetPathIPv6:
 
 		if req.Link != "" {
-			procPath = path.Join(path.Join(path.Join(path.Join(SysNetPath, SysNetPathIPv6), "conf"), req.Link), req.Property)
+			procPath = path.Join(path.Join(path.Join(path.Join(sysNetPath, sysNetPathIPv6), "conf"), req.Link), req.Property)
 		} else {
-			procPath = path.Join(path.Join(SysNetPath, SysNetPathIPv6), req.Property)
+			procPath = path.Join(path.Join(sysNetPath, sysNetPathIPv6), req.Property)
 		}
 		break
 	default:
@@ -54,8 +56,9 @@ func (req *SysNet) GetSysNetPath() (string, error) {
 	return procPath, nil
 }
 
+//GetSysNet read proc value and send response
 func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
-	path, err := req.GetSysNetPath()
+	path, err := req.getPath()
 	if err != nil {
 		return err
 	}
@@ -66,17 +69,18 @@ func (req *SysNet) GetSysNet(rw http.ResponseWriter) error {
 	}
 
 	property := SysNet{
-		Path: req.Path,
+		Path:     req.Path,
 		Property: req.Property,
-		Value: line,
-		Link: req.Link,
+		Value:    line,
+		Link:     req.Link,
 	}
 
 	return share.JsonResponse(property, rw)
 }
 
+//SetSysNet sets a value to proc
 func (req *SysNet) SetSysNet(rw http.ResponseWriter) error {
-	path, err := req.GetSysNetPath()
+	path, err := req.getPath()
 	if err != nil {
 		return err
 	}

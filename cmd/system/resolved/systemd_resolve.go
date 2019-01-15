@@ -6,27 +6,29 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/RestGW/api-routerd/cmd/share"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/RestGW/api-routerd/cmd/share"
 
 	"github.com/go-ini/ini"
 	log "github.com/sirupsen/logrus"
 )
 
 const (
-	ResolvedConfPath = "/etc/systemd/resolved.conf"
+	resolvedConfPath = "/etc/systemd/resolved.conf"
 )
 
+//DNSConfig Json request and response
 type DNSConfig struct {
 	DNS         []string `json:"dns"`
 	FallbackDNS []string `json:"fallback_dns"`
 }
 
-func (d *DNSConfig) WriteResolveConfig() error {
-	f, err := os.OpenFile(ResolvedConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func (d *DNSConfig) writeConfig() error {
+	f, err := os.OpenFile(resolvedConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -54,8 +56,8 @@ func (d *DNSConfig) WriteResolveConfig() error {
 	return nil
 }
 
-func ReadResolveConf() (*DNSConfig, error) {
-	cfg, err := ini.Load(ResolvedConfPath)
+func readConf() (*DNSConfig, error) {
+	cfg, err := ini.Load(resolvedConfPath)
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +73,9 @@ func ReadResolveConf() (*DNSConfig, error) {
 	return conf, nil
 }
 
-func GetResolveConf(rw http.ResponseWriter) error {
-	conf, err := ReadResolveConf()
+//GetConf read conf and send response
+func GetConf(rw http.ResponseWriter) error {
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -80,7 +83,8 @@ func GetResolveConf(rw http.ResponseWriter) error {
 	return share.JsonResponse(conf, rw)
 }
 
-func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) error {
+//UpdateConf update conf
+func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		DNS:         []string{""},
 		FallbackDNS: []string{""},
@@ -88,17 +92,17 @@ func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) error {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &dns)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadResolveConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -120,16 +124,17 @@ func UpdateResolveConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.FallbackDNS = append(conf.FallbackDNS, s)
 	}
 
-	err = conf.WriteResolveConfig()
+	err = conf.writeConfig()
 	if err != nil {
-		log.Errorf("Failed Write to resolv conf: %s", err)
+		log.Errorf("Failed Write to resolv conf: %v", err)
 		return err
 	}
 
 	return share.JsonResponse(conf, rw)
 }
 
-func DeleteResolveConf(rw http.ResponseWriter, r *http.Request) error {
+//DeleteConf remove conf from file
+func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		DNS:         []string{""},
 		FallbackDNS: []string{""},
@@ -137,17 +142,17 @@ func DeleteResolveConf(rw http.ResponseWriter, r *http.Request) error {
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Error("Failed to parse HTTP request: ", err)
+		log.Errorf("Failed to parse HTTP request: %v", err)
 		return err
 	}
 
 	err = json.Unmarshal([]byte(body), &dns)
 	if err != nil {
-		log.Error("Failed to Decode HTTP request to json: ", err)
+		log.Errorf("Failed to Decode HTTP request to json: %v", err)
 		return err
 	}
 
-	conf, err := ReadResolveConf()
+	conf, err := readConf()
 	if err != nil {
 		return err
 	}
@@ -170,9 +175,9 @@ func DeleteResolveConf(rw http.ResponseWriter, r *http.Request) error {
 		conf.FallbackDNS, _ = share.StringDeleteSlice(conf.FallbackDNS, s)
 	}
 
-	err = conf.WriteResolveConfig()
+	err = conf.writeConfig()
 	if err != nil {
-		log.Errorf("Failed Write to resolv conf: %s", err)
+		log.Errorf("Failed Write to resolv conf: %v", err)
 		return err
 	}
 

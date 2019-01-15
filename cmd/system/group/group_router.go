@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterGroupAdd(rw http.ResponseWriter, r *http.Request) {
+func routerGroupAdd(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 
@@ -31,7 +31,7 @@ func RouterGroupAdd(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterGroupModify(rw http.ResponseWriter, r *http.Request) {
+func routerGroupModify(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "PUT":
 
@@ -53,7 +53,7 @@ func RouterGroupModify(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterGroupDel(rw http.ResponseWriter, r *http.Request) {
+func routerGroupDel(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "DELETE":
 
@@ -75,10 +75,11 @@ func RouterGroupDel(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+//RegisterRouterGroup register with mux
 func RegisterRouterGroup(router *mux.Router) {
 	s := router.PathPrefix("/group").Subrouter().StrictSlash(false)
 
-	s.HandleFunc("/add", RouterGroupAdd)
-	s.HandleFunc("/delete", RouterGroupDel)
-	s.HandleFunc("/modify", RouterGroupModify)
+	s.HandleFunc("/add", routerGroupAdd)
+	s.HandleFunc("/delete", routerGroupDel)
+	s.HandleFunc("/modify", routerGroupModify)
 }

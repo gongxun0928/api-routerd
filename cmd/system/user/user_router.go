@@ -9,18 +9,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterUserAdd(rw http.ResponseWriter, r *http.Request) {
+func routerAdd(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 
-		g := new(User)
-		err := json.NewDecoder(r.Body).Decode(&g)
+		u := new(User)
+		err := json.NewDecoder(r.Body).Decode(&u)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = g.UserAdd()
+		err = u.Add()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -31,18 +31,18 @@ func RouterUserAdd(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterUserModify(rw http.ResponseWriter, r *http.Request) {
+func routerModify(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "PUT":
 
-		g := new(User)
-		err := json.NewDecoder(r.Body).Decode(&g)
+		u := new(User)
+		err := json.NewDecoder(r.Body).Decode(&u)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = g.UserModify()
+		err = u.Modify()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -53,18 +53,18 @@ func RouterUserModify(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func RouterUserDel(rw http.ResponseWriter, r *http.Request) {
+func routerDel(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "DELETE":
 
-		g := new(User)
-		err := json.NewDecoder(r.Body).Decode(&g)
+		u := new(User)
+		err := json.NewDecoder(r.Body).Decode(&u)
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = g.UserDel()
+		err = u.Del()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
@@ -75,10 +75,11 @@ func RouterUserDel(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+//RegisterRouterUser register with mux
 func RegisterRouterUser(router *mux.Router) {
 	s := router.PathPrefix("/user").Subrouter().StrictSlash(false)
 
-	s.HandleFunc("/add", RouterUserAdd)
-	s.HandleFunc("/delete", RouterUserDel)
-	s.HandleFunc("/modify", RouterUserModify)
+	s.HandleFunc("/add", routerAdd)
+	s.HandleFunc("/delete", routerDel)
+	s.HandleFunc("/modify", routerModify)
 }
