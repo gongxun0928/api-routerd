@@ -10,16 +10,18 @@ import (
 )
 
 const (
-	VMPath = "/proc/sys/vm"
+	vmPath = "/proc/sys/vm"
 )
 
+//VM JSON message
 type VM struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
+//GetVM read proc vm property
 func (req *VM) GetVM(rw http.ResponseWriter) error {
-	line, err := share.ReadOneLineFile(path.Join(VMPath, req.Property))
+	line, err := share.ReadOneLineFile(path.Join(vmPath, req.Property))
 	if err != nil {
 		return err
 	}
@@ -32,13 +34,14 @@ func (req *VM) GetVM(rw http.ResponseWriter) error {
 	return share.JSONResponse(vmProperty, rw)
 }
 
+//SetVM write a value to VM
 func (req *VM) SetVM(rw http.ResponseWriter) error {
-	err := share.WriteOneLineFile(path.Join(VMPath, req.Property), req.Value)
+	err := share.WriteOneLineFile(path.Join(vmPath, req.Property), req.Value)
 	if err != nil {
 		return err
 	}
 
-	line, err := share.ReadOneLineFile(path.Join(VMPath, req.Property))
+	line, err := share.ReadOneLineFile(path.Join(vmPath, req.Property))
 	if err != nil {
 		return err
 	}

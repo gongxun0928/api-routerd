@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterLoginMethodGet(rw http.ResponseWriter, r *http.Request) {
+func routerLoginMethodGet(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 
@@ -29,7 +29,7 @@ func RouterLoginMethodGet(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterLoginMethodPost(rw http.ResponseWriter, r *http.Request) {
+func routerLoginMethodPost(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
 
@@ -54,8 +54,9 @@ func RouterLoginMethodPost(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterLogin register with mux
 func RegisterRouterLogin(router *mux.Router) {
 	s := router.PathPrefix("/login").Subrouter().StrictSlash(false)
-	s.HandleFunc("/get/{path}", RouterLoginMethodGet)
-	s.HandleFunc("/post/{path}", RouterLoginMethodPost)
+	s.HandleFunc("/get/{path}", routerLoginMethodGet)
+	s.HandleFunc("/post/{path}", routerLoginMethodPost)
 }

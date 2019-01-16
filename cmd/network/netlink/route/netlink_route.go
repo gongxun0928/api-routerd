@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package netlink
+package route
 
 import (
 	"encoding/json"
@@ -15,6 +15,7 @@ import (
 	"github.com/vishvananda/netlink"
 )
 
+//Route message
 type Route struct {
 	Action  string `json:"action"`
 	Link    string `json:"link"`
@@ -22,7 +23,8 @@ type Route struct {
 	OnLink  string `json:"onlink"`
 }
 
-func DecodeRouteJSONRequest(r *http.Request) (Route, error) {
+//DecodeJSONRequest decoded route JSON message
+func DecodeJSONRequest(r *http.Request) (Route, error) {
 	route := new(Route)
 
 	err := json.NewDecoder(r.Body).Decode(&route)
@@ -33,6 +35,7 @@ func DecodeRouteJSONRequest(r *http.Request) (Route, error) {
 	return *route, nil
 }
 
+//AddDefaultGateWay add a default GW
 func (route *Route) AddDefaultGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
@@ -73,10 +76,10 @@ func (route *Route) AddDefaultGateWay() error {
 	return nil
 }
 
+//ReplaceDefaultGateWay replace default GW with new one
 func (route *Route) ReplaceDefaultGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
-		log.Errorf("Failed to find link %s: %s", err, route.Link)
 		return err
 	}
 
@@ -113,13 +116,8 @@ func (route *Route) ReplaceDefaultGateWay() error {
 	return nil
 }
 
-func DeleteGateWay(r *http.Request) error {
-	route, err := DecodeRouteJSONRequest(r)
-	if err != nil {
-		log.Errorf("Failed to decode route JSON request %v", err)
-		return err
-	}
-
+//DeleteGateWay remove a gateway
+func (route *Route) DeleteGateWay() error {
 	link, err := netlink.LinkByName(route.Link)
 	if err != nil {
 		log.Errorf("Failed to delete default gateway %s: %v", link, err)
@@ -128,13 +126,11 @@ func DeleteGateWay(r *http.Request) error {
 
 	ipAddr, _, err := net.ParseCIDR(route.Gateway)
 	if err != nil {
-		log.Errorf("Failed to parse default GateWay address %s: %v", route.Gateway, err)
 		return err
 	}
 
 	switch route.Action {
 	case "del-default-gw":
-
 		// del a gateway route
 		rt := &netlink.Route{
 			Scope:     netlink.SCOPE_UNIVERSE,
@@ -153,23 +149,18 @@ func DeleteGateWay(r *http.Request) error {
 	return nil
 }
 
-func GetRoutes(rw http.ResponseWriter, r *http.Request) error {
+//Get get routes
+func (route *Route) Get(rw http.ResponseWriter) error {
 	routes, err := netlink.RouteList(nil, 0)
 	if err != nil {
-		log.Errorf("Failed to get routes %v", err)
 		return err
 	}
 
 	return share.JSONResponse(routes, rw)
 }
 
-func ConfigureRoutes(r *http.Request) error {
-	route, err := DecodeRouteJSONRequest(r)
-	if err != nil {
-		log.Errorf("Failed to decode route JSON request %v", err)
-		return err
-	}
-
+//Configure routes
+func (route *Route) Configure() error {
 	switch route.Action {
 	case "add-default-gw":
 		return route.AddDefaultGateWay()

@@ -7,28 +7,33 @@ import (
 	"unsafe"
 )
 
+//Ifname size
 const (
 	IFNAMSIZ = 16
 )
 
+//ETHTOOL
 const (
 	SIOCETHTOOL = 0x8946
 )
 
+//driver info
 const (
-	ETHTOOL_GDRVINFO = 0x00000003
+	EthtoolGDRVInfo = 0x00000003
 )
 
+//EthTool Manager struct
 type EthTool struct {
 	fd int
 }
 
 type ifreq struct {
-	ifr_name [IFNAMSIZ]byte
-	ifr_data uintptr
+	ifrName [IFNAMSIZ]byte
+	ifrData uintptr
 }
 
-type EthtoolDrvInfo struct {
+//DrvInfo JSON message
+type DrvInfo struct {
 	Cmd         uint32   `json:"cmd"`
 	Driver      [32]byte `json:"driver"`
 	Version     [32]byte `json:"version"`
@@ -46,7 +51,7 @@ type EthtoolDrvInfo struct {
 var manager *EthTool
 
 // SocketIoctlFd returns a new fd
-func (e *EthTool) SocketIoctlFd() error {
+func (e *EthTool) socketIoctlFd() error {
 	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_DGRAM|syscall.SOCK_CLOEXEC, syscall.IPPROTO_IP)
 	if err != nil {
 		fd, err := syscall.Socket(syscall.AF_NETLINK, syscall.SOCK_RAW|syscall.SOCK_CLOEXEC, syscall.NETLINK_GENERIC)
@@ -63,13 +68,13 @@ func (e *EthTool) SocketIoctlFd() error {
 	return nil
 }
 
-func (e *EthTool) Ioctl(intf string, data uintptr) error {
+func (e *EthTool) ioctl(intf string, data uintptr) error {
 	var name [IFNAMSIZ]byte
 	copy(name[:], []byte(intf))
 
 	ifr := ifreq{
-		ifr_name: name,
-		ifr_data: data,
+		ifrName: name,
+		ifrData: data,
 	}
 
 	_, _, ep := syscall.Syscall(syscall.SYS_IOCTL, uintptr(e.fd), SIOCETHTOOL, uintptr(unsafe.Pointer(&ifr)))
@@ -80,9 +85,9 @@ func (e *EthTool) Ioctl(intf string, data uintptr) error {
 	return nil
 }
 
-func (e *EthTool) EthtoolConnect() error {
+func (e *EthTool) ethtoolConnect() error {
 	if e.fd < 1 {
-		err := e.SocketIoctlFd()
+		err := e.socketIoctlFd()
 		if err != nil {
 			return err
 		}
@@ -91,6 +96,7 @@ func (e *EthTool) EthtoolConnect() error {
 	return nil
 }
 
+//Close close fd
 func (e *EthTool) Close() {
 	syscall.Close(e.fd)
 	e.fd = -1
@@ -98,13 +104,14 @@ func (e *EthTool) Close() {
 	manager = nil
 }
 
+//NewEthTool new fd
 func NewEthTool() (*EthTool, error) {
 	if manager == nil {
 		manager = new(EthTool)
 		manager.fd = -1
 	}
 
-	err := manager.EthtoolConnect()
+	err := manager.ethtoolConnect()
 	if err != nil {
 		return nil, err
 	}

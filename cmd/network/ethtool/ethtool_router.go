@@ -3,17 +3,18 @@
 package ethtool
 
 import (
-	"net/http"
 	"encoding/json"
+	"net/http"
+
 	"github.com/gorilla/mux"
 )
 
-func RouterConfigureEthtool(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureEthtool(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	link := vars["link"]
 	command := vars["command"]
 	ethtool := Ethtool{
-		Link: link,
+		Link:   link,
 		Action: command,
 	}
 
@@ -46,7 +47,8 @@ func RouterConfigureEthtool(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterEthtool register with mux
 func RegisterRouterEthtool(n *mux.Router) {
 	e := n.PathPrefix("/ethtool").Subrouter().StrictSlash(false)
-	e.HandleFunc("/{link}/{command}", RouterConfigureEthtool)
+	e.HandleFunc("/{link}/{command}", routerConfigureEthtool)
 }

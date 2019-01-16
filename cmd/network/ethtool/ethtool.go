@@ -13,6 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+//Ethtool JSON message
 type Ethtool struct {
 	Action   string `json:"action"`
 	Link     string `json:"link"`
@@ -20,6 +21,7 @@ type Ethtool struct {
 	Value    string `json:"Value"`
 }
 
+//GetEthTool collect info via ethtool ioctl
 func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	link := share.LinkExists(r.Link)
 	if !link {
@@ -95,11 +97,11 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 		}
 		defer e.Close()
 
-		drvinfo := EthtoolDrvInfo{
-			Cmd: ETHTOOL_GDRVINFO,
+		drvinfo := DrvInfo{
+			Cmd: EthtoolGDRVInfo,
 		}
 
-		err = e.Ioctl(r.Link, uintptr(unsafe.Pointer(&drvinfo)))
+		err = e.ioctl(r.Link, uintptr(unsafe.Pointer(&drvinfo)))
 		if err != nil {
 			return err
 		}
@@ -168,6 +170,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	return nil
 }
 
+//SetEthTool set ethtool info
 func (r *Ethtool) SetEthTool(rw http.ResponseWriter) error {
 	link := share.LinkExists(r.Link)
 	if !link {

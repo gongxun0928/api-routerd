@@ -5,40 +5,42 @@ package networkd
 import (
 	"net/http"
 
+	"github.com/RestGW/api-routerd/cmd/network/networkd/link"
+	"github.com/RestGW/api-routerd/cmd/network/networkd/netdev"
+	"github.com/RestGW/api-routerd/cmd/network/networkd/network"
+
 	"github.com/gorilla/mux"
 )
 
-func RouterConfigureNetworkdNetwork(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureNetworkdLink(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		ConfigureNetworkFile(rw, r)
-		break
+		link.CreateFile(rw, r)
 	}
 }
 
-func RouterConfigureNetworkdNetDev(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureNetworkdNetDev(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		ConfigureNetDevFile(rw, r)
-		break
+		netdev.CreateFile(rw, r)
 	}
 }
 
-func RouterConfigureNetworkdLink(rw http.ResponseWriter, r *http.Request) {
+func routerConfigureNetworkdNetwork(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		ConfigureLinkFile(rw, r)
-		break
+		network.CreateFile(rw, r)
 	}
 }
 
+//RegisterRouterNetworkd register with mux
 func RegisterRouterNetworkd(router *mux.Router) {
 	InitNetworkd()
 
 	n := router.PathPrefix("/networkd").Subrouter().StrictSlash(false)
 
 	// systemd-networkd
-	n.HandleFunc("/network", RouterConfigureNetworkdNetwork)
-	n.HandleFunc("/netdev", RouterConfigureNetworkdNetDev)
-	n.HandleFunc("/link", RouterConfigureNetworkdLink)
+	n.HandleFunc("/network", routerConfigureNetworkdNetwork)
+	n.HandleFunc("/netdev", routerConfigureNetworkdNetDev)
+	n.HandleFunc("/link", routerConfigureNetworkdLink)
 }

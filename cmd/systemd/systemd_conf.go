@@ -17,10 +17,10 @@ import (
 )
 
 const (
-	SystemConfPath = "/etc/systemd/system.conf"
+	systemConfPath = "/etc/systemd/system.conf"
 )
 
-var SystemConfig = map[string]string{
+var systemConfig = map[string]string{
 	"LogLevel":                     "",
 	"LogTarget":                    "",
 	"LogColor":                     "",
@@ -74,8 +74,8 @@ var SystemConfig = map[string]string{
 	"IPAddressDeny":                "",
 }
 
-func WriteSystemConfig() error {
-	f, err := os.OpenFile(SystemConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
+func writeSystemConfig() error {
+	f, err := os.OpenFile(systemConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func WriteSystemConfig() error {
 	w := bufio.NewWriter(f)
 
 	conf := "[Manager]\n"
-	for k, v := range SystemConfig {
+	for k, v := range systemConfig {
 		if v != "" {
 			conf += k + "=" + v
 		} else {
@@ -99,28 +99,30 @@ func WriteSystemConfig() error {
 	return nil
 }
 
-func ReadSystemConf() error {
-	cfg, err := ini.Load(SystemConfPath)
+func readSystemConf() error {
+	cfg, err := ini.Load(systemConfPath)
 	if err != nil {
 		return err
 	}
 
-	for k := range SystemConfig {
-		SystemConfig[k] = cfg.Section("Manager").Key(k).String()
+	for k := range systemConfig {
+		systemConfig[k] = cfg.Section("Manager").Key(k).String()
 	}
 
 	return nil
 }
 
+//GetSystemConf read system.conf
 func GetSystemConf(rw http.ResponseWriter) error {
-	err := ReadSystemConf()
+	err := readSystemConf()
 	if err != nil {
 		return err
 	}
 
-	return share.JSONResponse(SystemConfig, rw)
+	return share.JSONResponse(systemConfig, rw)
 }
 
+//UpdateSystemConf update the system.conf
 func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -135,23 +137,23 @@ func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	err = ReadSystemConf()
+	err = readSystemConf()
 	if err != nil {
 		return err
 	}
 
 	for k, v := range conf {
-		_, ok := SystemConfig[k]
+		_, ok := systemConfig[k]
 		if ok {
-			SystemConfig[k] = v
+			systemConfig[k] = v
 		}
 	}
 
-	err = WriteSystemConfig()
+	err = writeSystemConfig()
 	if err != nil {
 		log.Errorf("Failed Write to system conf: %v", err)
 		return err
 	}
 
-	return share.JSONResponse(SystemConfig, rw)
+	return share.JSONResponse(systemConfig, rw)
 }

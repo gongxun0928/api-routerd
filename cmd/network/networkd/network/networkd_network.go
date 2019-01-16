@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package networkd
+package network
 
 import (
 	"encoding/json"
@@ -16,6 +16,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	networkdUnitPath = "/etc/systemd/network"
+)
+
+//Address message
 type Address struct {
 	Address string `json:"Address"`
 	Peer    string `json:"Peer"`
@@ -23,6 +28,7 @@ type Address struct {
 	Scope   string `json:"Scope"`
 }
 
+//Route message
 type Route struct {
 	Gateway         string `json:"Gateway"`
 	GatewayOnlink   string `json:"GatewayOnlink"`
@@ -32,6 +38,7 @@ type Route struct {
 	Table           string `json:"Table"`
 }
 
+//RoutingPolicyRule message
 type RoutingPolicyRule struct {
 	TypeOfService     string `json:"TypeOfService"`
 	From              string `json:"From"`
@@ -47,6 +54,7 @@ type RoutingPolicyRule struct {
 	InvertRule        string `json:"InvertRule"`
 }
 
+//DHCPSection message
 type DHCPSection struct {
 	UseDNS             string `json:"UseDNS"`
 	UseNTP             string `json:"UseNTP"`
@@ -62,6 +70,7 @@ type DHCPSection struct {
 	ClientIdentifier   string `json:"ClientIdentifier"`
 }
 
+//Network message
 type Network struct {
 	ConfFile string `json:"ConfFile"`
 
@@ -90,7 +99,7 @@ type Network struct {
 	Tunnel  string `json:"Tunnel"`
 }
 
-func (network *Network) CreateNetworkMatchSectionConfig() string {
+func (network *Network) createMatchSectionConfig() string {
 	conf := "[Match]\n"
 
 	switch v := network.Match.(type) {
@@ -138,7 +147,7 @@ func (network *Network) CreateNetworkMatchSectionConfig() string {
 	return conf
 }
 
-func (network *Network) CreateRouteSectionConfig() string {
+func (network *Network) createRouteSectionConfig() string {
 	var routeConf string
 
 	switch v := network.Routes.(type) {
@@ -237,7 +246,7 @@ func (network *Network) CreateRouteSectionConfig() string {
 	return routeConf
 }
 
-func (network *Network) CreateAddressSectionConfig() string {
+func (network *Network) createAddressSectionConfig() string {
 	var addressConf string
 
 	switch v := network.Addresses.(type) {
@@ -298,7 +307,7 @@ func (network *Network) CreateAddressSectionConfig() string {
 	return addressConf
 }
 
-func (network *Network) CreateRoutingPolicyRuleSectionConfig() string {
+func (network *Network) createRoutingPolicyRuleSectionConfig() string {
 	ruleConf := "\n[RoutingPolicyRule]\n"
 
 	switch v := network.RoutingPolicyRule.(type) {
@@ -420,7 +429,7 @@ func (network *Network) CreateRoutingPolicyRuleSectionConfig() string {
 	return ruleConf
 }
 
-func (network *Network) CreateDHCPSectionConfig() string {
+func (network *Network) createDHCPSectionConfig() string {
 	dhcpConf := "\n[DHCP]\n"
 
 	switch v := network.DHCPSection.(type) {
@@ -542,6 +551,7 @@ func (network *Network) CreateDHCPSectionConfig() string {
 	return dhcpConf
 }
 
+//CreateNetworkSectionConfig generate config
 func (network *Network) CreateNetworkSectionConfig() string {
 	conf := "[Network]\n"
 
@@ -681,7 +691,7 @@ func (network *Network) CreateNetworkSectionConfig() string {
 	return conf
 }
 
-func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
+func parseJSONfromHTTPReq(req *http.Request) error {
 	var configs map[string]interface{}
 
 	body, err := ioutil.ReadAll(req.Body)
@@ -695,23 +705,22 @@ func NetworkdParseJSONfromHTTPReq(req *http.Request) error {
 	network := new(Network)
 	json.Unmarshal([]byte(body), &network)
 
-	matchConfig := network.CreateNetworkMatchSectionConfig()
+	matchConfig := network.createMatchSectionConfig()
 	networkConfig := network.CreateNetworkSectionConfig()
-	addressConfig := network.CreateAddressSectionConfig()
-	routeConfig := network.CreateRouteSectionConfig()
-	ruleConfig := network.CreateRoutingPolicyRuleSectionConfig()
-	dhcpConfig := network.CreateDHCPSectionConfig()
+	addressConfig := network.createAddressSectionConfig()
+	routeConfig := network.createRouteSectionConfig()
+	ruleConfig := network.createRoutingPolicyRuleSectionConfig()
+	dhcpConfig := network.createDHCPSectionConfig()
 
 	config := []string{matchConfig, networkConfig, addressConfig, routeConfig, ruleConfig, dhcpConfig}
 
-	fmt.Println(config)
-
 	unitName := fmt.Sprintf("25-%s.network", network.ConfFile)
-	unitPath := filepath.Join(NetworkdUnitPath, unitName)
+	unitPath := filepath.Join(networkdUnitPath, unitName)
 
 	return share.WriteFullFile(unitPath, config)
 }
 
-func ConfigureNetworkFile(rw http.ResponseWriter, req *http.Request) {
-	NetworkdParseJSONfromHTTPReq(req)
+//CreateFile generate .network
+func CreateFile(rw http.ResponseWriter, req *http.Request) {
+	parseJSONfromHTTPReq(req)
 }

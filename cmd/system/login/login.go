@@ -16,7 +16,7 @@ const (
 	dbusPath      = "/org/freedesktop/login1"
 )
 
-var LoginMethod = map[string]string{
+var loginMethod = map[string]string{
 	"list-sessions":     "ListSessions",
 	"list-users":        "ListUsers",
 	"lock-session":      "LockSession",
@@ -25,12 +25,14 @@ var LoginMethod = map[string]string{
 	"terminate-user":    "TerminateUser",
 }
 
+//Login JSON message
 type Login struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
+//LoginMethodGet Pull properties from systemd
 func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 	c, err := sd.New()
 	if err != nil {
@@ -38,12 +40,12 @@ func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 	}
 	defer c.Close()
 
-	_, k := LoginMethod[t.Path]
+	_, k := loginMethod[t.Path]
 	if !k {
 		return fmt.Errorf("Failed to call method login:  %s not found", t.Path)
 	}
 
-	switch LoginMethod[t.Path] {
+	switch loginMethod[t.Path] {
 	case "ListUsers":
 		users, err := c.ListUsers()
 		if err != nil {
@@ -63,6 +65,7 @@ func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 	return nil
 }
 
+//LoginMethodPost Do call login methods via dbus
 func (t *Login) LoginMethodPost(rw http.ResponseWriter) error {
 	c, err := sd.New()
 	if err != nil {
@@ -70,15 +73,12 @@ func (t *Login) LoginMethodPost(rw http.ResponseWriter) error {
 	}
 	defer c.Close()
 
-	_, k := LoginMethod[t.Path]
+	_, k := loginMethod[t.Path]
 	if !k {
 		return fmt.Errorf("Failed to call method login:  %s not found", t.Path)
 	}
 
-	fmt.Println(t.Path)
-	fmt.Println(LoginMethod[t.Path])
-
-	switch LoginMethod[t.Path] {
+	switch loginMethod[t.Path] {
 	case "LockSession":
 		c.LockSession(t.Value)
 		break

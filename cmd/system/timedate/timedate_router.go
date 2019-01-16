@@ -10,7 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterGetTimeDate(rw http.ResponseWriter, r *http.Request) {
+func routerGetTimeDate(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	property := vars["property"]
 
@@ -31,7 +31,7 @@ func RouterGetTimeDate(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func RouterSetTimeDate(rw http.ResponseWriter, r *http.Request) {
+func routerSetTimeDate(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "PUT":
 
@@ -51,9 +51,10 @@ func RouterSetTimeDate(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//RegisterRouterTimeDate register with mux
 func RegisterRouterTimeDate(router *mux.Router) {
 	s := router.PathPrefix("/timedate").Subrouter().StrictSlash(false)
-	s.HandleFunc("", RouterGetTimeDate)
-	s.HandleFunc("/get/{property}", RouterGetTimeDate)
-	s.HandleFunc("/set", RouterSetTimeDate)
+	s.HandleFunc("", routerGetTimeDate)
+	s.HandleFunc("/get/{property}", routerGetTimeDate)
+	s.HandleFunc("/set", routerSetTimeDate)
 }

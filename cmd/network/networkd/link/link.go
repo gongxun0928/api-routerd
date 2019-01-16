@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package networkd
+package link
 
 import (
 	"encoding/json"
@@ -15,6 +15,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+const (
+	networkdUnitPath = "/etc/systemd/network"
+)
+
+//Link JSON message
 type Link struct {
 	ConfFile string      `json:"ConfFile"`
 	Match    interface{} `json:"Match"`
@@ -42,7 +47,7 @@ type Link struct {
 	CombinedChannels           string `json:"CombinedChannels"`
 }
 
-func (link *Link) CreateLinkMatchSectionConfig() string {
+func (link *Link) createMatchSectionConfig() string {
 	conf := "[Match]\n"
 
 	switch v := link.Match.(type) {
@@ -89,7 +94,7 @@ func (link *Link) CreateLinkMatchSectionConfig() string {
 	return conf
 }
 
-func (link *Link) CreateLinkSectionConfig() string {
+func (link *Link) createLinkSectionConfig() string {
 	conf := "[Link]\n"
 
 	if link.Description != "" {
@@ -179,7 +184,7 @@ func (link *Link) CreateLinkSectionConfig() string {
 	return conf
 }
 
-func LinkParseJSONFromHTTPReq(req *http.Request) error {
+func parseJSONFromHTTPReq(req *http.Request) error {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Errorf("Failed to parse HTTP request: %v ", err)
@@ -189,19 +194,18 @@ func LinkParseJSONFromHTTPReq(req *http.Request) error {
 	link := new(Link)
 	json.Unmarshal([]byte(body), &link)
 
-	matchConfig := link.CreateLinkMatchSectionConfig()
-	linkConfig := link.CreateLinkSectionConfig()
+	matchConfig := link.createMatchSectionConfig()
+	linkConfig := link.createLinkSectionConfig()
 
 	config := []string{matchConfig, linkConfig}
 
-	fmt.Println(config)
-
 	unitName := fmt.Sprintf("00-%s.link", link.Name)
-	unitPath := filepath.Join(NetworkdUnitPath, unitName)
+	unitPath := filepath.Join(networkdUnitPath, unitName)
 
 	return share.WriteFullFile(unitPath, config)
 }
 
-func ConfigureLinkFile(rw http.ResponseWriter, req *http.Request) {
-	LinkParseJSONFromHTTPReq(req)
+//CreateFile generate .link file
+func CreateFile(rw http.ResponseWriter, req *http.Request) {
+	parseJSONFromHTTPReq(req)
 }

@@ -4,7 +4,6 @@ package systemd
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -16,6 +15,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+//Unit JSON message
 type Unit struct {
 	Action   string `json:"action"`
 	Unit     string `json:"unit"`
@@ -24,136 +24,124 @@ type Unit struct {
 	Value    string `json:"value"`
 }
 
+//Property generic property and value
 type Property struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
+//UnitStatus unit status
 type UnitStatus struct {
 	Status string `json:"property"`
 	Unit   string `json:"unit"`
 }
 
-func SystemdProperty(property string) (dbus.Variant, error) {
-	conn, err := share.GetSystemBusPrivateConn()
-	if err != nil {
-		log.Errorf("Failed to get dbus connection: %v", err)
-		return dbus.Variant{}, err
-	}
-	defer conn.Close()
-
-	c := conn.Object("org.freedesktop.systemd1", "/org/freedesktop/systemd1")
-	p, perr := c.GetProperty("org.freedesktop.systemd1.Manager." + property)
-	if perr != nil {
-		log.Errorf("org.freedesktop.systemd1.Manager.%s", property)
-		return dbus.Variant{}, errors.New("dbus error")
-	}
-
-	if p.Value() == nil {
-		return dbus.Variant{}, errors.New("Failed to get property")
-	}
-
-	return p, nil
-}
-
-func SystemdState(w http.ResponseWriter) error {
-	v, err := SystemdProperty("SystemState")
+//State sytemd state
+func State(w http.ResponseWriter) error {
+	v, err := getProperty("SystemState")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "SystemState",
-		Value: v.Value().(string),
+		Value:    v.Value().(string),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdVersion(w http.ResponseWriter) error {
-	v, err := SystemdProperty("Version")
+//Version systemd version
+func Version(w http.ResponseWriter) error {
+	v, err := getProperty("Version")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "Version",
-		Value: v.Value().(string),
+		Value:    v.Value().(string),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdVirtualization(w http.ResponseWriter) error {
-	v, err := SystemdProperty("Virtualization")
+//Virtualization systemd virt
+func Virtualization(w http.ResponseWriter) error {
+	v, err := getProperty("Virtualization")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "Virtualization",
-		Value: v.Value().(string),
+		Value:    v.Value().(string),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdArchitecture(w http.ResponseWriter) error {
-	v, err := SystemdProperty("Architecture")
+//Architecture arch of the system
+func Architecture(w http.ResponseWriter) error {
+	v, err := getProperty("Architecture")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "Architecture",
-		Value: v.Value().(string),
+		Value:    v.Value().(string),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdFeatures(w http.ResponseWriter) error {
-	v, err := SystemdProperty("Features")
+//Features systemd features
+func Features(w http.ResponseWriter) error {
+	v, err := getProperty("Features")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "Features",
-		Value: v.Value().(string),
+		Value:    v.Value().(string),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdNFailedUnits(w http.ResponseWriter) error {
-	v, err := SystemdProperty("NFailedUnits")
+//NFailedUnits how many uniuts failed
+func NFailedUnits(w http.ResponseWriter) error {
+	v, err := getProperty("NFailedUnits")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "NFailedUnits",
-		Value: fmt.Sprint(v.Value().(uint32)),
+		Value:    fmt.Sprint(v.Value().(uint32)),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
-func SystemdNNames(w http.ResponseWriter) error {
-	v, err := SystemdProperty("NNames")
+//NNames number of names
+func NNames(w http.ResponseWriter) error {
+	v, err := getProperty("NNames")
 	if err != nil {
 		return err
 	}
 
 	prop := Property{
 		Property: "NNames",
-		Value: fmt.Sprint(v.Value().(uint32)),
+		Value:    fmt.Sprint(v.Value().(uint32)),
 	}
 
 	return share.JSONResponse(prop, w)
 }
 
+//ListUnits list all units
 func ListUnits(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -171,6 +159,7 @@ func ListUnits(w http.ResponseWriter) error {
 	return share.JSONResponse(units, w)
 }
 
+//StartUnit start a unit
 func (u *Unit) StartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -189,6 +178,7 @@ func (u *Unit) StartUnit() error {
 	return nil
 }
 
+//StopUnit stop a unit
 func (u *Unit) StopUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -207,6 +197,7 @@ func (u *Unit) StopUnit() error {
 	return nil
 }
 
+//RestartUnit restart a unit
 func (u *Unit) RestartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -225,6 +216,7 @@ func (u *Unit) RestartUnit() error {
 	return nil
 }
 
+//ReloadUnit reload daemon
 func (u *Unit) ReloadUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -242,6 +234,7 @@ func (u *Unit) ReloadUnit() error {
 	return nil
 }
 
+//KillUnit send a signal to a unit
 func (u *Unit) KillUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -261,6 +254,7 @@ func (u *Unit) KillUnit() error {
 	return nil
 }
 
+//GetUnitStatus get unit status
 func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -277,7 +271,7 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 
 	status := UnitStatus{
 		Status: units[0].ActiveState,
-		Unit: u.Unit,
+		Unit:   u.Unit,
 	}
 
 	json.NewEncoder(w).Encode(status)
@@ -285,6 +279,7 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	return nil
 }
 
+//GetUnitProperty get unit property
 func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -318,6 +313,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	return share.JSONResponse(p, w)
 }
 
+//SetUnitProperty sets a unit property
 func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -335,7 +331,7 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 		}
 
 		p := sd.Property{
-			Name: "CPUShares",
+			Name:  "CPUShares",
 			Value: dbus.MakeVariant(uint64(n)),
 		}
 		err = conn.SetUnitProperties(u.Unit, true, p)
@@ -349,6 +345,7 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	return nil
 }
 
+//GetUnitTypeProperty get unit type property
 func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {

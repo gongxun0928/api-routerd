@@ -18,7 +18,7 @@ const (
 	dbusPath      = "/org/freedesktop/timedate1"
 )
 
-var TimeInfo = map[string]string{
+var timeInfo = map[string]string{
 	"Timezone":        "",
 	"LocalRTC":        "",
 	"CanNTP":          "",
@@ -28,7 +28,7 @@ var TimeInfo = map[string]string{
 	"RTCTimeUSec":     "",
 }
 
-var TimeDateMethod = map[string]string{
+var timeDateMethod = map[string]string{
 	"SetTime":       "",
 	"SetTimezone":   "",
 	"SetLocalRTC":   "",
@@ -36,11 +36,13 @@ var TimeDateMethod = map[string]string{
 	"ListTimezones": "",
 }
 
+//TimeDate JSON message
 type TimeDate struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
+//SetTimeDate set timedate property
 func (t *TimeDate) SetTimeDate() error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
@@ -49,7 +51,7 @@ func (t *TimeDate) SetTimeDate() error {
 	}
 	defer conn.Close()
 
-	_, k := TimeDateMethod[t.Property]
+	_, k := timeDateMethod[t.Property]
 	if !k {
 		return fmt.Errorf("Failed to set timedate:  %s not found", t.Property)
 	}
@@ -80,6 +82,7 @@ func (t *TimeDate) SetTimeDate() error {
 	return nil
 }
 
+//GetTimeDate gets property from timedated
 func GetTimeDate(rw http.ResponseWriter, property string) error {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {
@@ -89,7 +92,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 	defer conn.Close()
 
 	h := conn.Object(dbusInterface, dbusPath)
-	for k := range TimeInfo {
+	for k := range timeInfo {
 		p, perr := h.GetProperty("org.freedesktop.timedate1." + k)
 		if perr != nil {
 			log.Errorf("Failed to get org.freedesktop.timedate1.%s", k)
@@ -103,7 +106,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 				continue
 			}
 
-			TimeInfo[k] = v
+			timeInfo[k] = v
 			break
 		case "LocalRTC":
 			v, b := p.Value().(bool)
@@ -111,7 +114,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 				continue
 			}
 
-			TimeInfo[k] = strconv.FormatBool(v)
+			timeInfo[k] = strconv.FormatBool(v)
 
 			break
 
@@ -121,7 +124,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 				continue
 			}
 
-			TimeInfo[k] = strconv.FormatBool(v)
+			timeInfo[k] = strconv.FormatBool(v)
 
 			break
 		case "NTP":
@@ -130,7 +133,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 				continue
 			}
 
-			TimeInfo[k] = strconv.FormatBool(v)
+			timeInfo[k] = strconv.FormatBool(v)
 
 			break
 		case "NTPSynchronized":
@@ -139,7 +142,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 				continue
 			}
 
-			TimeInfo[k] = strconv.FormatBool(v)
+			timeInfo[k] = strconv.FormatBool(v)
 
 			break
 		case "TimeUSec":
@@ -149,7 +152,7 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 			}
 
 			t := time.Unix(0, int64(v))
-			TimeInfo[k] = t.String()
+			timeInfo[k] = t.String()
 
 		case "RTCTimeUSec":
 			v, b := p.Value().(uint64)
@@ -159,18 +162,18 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 
 			t := time.Unix(0, int64(v))
 
-			TimeInfo[k] = t.String()
+			timeInfo[k] = t.String()
 			break
 		}
 	}
 
 	if property == "" {
-		return share.JSONResponse(TimeInfo, rw)
+		return share.JSONResponse(timeInfo, rw)
 	}
 
 	t := TimeDate{
 		Property: property,
-		Value:    TimeInfo[property],
+		Value:    timeInfo[property],
 	}
 
 	return share.JSONResponse(t, rw)

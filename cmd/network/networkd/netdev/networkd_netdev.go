@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package networkd
+package netdev
 
 import (
 	"encoding/json"
@@ -15,7 +15,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// NetDev
+const (
+	networkdUnitPath = "/etc/systemd/network"
+)
+
+//NetDev JSON message
 type NetDev struct {
 	Description string `json:"Description"`
 	MACAddress  string `json:"MACAddress"`
@@ -58,7 +62,7 @@ type NetDev struct {
 	PeerMACAddress string `json:"PeerMACAddress"`
 }
 
-func (netdev *NetDev) CreateBondSectionConfig() string {
+func (netdev *NetDev) createBondSectionConfig() string {
 	conf := "\n[Bond]\n"
 
 	if netdev.Mode != "" {
@@ -72,7 +76,7 @@ func (netdev *NetDev) CreateBondSectionConfig() string {
 	return conf
 }
 
-func (netdev *NetDev) CreateBridgeSectionConfig() string {
+func (netdev *NetDev) createBridgeSectionConfig() string {
 	conf := "\n[Bridge]\n"
 
 	if netdev.HelloTimeSec != "" {
@@ -90,7 +94,7 @@ func (netdev *NetDev) CreateBridgeSectionConfig() string {
 	return conf
 }
 
-func (netdev *NetDev) CreateTunnelSectionConfig() string {
+func (netdev *NetDev) createTunnelSectionConfig() string {
 	conf := "\n[Tunnel]\n"
 
 	if netdev.Local != "" {
@@ -128,7 +132,7 @@ func (netdev *NetDev) CreateTunnelSectionConfig() string {
 	return conf
 }
 
-func (netdev *NetDev) CreateVxLanSectionConfig() string {
+func (netdev *NetDev) createVxLanSectionConfig() string {
 	conf := "\n[VXLAN]\n"
 
 	if netdev.ID != "" {
@@ -170,6 +174,7 @@ func (netdev *NetDev) CreateVxLanSectionConfig() string {
 	return conf
 }
 
+//CreateNetDevSectionConfig generate netdev config
 func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	conf := "[NetDev]\n"
 
@@ -196,7 +201,7 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	switch netdev.Kind {
 	case "bond":
 
-		conf += netdev.CreateBondSectionConfig()
+		conf += netdev.createBondSectionConfig()
 
 		break
 
@@ -212,12 +217,12 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 	case "bridge":
 
-		conf += netdev.CreateBridgeSectionConfig()
+		conf += netdev.createBridgeSectionConfig()
 
 		break
 	case "tunnel":
 
-		conf += netdev.CreateTunnelSectionConfig()
+		conf += netdev.createTunnelSectionConfig()
 
 		break
 	case "veth":
@@ -263,14 +268,14 @@ func (netdev *NetDev) CreateNetDevSectionConfig() string {
 
 	case "vxlan":
 
-		conf += netdev.CreateVxLanSectionConfig()
+		conf += netdev.createVxLanSectionConfig()
 
 	}
 
 	return conf
 }
 
-func NetdevdParseJSONFromHTTPReq(req *http.Request) error {
+func parseJSONFromHTTPReq(req *http.Request) error {
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		log.Errorf("Failed to parse HTTP request: %v", err)
@@ -286,11 +291,12 @@ func NetdevdParseJSONFromHTTPReq(req *http.Request) error {
 	fmt.Println(config)
 
 	unitName := fmt.Sprintf("25-%s.netdev", netdev.Name)
-	unitPath := filepath.Join(NetworkdUnitPath, unitName)
+	unitPath := filepath.Join(networkdUnitPath, unitName)
 
 	return share.WriteFullFile(unitPath, config)
 }
 
-func ConfigureNetDevFile(rw http.ResponseWriter, req *http.Request) {
-	NetdevdParseJSONFromHTTPReq(req)
+//CreateFile generate .netdev
+func CreateFile(rw http.ResponseWriter, req *http.Request) {
+	parseJSONFromHTTPReq(req)
 }

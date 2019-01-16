@@ -9,11 +9,13 @@ import (
 	"github.com/RestGW/api-routerd/cmd/share"
 )
 
+//Hello JSON message
 type Hello struct {
 	Cmd  string `json:"cmd"`
 	Text string `json:"text"`
 }
 
+//SayHello send message back whatever received
 func (r *Hello) SayHello(rw http.ResponseWriter) error {
 	fmt.Println(r)
 
@@ -22,5 +24,5 @@ func (r *Hello) SayHello(rw http.ResponseWriter) error {
 		Text: r.Text,
 	}
 
-	return share.JsonResponse(g, rw)
+	return share.JSONResponse(g, rw)
 }

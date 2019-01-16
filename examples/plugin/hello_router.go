@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func RouterSayHello(rw http.ResponseWriter, r *http.Request) {
+func routerSayHello(rw http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		g := new(Hello)
@@ -29,8 +29,9 @@ func RouterSayHello(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
+//RegisterRouterSayHello register with mux
 func RegisterRouterSayHello(router *mux.Router) {
 	s := router.PathPrefix("/hello").Subrouter().StrictSlash(false)
 
-	s.HandleFunc("/sayhello/{text}", RouterSayHello)
+	s.HandleFunc("/sayhello/{text}", routerSayHello)
 }

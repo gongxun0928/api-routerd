@@ -22,6 +22,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+//StartRouter Init and start Gorilla mux router
 func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) error {
 	var srv http.Server
 

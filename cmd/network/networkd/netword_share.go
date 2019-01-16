@@ -9,19 +9,21 @@ import (
 )
 
 const (
-	NetworkdUnitPath = "/etc/systemd/network"
+	networkdUnitPath = "/etc/systemd/network"
 )
 
+//Match section
 type Match struct {
 	MAC    string `json:"MAC"`
 	Driver string `json:"Driver"`
 	Name   string `json:"Name"`
 }
 
+//InitNetworkd init networkd module
 func InitNetworkd() error {
-	err := share.CreateDirectory(NetworkdUnitPath, 0777)
+	err := share.CreateDirectory(networkdUnitPath, 0777)
 	if err != nil {
-		log.Errorf("Failed create network unit path %s: %v", NetworkdUnitPath, err)
+		log.Errorf("Failed create network unit path %s: %v", networkdUnitPath, err)
 		return err
 	}
 

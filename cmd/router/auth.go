@@ -13,13 +13,15 @@ import (
 )
 
 const (
-	AuthConfPath = "/etc/api-routerd/api-routerd-auth.conf"
+	authConfPath = "/etc/api-routerd/api-routerd-auth.conf"
 )
 
+//TokenDB token DB
 type TokenDB struct {
 	tokenUsers map[string]string
 }
 
+//AuthMiddleware Authenticate the User
 func (db *TokenDB) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -35,10 +37,11 @@ func (db *TokenDB) AuthMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+//InitAuthMiddleware init middleware
 func InitAuthMiddleware() (TokenDB, error) {
 	db := TokenDB{make(map[string]string)}
 
-	lines, r := share.ReadFullFile(AuthConfPath)
+	lines, r := share.ReadFullFile(authConfPath)
 	if r != nil {
 		log.Fatal("Failed to read auth config file")
 		return db, errors.New("Failed to read auth config file")
