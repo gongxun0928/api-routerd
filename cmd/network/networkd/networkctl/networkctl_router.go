@@ -10,8 +10,8 @@ import (
 
 func routerNetworkctlGet(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	verb := vars["verb"]
 	link := vars["link"]
-	verb := vars["command"]
 
 	n := Networkctl{
 		Link: link,
@@ -34,5 +34,6 @@ func RegisterRouterNetworkctl(r *mux.Router) {
 
 	n := r.PathPrefix("/networkctl").Subrouter().StrictSlash(false)
 	n.HandleFunc("", routerNetworkctlGet)
+	n.HandleFunc("/{verb}", routerNetworkctlGet)
 	n.HandleFunc("/{verb}/{link}", routerNetworkctlGet)
 }

@@ -7,13 +7,23 @@ import (
 	"github.com/RestGW/api-routerd/cmd/share"
 )
 
-// StatusResponse JSON response for networkctl
-type StatusResponse struct {
+// Response JSON response for networkctl
+type Response struct {
 	Index       string `json:"index"`
 	Link        string `json:"link"`
 	Type        string `json:"type"`
 	Operational string `json:"operational"`
 	Setup       string `json:"setup"`
+}
+
+// ResponseLLDP LLDP response
+type ResponseLLDP struct {
+	Link       string `json:"link"`
+	ChassisID  string `json:"chassis_id"`
+	System     string `json:"system"`
+	Capability string `json:"capability"`
+	Port       string `json:"port"`
+	PortDdesc  string `json:"port_description"`
 }
 
 func getPathNetworkctl() (string, error) {
@@ -31,7 +41,7 @@ func getPathNetworkctl() (string, error) {
 }
 
 // ExecuteNetworkctl execute networkctl same as status
-func ExecuteNetworkctl() ([]StatusResponse, error) {
+func ExecuteNetworkctl() ([]Response, error) {
 	path, err := getPathNetworkctl()
 	if err != nil {
 		return nil, err
@@ -45,7 +55,7 @@ func ExecuteNetworkctl() ([]StatusResponse, error) {
 
 	lines := strings.Split(string(stdout), "\n")
 
-	r := make([]StatusResponse, len(lines)-4)
+	r := make([]Response, len(lines)-4)
 	for i, line := range lines {
 		if i == 0 || i >= len(lines)-3 {
 			continue
@@ -56,11 +66,53 @@ func ExecuteNetworkctl() ([]StatusResponse, error) {
 			continue
 		}
 
-		n := StatusResponse{
+		n := Response{
 			Index:       fields[0],
-			Type:        fields[1],
-			Operational: fields[2],
-			Setup:       fields[3],
+			Link:        fields[1],
+			Type:        fields[2],
+			Operational: fields[3],
+			Setup:       fields[4],
+		}
+
+		r[i-1] = n
+	}
+
+	return r, nil
+}
+
+// ExecuteNetworkctlLLDP execute networkctl same as status
+func ExecuteNetworkctlLLDP() ([]ResponseLLDP, error) {
+	path, err := getPathNetworkctl()
+	if err != nil {
+		return nil, err
+	}
+
+	cmd := exec.Command(path, "lldp")
+	stdout, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(stdout), "\n")
+
+	r := make([]ResponseLLDP, len(lines)-6)
+	for i, line := range lines {
+		if i == 0 || i >= len(lines)-4 {
+			continue
+		}
+
+		fields := strings.Fields(line)
+		if len(fields) < 6 {
+			continue
+		}
+
+		n := ResponseLLDP{
+			Link:       fields[0],
+			ChassisID:  fields[1],
+			System:     fields[2],
+			Capability: fields[3],
+			Port:       fields[4],
+			PortDdesc:  fields[5],
 		}
 
 		r[i-1] = n

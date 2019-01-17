@@ -23,7 +23,16 @@ func (n *Networkctl) NetworkctlGet(rw http.ResponseWriter) error {
 		return fmt.Errorf("Failed to find link: %s", n.Link)
 	}
 
+	fmt.Println(n)
 	switch n.Verb {
+	case "lldp":
+		r, err := ExecuteNetworkctlLLDP()
+		if err != nil {
+			return err
+		}
+
+		return share.JSONResponse(r, rw)
+
 	case "networkctl":
 	default:
 		r, err := ExecuteNetworkctl()
