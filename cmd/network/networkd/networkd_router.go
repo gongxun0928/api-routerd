@@ -8,6 +8,7 @@ import (
 	"github.com/RestGW/api-routerd/cmd/network/networkd/link"
 	"github.com/RestGW/api-routerd/cmd/network/networkd/netdev"
 	"github.com/RestGW/api-routerd/cmd/network/networkd/network"
+	"github.com/RestGW/api-routerd/cmd/network/networkd/networkctl"
 
 	"github.com/gorilla/mux"
 )
@@ -33,7 +34,7 @@ func routerConfigureNetworkdNetwork(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterNetworkd register with mux
+// RegisterRouterNetworkd register with mux
 func RegisterRouterNetworkd(router *mux.Router) {
 	InitNetworkd()
 
@@ -43,4 +44,7 @@ func RegisterRouterNetworkd(router *mux.Router) {
 	n.HandleFunc("/network", routerConfigureNetworkdNetwork)
 	n.HandleFunc("/netdev", routerConfigureNetworkdNetDev)
 	n.HandleFunc("/link", routerConfigureNetworkdLink)
+
+	// networkctl
+	networkctl.RegisterRouterNetworkctl(n)
 }
