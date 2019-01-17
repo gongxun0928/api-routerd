@@ -7,6 +7,7 @@ import (
 	"path"
 
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 const (
@@ -17,11 +18,31 @@ const (
 //InitLog inits the logger
 func InitLog() error {
 	log := logrus.New()
+	log.Level = logrus.InfoLevel
 
-	log.Out = os.Stderr
-	log.Level = logrus.DebugLevel
+	viper.AutomaticEnv()
+	lvl := viper.GetString("API_ROUTERD_LOG_LEVEL")
+	if lvl != "" {
+		l, err := logrus.ParseLevel(lvl)
+		if err != nil {
+			log.WithField("level", lvl).Warn("Invalid log level, fallback to 'info'")
+		} else {
+			log.SetLevel(l)
+		}
+	}
 
-	logDir := defaultLogDir
+	switch viper.GetString("API_ROUTERD_LOG_FORMAT") {
+	case "json":
+		log.SetFormatter(&logrus.JSONFormatter{})
+	default:
+	case "text":
+		log.SetFormatter(&logrus.TextFormatter{})
+	}
+
+	logDir := viper.GetString("API_ROUTERD_LOG_DIR")
+	if logDir == "" {
+		logDir = defaultLogDir
+	}
 
 	err := CreateDirectory(logDir, 0644)
 	if err != nil {
