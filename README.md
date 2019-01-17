@@ -16,6 +16,8 @@ A RestAPI MicroService GateWay for Linux
 
 api-routerd is a cloud-enabled, mobile-ready, a super light weight remote management tool which uses REST API for real time configuration and performance as well as health monitoring for systems (containers) and applications. It provides fast API based monitoring without affecting the system it's running on.
 
+- Proactive Monitoring and Analytics
+  api-routerd saves network administrators time and frustration because it makes it easy to gather statistics and perform analyses.
 - Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan ...) from any OS (Linux, IOS, Android, Windows ...)
 - An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS . See [Source Code](https://github.com/RestGW/iDevOps) .
 - Minimal data transfer using JSON.
@@ -69,9 +71,6 @@ api-routerd uses a number of open source projects to work properly:
 * [viper](https://github.com/spf13/viper)
 * [go-ini](https://github.com/go-ini/ini)
 
-
-And of course api-routerd itself is open source with a [public repository][git-repo-url]
- on GitHub.
 
 ### Development
 
