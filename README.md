@@ -7,9 +7,7 @@ A RestAPI MicroService GateWay for Linux
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
 [![HitCount](http://hits.dwyl.io/ssahani/RestGW/api-routerd.svg)](http://hits.dwyl.io/ssahani/RestGW/api-routerd)
 [![CodeFactor](https://www.codefactor.io/repository/github/restgw/api-routerd/badge)](https://www.codefactor.io/repository/github/restgw/api-routerd)
-[![codebeat badge](https://codebeat.co/badges/1bdd48c6-4cc1-4255-a11b-9807473e9c3d)](https://codebeat.co/projects/github-com-restgw-api-routerd-master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/RestGW/api-routerd)](https://goreportcard.com/report/github.com/RestGW/api-routerd)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/5094d66b86f44522b3de7381a0bba5a1)](https://app.codacy.com/app/ssahani/api-routerd?utm_source=github.com&utm_medium=referral&utm_content=RestGW/api-routerd&utm_campaign=Badge_Grade_Dashboard)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Coverage Status](https://coveralls.io/repos/github/RestGW/api-routerd/badge.svg?branch=master)](https://coveralls.io/github/RestGW/api-routerd?branch=master)
 
