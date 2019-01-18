@@ -18,13 +18,13 @@ const (
 	dbusPathConfig      = "/org/fedoraproject/FirewallD1/config"
 )
 
-//Conn dbus connection
+// Conn dbus connection
 type Conn struct {
 	conn   *dbus.Conn
 	object dbus.BusObject
 }
 
-//Zone FW Zone object
+// Zone FW Zone object
 type Zone struct {
 	Version     string   `json:"version"`
 	Name        string   `json:"name"`
@@ -33,7 +33,7 @@ type Zone struct {
 	Interfaces  []string `json:"interfaces"`
 }
 
-//Service FW Service object
+// Service FW Service object
 type Service struct {
 	Version      string            `json:"version"`
 	Name         string            `json:"name"`
@@ -44,7 +44,7 @@ type Service struct {
 	SourcePorts  [][]interface{}   `json:"source_ports"`
 }
 
-//NewConn get a new connection
+// NewConn get a new connection
 func NewConn() (*Conn, error) {
 	c := new(Conn)
 
@@ -59,7 +59,7 @@ func NewConn() (*Conn, error) {
 	return c, nil
 }
 
-//Close close the connection
+// Close close the connection
 func (c *Conn) Close() {
 	c.conn.Close()
 }
@@ -76,7 +76,7 @@ func (c *Conn) getZonePathbyName(zone string) (string, error) {
 	return r, nil
 }
 
-//GetZones gets all zones from runtime
+// GetZones gets all zones from runtime
 func (c *Conn) GetZones() ([]string, error) {
 	var z []string
 
@@ -88,7 +88,7 @@ func (c *Conn) GetZones() ([]string, error) {
 	return z, nil
 }
 
-//ListAllZones lists all zones from permanent config
+// ListAllZones lists all zones from permanent config
 func (c *Conn) ListAllZones() ([]string, error) {
 	var z []string
 
@@ -101,7 +101,7 @@ func (c *Conn) ListAllZones() ([]string, error) {
 	return z, nil
 }
 
-//ListServices lists all services from runtime
+// ListServices lists all services from runtime
 func (c *Conn) ListServices() ([]string, error) {
 	var services []string
 
@@ -113,19 +113,19 @@ func (c *Conn) ListServices() ([]string, error) {
 	return services, nil
 }
 
-//GetDefaultZone gets the default runtime zone
+// GetDefaultZone gets the default runtime zone
 func (c *Conn) GetDefaultZone() (string, error) {
 	var zone string
 
 	err := c.object.Call(dbusInterface+".getDefaultZone", 0).Store(&zone)
 	if err != nil {
-		return "", err
+		return zone, err
 	}
 
 	return zone, nil
 }
 
-//ListPorts lists all ports from runtime
+// ListPorts lists all ports from runtime
 func (c *Conn) ListPorts(zone string) ([][]string, error) {
 	var ports [][]string
 
@@ -137,7 +137,7 @@ func (c *Conn) ListPorts(zone string) ([][]string, error) {
 	return ports, nil
 }
 
-//GetZoneSettings get all zone settings from runtime
+// GetZoneSettings get all zone settings from runtime
 func (c *Conn) GetZoneSettings(zone string) (*Zone, error) {
 	out := []interface{}{}
 
@@ -166,7 +166,7 @@ func (c *Conn) GetZoneSettings(zone string) (*Zone, error) {
 	return z, nil
 }
 
-//GetZoneSettingsPermanent get all zone settings from permament config
+// GetZoneSettingsPermanent get all zone settings from permament config
 func (c *Conn) GetZoneSettingsPermanent(zone string) (*Zone, error) {
 	out := []interface{}{}
 
@@ -201,7 +201,7 @@ func (c *Conn) GetZoneSettingsPermanent(zone string) (*Zone, error) {
 	return z, nil
 }
 
-//GetServiceSettings get service setting from runtime
+// GetServiceSettings get service setting from runtime
 func (c *Conn) GetServiceSettings(zone string) (*Service, error) {
 	out := []interface{}{}
 
@@ -237,7 +237,7 @@ func (c *Conn) GetServiceSettings(zone string) (*Service, error) {
 	return s, nil
 }
 
-//GetServiceSettingsPermanent gets all settings from permanent config
+// GetServiceSettingsPermanent gets all settings from permanent config
 func (c *Conn) GetServiceSettingsPermanent(zone string) (*Service, error) {
 	out := []interface{}{}
 
@@ -292,7 +292,7 @@ func (c *Conn) AddPort(zone string, port string, protocol string) (string, error
 	return r, nil
 }
 
-//RemovePort remove a port from runtime
+// RemovePort remove a port from runtime
 func (c *Conn) RemovePort(zone string, port string, protocol string) (string, error) {
 	var r string
 
@@ -304,7 +304,7 @@ func (c *Conn) RemovePort(zone string, port string, protocol string) (string, er
 	return r, nil
 }
 
-//AddPortPermanent add a port to permanent config
+// AddPortPermanent add a port to permanent config
 func (c *Conn) AddPortPermanent(zone string, port string, protocol string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -320,7 +320,7 @@ func (c *Conn) AddPortPermanent(zone string, port string, protocol string) (stri
 	return r, nil
 }
 
-//RemovePortPermanent remove a port from permanent config
+// RemovePortPermanent remove a port from permanent config
 func (c *Conn) RemovePortPermanent(zone string, port string, protocol string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -336,7 +336,7 @@ func (c *Conn) RemovePortPermanent(zone string, port string, protocol string) (s
 	return r, nil
 }
 
-//AddProtocol add a prortocol to runtime
+// AddProtocol add a prortocol to runtime
 func (c *Conn) AddProtocol(zone string, protocol string) (string, error) {
 	var r string
 	var err error
@@ -349,7 +349,7 @@ func (c *Conn) AddProtocol(zone string, protocol string) (string, error) {
 	return r, nil
 }
 
-//RemoveProtocol remove a protocol from runtime
+// RemoveProtocol remove a protocol from runtime
 func (c *Conn) RemoveProtocol(zone string, protocol string) (string, error) {
 	var r string
 
@@ -361,7 +361,7 @@ func (c *Conn) RemoveProtocol(zone string, protocol string) (string, error) {
 	return r, nil
 }
 
-//AddProtocolPermanent add a protocol to permanent config
+// AddProtocolPermanent add a protocol to permanent config
 func (c *Conn) AddProtocolPermanent(zone string, protocol string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -377,7 +377,7 @@ func (c *Conn) AddProtocolPermanent(zone string, protocol string) (string, error
 	return r, nil
 }
 
-//RemoveProtocolPermanent removes a protcol from a zone in permanent configuration
+// RemoveProtocolPermanent removes a protcol from a zone in permanent configuration
 func (c *Conn) RemoveProtocolPermanent(zone string, protocol string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -393,7 +393,7 @@ func (c *Conn) RemoveProtocolPermanent(zone string, protocol string) (string, er
 	return r, nil
 }
 
-//AddInterface Add a interface to a zone in runtime configuration
+// AddInterface Add a interface to a zone in runtime configuration
 func (c *Conn) AddInterface(zone string, intf string) (string, error) {
 	var r string
 	var err error
@@ -406,7 +406,7 @@ func (c *Conn) AddInterface(zone string, intf string) (string, error) {
 	return r, nil
 }
 
-//RemoveInterface Remove a interface from a zone in runtime configuration
+// RemoveInterface Remove a interface from a zone in runtime configuration
 func (c *Conn) RemoveInterface(zone string, intf string) (string, error) {
 	var r string
 
@@ -418,7 +418,7 @@ func (c *Conn) RemoveInterface(zone string, intf string) (string, error) {
 	return r, nil
 }
 
-//AddInterfacePermanent Add a interface to a zone in permanent configuration
+// AddInterfacePermanent Add a interface to a zone in permanent configuration
 func (c *Conn) AddInterfacePermanent(zone string, intf string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {
@@ -434,7 +434,7 @@ func (c *Conn) AddInterfacePermanent(zone string, intf string) (string, error) {
 	return r, nil
 }
 
-//RemoveInterfacePermanent Remove a interface from a zone in permanent configuration
+// RemoveInterfacePermanent Remove a interface from a zone in permanent configuration
 func (c *Conn) RemoveInterfacePermanent(zone string, intf string) (string, error) {
 	r, err := c.getZonePathbyName(zone)
 	if err != nil {

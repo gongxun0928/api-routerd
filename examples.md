@@ -444,6 +444,19 @@ Kind=veth
 Name=test
 ```
 
+
+networkctl
+```sh
+
+$ curl --header "X-Session-Tocurl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/network/networkd/networkctl
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/network/networkd/networkctl/lldp
+[{"link":"veth0","chassis_id":"d8dad9bbe6fc4eb6…","system":"Zeus","capability":".......a...","port":"veth-peer","port_description":"n/a"},{"link":"","chassis_id":"","system":"","capability":"","port":"","port_description":""}]
+
+$ curl --header "X-Session-Token: secret" --request GET http://localhost:17999/api/network/networkd/networkctl/status/veth0
+{"link":"veth0","index":"● 10","link_file":"/usr/lib/systemd/network/99-default.link","network_file":"/usr/lib/systemd/network/veth0.network","type":"ether","state":"routable (configured)","driver":"veth","hw_address":"26:03:e0:ab:be:8e","address":["10.65.208.212","192.168.225.43","fe80::2403:e0ff:feab:be8e"],"connected_to":["Zeus on port veth-peer"]}
+
+```
+
 ##### Hostname
 
 Example: Get and Set Hostname

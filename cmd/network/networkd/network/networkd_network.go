@@ -551,8 +551,8 @@ func (network *Network) createDHCPSectionConfig() string {
 	return dhcpConf
 }
 
-//CreateNetworkSectionConfig generate config
-func (network *Network) CreateNetworkSectionConfig() string {
+// createNetworkSectionConfig generate config
+func (network *Network) createNetworkSectionConfig() string {
 	conf := "[Network]\n"
 
 	if network.DHCP != "" {
@@ -706,7 +706,7 @@ func parseJSONfromHTTPReq(req *http.Request) error {
 	json.Unmarshal([]byte(body), &network)
 
 	matchConfig := network.createMatchSectionConfig()
-	networkConfig := network.CreateNetworkSectionConfig()
+	networkConfig := network.createNetworkSectionConfig()
 	addressConfig := network.createAddressSectionConfig()
 	routeConfig := network.createRouteSectionConfig()
 	ruleConfig := network.createRoutingPolicyRuleSectionConfig()
