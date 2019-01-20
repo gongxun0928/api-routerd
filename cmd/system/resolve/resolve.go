@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package resolved
+package resolve
 
 import (
 	"bufio"
@@ -21,7 +21,7 @@ const (
 	resolvedConfPath = "/etc/systemd/resolved.conf"
 )
 
-//DNSConfig Json request and response
+// DNSConfig Json request and response
 type DNSConfig struct {
 	DNS         []string `json:"dns"`
 	FallbackDNS []string `json:"fallback_dns"`
@@ -73,7 +73,7 @@ func readConf() (*DNSConfig, error) {
 	return conf, nil
 }
 
-//GetConf read conf and send response
+// GetConf read conf and send response
 func GetConf(rw http.ResponseWriter) error {
 	conf, err := readConf()
 	if err != nil {
@@ -83,7 +83,7 @@ func GetConf(rw http.ResponseWriter) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//UpdateConf update conf
+// UpdateConf update conf
 func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		DNS:         []string{""},
@@ -133,7 +133,7 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//DeleteConf remove conf from file
+// DeleteConf remove conf from file
 func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		DNS:         []string{""},

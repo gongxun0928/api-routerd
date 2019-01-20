@@ -12,14 +12,14 @@ const (
 	networkdUnitPath = "/etc/systemd/network"
 )
 
-//Match section
+// Match section
 type Match struct {
 	MAC    string `json:"MAC"`
 	Driver string `json:"Driver"`
 	Name   string `json:"Name"`
 }
 
-//InitNetworkd init networkd module
+// InitNetworkd init networkd module
 func InitNetworkd() error {
 	err := share.CreateDirectory(networkdUnitPath, 0777)
 	if err != nil {

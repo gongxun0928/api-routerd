@@ -15,7 +15,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//Unit JSON message
+// Unit JSON message
 type Unit struct {
 	Action   string `json:"action"`
 	Unit     string `json:"unit"`
@@ -24,19 +24,19 @@ type Unit struct {
 	Value    string `json:"value"`
 }
 
-//Property generic property and value
+// Property generic property and value
 type Property struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
-//UnitStatus unit status
+// UnitStatus unit status
 type UnitStatus struct {
 	Status string `json:"property"`
 	Unit   string `json:"unit"`
 }
 
-//State sytemd state
+// State sytemd state
 func State(w http.ResponseWriter) error {
 	v, err := getProperty("SystemState")
 	if err != nil {
@@ -51,7 +51,7 @@ func State(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//Version systemd version
+// Version systemd version
 func Version(w http.ResponseWriter) error {
 	v, err := getProperty("Version")
 	if err != nil {
@@ -66,7 +66,7 @@ func Version(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//Virtualization systemd virt
+// Virtualization systemd virt
 func Virtualization(w http.ResponseWriter) error {
 	v, err := getProperty("Virtualization")
 	if err != nil {
@@ -81,7 +81,7 @@ func Virtualization(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//Architecture arch of the system
+// Architecture arch of the system
 func Architecture(w http.ResponseWriter) error {
 	v, err := getProperty("Architecture")
 	if err != nil {
@@ -96,7 +96,7 @@ func Architecture(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//Features systemd features
+// Features systemd features
 func Features(w http.ResponseWriter) error {
 	v, err := getProperty("Features")
 	if err != nil {
@@ -111,7 +111,7 @@ func Features(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//NFailedUnits how many uniuts failed
+// NFailedUnits how many uniuts failed
 func NFailedUnits(w http.ResponseWriter) error {
 	v, err := getProperty("NFailedUnits")
 	if err != nil {
@@ -126,7 +126,7 @@ func NFailedUnits(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//NNames number of names
+// NNames number of names
 func NNames(w http.ResponseWriter) error {
 	v, err := getProperty("NNames")
 	if err != nil {
@@ -141,7 +141,7 @@ func NNames(w http.ResponseWriter) error {
 	return share.JSONResponse(prop, w)
 }
 
-//ListUnits list all units
+// ListUnits list all units
 func ListUnits(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -159,7 +159,7 @@ func ListUnits(w http.ResponseWriter) error {
 	return share.JSONResponse(units, w)
 }
 
-//StartUnit start a unit
+// StartUnit start a unit
 func (u *Unit) StartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -178,7 +178,7 @@ func (u *Unit) StartUnit() error {
 	return nil
 }
 
-//StopUnit stop a unit
+// StopUnit stop a unit
 func (u *Unit) StopUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -197,7 +197,7 @@ func (u *Unit) StopUnit() error {
 	return nil
 }
 
-//RestartUnit restart a unit
+// RestartUnit restart a unit
 func (u *Unit) RestartUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -216,7 +216,7 @@ func (u *Unit) RestartUnit() error {
 	return nil
 }
 
-//ReloadUnit reload daemon
+// ReloadUnit reload daemon
 func (u *Unit) ReloadUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -234,7 +234,7 @@ func (u *Unit) ReloadUnit() error {
 	return nil
 }
 
-//KillUnit send a signal to a unit
+// KillUnit send a signal to a unit
 func (u *Unit) KillUnit() error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -254,7 +254,7 @@ func (u *Unit) KillUnit() error {
 	return nil
 }
 
-//GetUnitStatus get unit status
+// GetUnitStatus get unit status
 func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -279,7 +279,7 @@ func (u *Unit) GetUnitStatus(w http.ResponseWriter) error {
 	return nil
 }
 
-//GetUnitProperty get unit property
+// GetUnitProperty get unit property
 func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -313,7 +313,7 @@ func (u *Unit) GetUnitProperty(w http.ResponseWriter) error {
 	return share.JSONResponse(p, w)
 }
 
-//SetUnitProperty sets a unit property
+// SetUnitProperty sets a unit property
 func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {
@@ -345,7 +345,7 @@ func (u *Unit) SetUnitProperty(w http.ResponseWriter) error {
 	return nil
 }
 
-//GetUnitTypeProperty get unit type property
+// GetUnitTypeProperty get unit type property
 func (u *Unit) GetUnitTypeProperty(w http.ResponseWriter) error {
 	conn, err := sd.NewSystemdConnection()
 	if err != nil {

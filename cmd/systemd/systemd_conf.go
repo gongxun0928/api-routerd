@@ -122,7 +122,7 @@ func GetSystemConf(rw http.ResponseWriter) error {
 	return share.JSONResponse(systemConfig, rw)
 }
 
-//UpdateSystemConf update the system.conf
+// UpdateSystemConf update the system.conf
 func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

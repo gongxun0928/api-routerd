@@ -231,7 +231,7 @@ func routerGetUnitTypeProperty(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterSystemd register with mux
+// RegisterRouterSystemd register with mux
 func RegisterRouterSystemd(router *mux.Router) {
 	n := router.PathPrefix("/service").Subrouter()
 

@@ -11,7 +11,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//Firewall Json request
+// Firewall Json request
 type Firewall struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
@@ -25,7 +25,7 @@ type Firewall struct {
 
 var firewalldMethods *share.Set
 
-//GetFirewalld wraps all FW get commands
+// GetFirewalld wraps all FW get commands
 func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -117,7 +117,7 @@ func (f *Firewall) GetFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
-//AddFirewalld wrap all firewalld add
+// AddFirewalld wrap all firewalld add
 func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -180,7 +180,7 @@ func (f *Firewall) AddFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
-//DeleteFirewalld wrap all delete commands
+// DeleteFirewalld wrap all delete commands
 func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 	c, err := NewConn()
 	if err != nil {
@@ -243,7 +243,7 @@ func (f *Firewall) DeleteFirewalld(rw http.ResponseWriter) error {
 	return nil
 }
 
-//Init Init the FW module
+// Init Init the FW module
 func Init() error {
 	firewalldMethods = share.NewSet()
 

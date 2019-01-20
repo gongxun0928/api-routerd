@@ -11,7 +11,7 @@ import (
 	"github.com/coreos/go-systemd/machine1"
 )
 
-//Machine Json request
+// Machine Json request
 type Machine struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
@@ -22,7 +22,7 @@ type Machine struct {
 
 var machineMethods *share.Set
 
-//MethodGet retrives info from machined via dbus
+// MethodGet retrives info from machined via dbus
 func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 	c, err := machine1.New()
 	if err != nil {
@@ -104,7 +104,7 @@ func (m *Machine) MethodGet(rw http.ResponseWriter) error {
 	return nil
 }
 
-//MethodConfigure Post methods
+// MethodConfigure Post methods
 func (m *Machine) MethodConfigure(rw http.ResponseWriter) error {
 	c, err := machine1.New()
 	if err != nil {
@@ -150,7 +150,7 @@ func (m *Machine) MethodConfigure(rw http.ResponseWriter) error {
 	return nil
 }
 
-//InitMachine init machine package
+// InitMachine init machine package
 func InitMachine() error {
 	machineMethods = share.NewSet()
 

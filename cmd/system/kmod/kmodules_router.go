@@ -64,7 +64,7 @@ func routerRmMod(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-//RegisterRouterKMod register with mux
+// RegisterRouterKMod register with mux
 func RegisterRouterKMod(router *mux.Router) {
 	s := router.PathPrefix("/kmod").Subrouter().StrictSlash(false)
 

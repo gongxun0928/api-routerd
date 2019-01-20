@@ -62,7 +62,7 @@ func routerConfigureFirewalld(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterFirewalld register with mux
+// RegisterRouterFirewalld register with mux
 func RegisterRouterFirewalld(router *mux.Router) {
 	f := router.PathPrefix("/firewalld").Subrouter().StrictSlash(false)
 

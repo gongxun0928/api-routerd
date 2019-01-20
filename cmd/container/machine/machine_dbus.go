@@ -14,13 +14,13 @@ const (
 	dbusPath      = "/org/freedesktop/machine1"
 )
 
-//Conn connection object
+// Conn connection object
 type Conn struct {
 	conn   *dbus.Conn
 	object dbus.BusObject
 }
 
-//NewConn opens a new dbus connection
+// NewConn opens a new dbus connection
 func NewConn() (*Conn, error) {
 	c := new(Conn)
 
@@ -35,12 +35,12 @@ func NewConn() (*Conn, error) {
 	return c, nil
 }
 
-//Close close a dbus connection
+// Close close a dbus connection
 func (c *Conn) Close() {
 	c.conn.Close()
 }
 
-//GetMachineOSRelease retrive the OSRelease info
+// GetMachineOSRelease retrive the OSRelease info
 func GetMachineOSRelease(machine string) (dbus.ObjectPath, error) {
 	conn, err := NewConn()
 	if err != nil {
@@ -62,7 +62,7 @@ func GetMachineOSRelease(machine string) (dbus.ObjectPath, error) {
 	return path, nil
 }
 
-//CloneImage clones a image
+// CloneImage clones a image
 func CloneImage(image string, newImage string) error {
 	conn, err := NewConn()
 	if err != nil {
@@ -79,7 +79,7 @@ func CloneImage(image string, newImage string) error {
 	return nil
 }
 
-//RenameImage rename a image
+// RenameImage rename a image
 func RenameImage(image string, newImage string) error {
 	conn, err := NewConn()
 	if err != nil {
@@ -96,7 +96,7 @@ func RenameImage(image string, newImage string) error {
 	return nil
 }
 
-//RemoveImage remove a image
+// RemoveImage remove a image
 func RemoveImage(image string) error {
 	conn, err := NewConn()
 	if err != nil {

@@ -20,7 +20,7 @@ const (
 	resolvConfPath = "/etc/resolv.conf"
 )
 
-//DNSConfig Json Request
+// DNSConfig Json Request
 type DNSConfig struct {
 	Servers []string `json:"servers"`
 	Search  []string `json:"search"`
@@ -89,7 +89,7 @@ func readConf() (*DNSConfig, error) {
 	return conf, nil
 }
 
-//GetConf read resolv.conf and send response
+// GetConf read resolv.conf and send response
 func GetConf(rw http.ResponseWriter) error {
 	conf, err := readConf()
 	if err != nil {
@@ -99,7 +99,7 @@ func GetConf(rw http.ResponseWriter) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//UpdateConf update resolv.conf
+// UpdateConf update resolv.conf
 func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		Servers: []string{""},
@@ -149,7 +149,7 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//DeleteConf delete conf from file
+// DeleteConf delete conf from file
 func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	dns := DNSConfig{
 		Servers: []string{""},

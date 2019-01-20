@@ -29,7 +29,7 @@ func routerSayHello(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-//RegisterRouterSayHello register with mux
+// RegisterRouterSayHello register with mux
 func RegisterRouterSayHello(router *mux.Router) {
 	s := router.PathPrefix("/hello").Subrouter().StrictSlash(false)
 

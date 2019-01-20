@@ -12,18 +12,18 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//KMod Json commanfs
+// KMod Json commanfs
 type KMod struct {
 	Name string `json:"name"`
 	Args string `json:"args"`
 }
 
-//LsMod list all modules
+// LsMod list all modules
 func LsMod(w http.ResponseWriter) error {
 	return proc.GetModules(w)
 }
 
-//ModProbe Insert a module
+// ModProbe Insert a module
 func (r *KMod) ModProbe() error {
 	err := share.CheckBinaryExists("modprobe")
 	if err != nil {
@@ -45,7 +45,7 @@ func (r *KMod) ModProbe() error {
 	return nil
 }
 
-//RmMod remove a module
+// RmMod remove a module
 func (r *KMod) RmMod() error {
 	err := share.CheckBinaryExists("rmmod")
 	if err != nil {

@@ -90,7 +90,7 @@ func readConf() error {
 	return nil
 }
 
-//GetConf Read and send journal conf
+// GetConf Read and send journal conf
 func GetConf(rw http.ResponseWriter) error {
 	err := readConf()
 	if err != nil {
@@ -100,7 +100,7 @@ func GetConf(rw http.ResponseWriter) error {
 	return share.JSONResponse(journalConfig, rw)
 }
 
-//UpdateConf update the journal conf
+// UpdateConf update the journal conf
 func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {

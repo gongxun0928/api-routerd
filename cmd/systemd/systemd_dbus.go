@@ -16,7 +16,7 @@ const (
 	dbusPath      = "/org/freedesktop/systemd1"
 )
 
-//getProperty Retrive property from systemd
+// getProperty Retrive property from systemd
 func getProperty(property string) (dbus.Variant, error) {
 	conn, err := share.GetSystemBusPrivateConn()
 	if err != nil {

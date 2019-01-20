@@ -1,4 +1,4 @@
-package timesyncd
+package timesync
 
 import (
 	"bufio"
