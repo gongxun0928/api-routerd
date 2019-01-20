@@ -26,7 +26,7 @@ const (
 	procModulesPath = "/proc/modules"
 )
 
-//NetARP Json response
+// NetARP Json response
 type NetARP struct {
 	IPAddress string `json:"ip_address"`
 	HWType    string `json:"hw_type"`
@@ -36,7 +36,7 @@ type NetARP struct {
 	Device    string `json:"device"`
 }
 
-//Modules Json response
+// Modules Json response
 type Modules struct {
 	Module     string `json:"module"`
 	MemorySize string `json:"memory_size"`
@@ -45,7 +45,7 @@ type Modules struct {
 	State      string `json:"state"`
 }
 
-//GetVersion get system version
+// GetVersion get system version
 func GetVersion(rw http.ResponseWriter) error {
 	infostat, err := host.Info()
 	if err != nil {
@@ -55,7 +55,7 @@ func GetVersion(rw http.ResponseWriter) error {
 	return share.JSONResponse(infostat, rw)
 }
 
-//GetPlatformInformation read platform info
+// GetPlatformInformation read platform info
 func GetPlatformInformation(rw http.ResponseWriter) error {
 	platform, family, version, err := host.PlatformInformation()
 	if err != nil {
@@ -75,7 +75,7 @@ func GetPlatformInformation(rw http.ResponseWriter) error {
 	return share.JSONResponse(p, rw)
 }
 
-//GetVirtualization read virt info
+// GetVirtualization read virt info
 func GetVirtualization(rw http.ResponseWriter) error {
 	system, role, err := host.Virtualization()
 	if err != nil {
@@ -93,7 +93,7 @@ func GetVirtualization(rw http.ResponseWriter) error {
 	return share.JSONResponse(v, rw)
 }
 
-//GetUserStat active users
+// GetUserStat active users
 func GetUserStat(rw http.ResponseWriter) error {
 	userstat, err := host.Users()
 	if err != nil {
@@ -103,7 +103,7 @@ func GetUserStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(userstat, rw)
 }
 
-//GetTemperatureStat read temp of HW
+// GetTemperatureStat read temp of HW
 func GetTemperatureStat(rw http.ResponseWriter) error {
 	tempstat, err := host.SensorsTemperatures()
 	if err != nil {
@@ -113,7 +113,7 @@ func GetTemperatureStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(tempstat, rw)
 }
 
-//GetNetStat read netstat from proc tcp/udp/sctp
+// GetNetStat read netstat from proc tcp/udp/sctp
 func GetNetStat(rw http.ResponseWriter, protocol string) error {
 	conn, err := net.Connections(protocol)
 	if err != nil {
@@ -123,7 +123,7 @@ func GetNetStat(rw http.ResponseWriter, protocol string) error {
 	return share.JSONResponse(conn, rw)
 }
 
-//GetNetStatPid connection by the pid
+// GetNetStatPid connection by the pid
 func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) error {
 	pid, err := strconv.ParseInt(process, 10, 32)
 	if err != nil || protocol == "" || pid == 0 {
@@ -138,7 +138,7 @@ func GetNetStatPid(rw http.ResponseWriter, protocol string, process string) erro
 	return share.JSONResponse(conn, rw)
 }
 
-//GetProtoCountersStat protocol specific statitics
+// GetProtoCountersStat protocol specific statitics
 func GetProtoCountersStat(rw http.ResponseWriter) error {
 	protocols := []string{"ip", "icmp", "icmpmsg", "tcp", "udp", "udplite"}
 
@@ -150,7 +150,7 @@ func GetProtoCountersStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(proto, rw)
 }
 
-//GetNetDev network device stat
+// GetNetDev network device stat
 func GetNetDev(rw http.ResponseWriter) error {
 	netdev, err := net.IOCounters(true)
 	if err != nil {
@@ -160,7 +160,7 @@ func GetNetDev(rw http.ResponseWriter) error {
 	return share.JSONResponse(netdev, rw)
 }
 
-//GetInterfaceStat network interface stat
+// GetInterfaceStat network interface stat
 func GetInterfaceStat(rw http.ResponseWriter) error {
 	interfaces, err := net.Interfaces()
 	if err != nil {
@@ -170,7 +170,7 @@ func GetInterfaceStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(interfaces, rw)
 }
 
-//GetSwapMemoryStat swap memory info
+// GetSwapMemoryStat swap memory info
 func GetSwapMemoryStat(rw http.ResponseWriter) error {
 	swap, err := mem.SwapMemory()
 	if err != nil {
@@ -180,7 +180,7 @@ func GetSwapMemoryStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(swap, rw)
 }
 
-//GetVirtualMemoryStat VM information
+// GetVirtualMemoryStat VM information
 func GetVirtualMemoryStat(rw http.ResponseWriter) error {
 	virt, err := mem.VirtualMemory()
 	if err != nil {
@@ -190,7 +190,7 @@ func GetVirtualMemoryStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(virt, rw)
 }
 
-//GetCPUInfo CPU info
+// GetCPUInfo CPU info
 func GetCPUInfo(rw http.ResponseWriter) error {
 	cpus, err := cpu.Info()
 	if err != nil {
@@ -200,7 +200,7 @@ func GetCPUInfo(rw http.ResponseWriter) error {
 	return share.JSONResponse(cpus, rw)
 }
 
-//GetCPUTimeStat read CPU time
+// GetCPUTimeStat read CPU time
 func GetCPUTimeStat(rw http.ResponseWriter) error {
 	cpus, err := cpu.Times(true)
 	if err != nil {
@@ -210,7 +210,7 @@ func GetCPUTimeStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(cpus, rw)
 }
 
-//GetAvgStat read avg stat
+// GetAvgStat read avg stat
 func GetAvgStat(rw http.ResponseWriter) error {
 	avgstat, r := load.Avg()
 	if r != nil {
@@ -220,7 +220,7 @@ func GetAvgStat(rw http.ResponseWriter) error {
 	return share.JSONResponse(avgstat, rw)
 }
 
-//GetPartitions read all partitions
+// GetPartitions read all partitions
 func GetPartitions(rw http.ResponseWriter) error {
 	p, r := disk.Partitions(true)
 	if r != nil {
@@ -230,7 +230,7 @@ func GetPartitions(rw http.ResponseWriter) error {
 	return share.JSONResponse(p, rw)
 }
 
-//GetIOCounters read IO counters
+// GetIOCounters read IO counters
 func GetIOCounters(rw http.ResponseWriter) error {
 	i, r := disk.IOCounters()
 	if r != nil {
@@ -240,7 +240,7 @@ func GetIOCounters(rw http.ResponseWriter) error {
 	return share.JSONResponse(i, rw)
 }
 
-//GetDiskUsage read disk usage
+// GetDiskUsage read disk usage
 func GetDiskUsage(rw http.ResponseWriter) error {
 	u, r := disk.Usage("/")
 	if r != nil {
@@ -250,7 +250,7 @@ func GetDiskUsage(rw http.ResponseWriter) error {
 	return share.JSONResponse(u, rw)
 }
 
-//GetMisc read /proc/misc
+// GetMisc read /proc/misc
 func GetMisc(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(procMiscPath)
 	if err != nil {
@@ -272,7 +272,7 @@ func GetMisc(rw http.ResponseWriter) error {
 	return share.JSONResponse(miscMap, rw)
 }
 
-//GetNetArp get ARP info
+// GetNetArp get ARP info
 func GetNetArp(rw http.ResponseWriter) error {
 	lines, err := share.ReadFullFile(procNetArpPath)
 	if err != nil {
@@ -341,7 +341,7 @@ func GetModules(rw http.ResponseWriter) error {
 	return share.JSONResponse(modules, rw)
 }
 
-//GetProcessInfo get process information from proc
+// GetProcessInfo get process information from proc
 func GetProcessInfo(rw http.ResponseWriter, proc string, property string) error {
 	pid, err := strconv.ParseInt(proc, 10, 32)
 	if err != nil {

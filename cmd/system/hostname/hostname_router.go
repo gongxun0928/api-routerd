@@ -51,9 +51,10 @@ func routerSetHostname(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterHostname registers with mux
+// RegisterRouterHostname registers with mux
 func RegisterRouterHostname(router *mux.Router) {
 	s := router.PathPrefix("/hostname").Subrouter().StrictSlash(false)
+
 	s.HandleFunc("", routerGetHostname)
 	s.HandleFunc("/get/{property}", routerGetHostname)
 	s.HandleFunc("/set", routerSetHostname)

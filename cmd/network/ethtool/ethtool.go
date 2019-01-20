@@ -13,7 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//Ethtool JSON message
+// Ethtool JSON message
 type Ethtool struct {
 	Action   string `json:"action"`
 	Link     string `json:"link"`
@@ -21,7 +21,7 @@ type Ethtool struct {
 	Value    string `json:"Value"`
 }
 
-//GetEthTool collect info via ethtool ioctl
+// GetEthTool collect info via ethtool ioctl
 func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	link := share.LinkExists(r.Link)
 	if !link {
@@ -170,7 +170,7 @@ func (r *Ethtool) GetEthTool(rw http.ResponseWriter) error {
 	return nil
 }
 
-//SetEthTool set ethtool info
+// SetEthTool set ethtool info
 func (r *Ethtool) SetEthTool(rw http.ResponseWriter) error {
 	link := share.LinkExists(r.Link)
 	if !link {

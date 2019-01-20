@@ -19,7 +19,7 @@ const (
 	networkdUnitPath = "/etc/systemd/network"
 )
 
-//NetDev JSON message
+// NetDev JSON message
 type NetDev struct {
 	Description string `json:"Description"`
 	MACAddress  string `json:"MACAddress"`
@@ -174,7 +174,7 @@ func (netdev *NetDev) createVxLanSectionConfig() string {
 	return conf
 }
 
-//CreateNetDevSectionConfig generate netdev config
+// CreateNetDevSectionConfig generate netdev config
 func (netdev *NetDev) CreateNetDevSectionConfig() string {
 	conf := "[NetDev]\n"
 

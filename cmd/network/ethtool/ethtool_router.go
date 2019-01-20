@@ -47,8 +47,9 @@ func routerConfigureEthtool(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterEthtool register with mux
+// RegisterRouterEthtool register with mux
 func RegisterRouterEthtool(n *mux.Router) {
 	e := n.PathPrefix("/ethtool").Subrouter().StrictSlash(false)
+
 	e.HandleFunc("/{link}/{command}", routerConfigureEthtool)
 }

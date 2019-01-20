@@ -737,3 +737,12 @@ $ curl --header "X-Session-Token: secret" --request POST --data '{"permanent": t
 $ curl --header "X-Session-Token: secret" --request DELETE --data '{"permanent": true, "zone":"public","port":"100", "protocol":"tcp"}' http://localhost:17999/api/system/firewalld/delete/remove-port
 
 ```
+
+timedate
+```sh
+
+% curl --request GET --header "X-Session-Token: secret" http://localhost:17999/api/system/timedate                                                                                          ~
+{"CanNTP":"true","LocalRTC":"false","NTP":"false","NTPSynchronized":"true","RTCTimeUSec":"1970-01-19 03:29:53.83 +0530 IST","TimeUSec":"1970-01-19 03:29:53.830328922 +0530 IST","Timezone":"A
+% curl --request PUT --data '{"property":"SetNTP","value":"false"}' --header "X-Session-Token: secret" http://localhost:17999/api/system/timedate/set
+
+```

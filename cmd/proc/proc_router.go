@@ -9,7 +9,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-//Info Json request
+// Info Json request
 type Info struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
@@ -23,7 +23,6 @@ func routerGetProcNetDev(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -34,7 +33,6 @@ func routerGetProcVersion(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -45,7 +43,6 @@ func routerGetProcPlatformInformation(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -56,7 +53,6 @@ func routerGetProcVirtualization(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -67,7 +63,6 @@ func routerGetProcUserStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -78,7 +73,6 @@ func routerGetProcTemperatureStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -92,7 +86,6 @@ func routerGetProcNetStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -107,7 +100,6 @@ func routerGetProcPidNetStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -129,7 +121,6 @@ func routerGetProcProtoCountersStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -140,7 +131,6 @@ func routerGetProcGetSwapMemoryStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -151,7 +141,6 @@ func routerGetProcVirtualMemoryStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -162,7 +151,6 @@ func routerGetProcCPUInfo(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -173,7 +161,6 @@ func routerGetProcCPUTimeStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -184,7 +171,6 @@ func routerGetProcAvgStat(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -192,7 +178,9 @@ func configureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 	var err error
 
 	vars := mux.Vars(r)
-	vm := VM{Property: vars["path"]}
+	vm := VM{
+		Property: vars["path"],
+	}
 
 	switch r.Method {
 	case "GET":
@@ -210,7 +198,6 @@ func configureProcSysVM(rw http.ResponseWriter, r *http.Request) {
 
 		vm.Value = v.Value
 		err = vm.SetVM(rw)
-		break
 	}
 
 	if err != nil {
@@ -254,7 +241,6 @@ func routerGetProcMisc(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -265,7 +251,6 @@ func routerGetProcNetArp(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -276,7 +261,6 @@ func routerGetProcModules(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -292,7 +276,6 @@ func routerGetProcProcess(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
@@ -326,7 +309,7 @@ func routerGetDiskUsage(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterProc register with mux
+// RegisterRouterProc register with mux
 func RegisterRouterProc(router *mux.Router) {
 	n := router.PathPrefix("/proc").Subrouter().StrictSlash(false)
 

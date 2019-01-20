@@ -4,7 +4,6 @@ package timedate
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -26,8 +25,6 @@ func routerGetTimeDate(rw http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-
-		break
 	}
 }
 
@@ -42,19 +39,18 @@ func routerSetTimeDate(rw http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		fmt.Println(timedate)
 		err = timedate.SetTimeDate()
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 		}
-		break
 	}
 }
 
-//RegisterRouterTimeDate register with mux
+// RegisterRouterTimeDate register with mux
 func RegisterRouterTimeDate(router *mux.Router) {
-	s := router.PathPrefix("/timedate").Subrouter().StrictSlash(false)
-	s.HandleFunc("", routerGetTimeDate)
-	s.HandleFunc("/get/{property}", routerGetTimeDate)
-	s.HandleFunc("/set", routerSetTimeDate)
+	t := router.PathPrefix("/timedate").Subrouter().StrictSlash(false)
+
+	t.HandleFunc("", routerGetTimeDate)
+	t.HandleFunc("/get/{property}", routerGetTimeDate)
+	t.HandleFunc("/set", routerSetTimeDate)
 }

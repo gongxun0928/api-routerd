@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
-package hostname
+package timedate
 
 import (
 	"fmt"
@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	dbusInterface = "org.freedesktop.hostname1"
-	dbusPath      = "/org/freedesktop/hostname1"
+	dbusInterface = "org.freedesktop.timedate1"
+	dbusPath      = "/org/freedesktop/timedate1"
 )
 
 // Conn dbus connection
@@ -41,27 +41,30 @@ func (c *Conn) Close() {
 	c.conn.Close()
 }
 
-// SetHostName set hostname properties
-func (c *Conn) SetHostName(property string, value string) error {
-	err := c.object.Call(dbusInterface+"."+property, 0, value, false).Err
-	if err != nil {
-		return fmt.Errorf("Failed to set hostname: %v", err)
+// SetTimeDate set timdate properties
+func (c *Conn) SetTimeDate(property string, value string) error {
+	var err error
+
+	if property == "SetNTP" {
+		b, err := share.ParseBool(value)
+		if err != nil {
+			return err
+		}
+
+		err = c.object.Call(dbusInterface+"."+property, 0, b, false).Err
+	} else {
+		err = c.object.Call(dbusInterface+"."+property, 0, value, false).Err
 	}
 
-	return nil
+	return err
 }
 
-// GetHostName get hostname properties
-func (c *Conn) GetHostName(property string) (string, error) {
+// GetTimeDate get timedate properties
+func (c *Conn) GetTimeDate(property string) (dbus.Variant, error) {
 	p, err := c.object.GetProperty(dbusInterface + "." + property)
 	if err != nil {
-		return "", err
+		return dbus.Variant{}, err
 	}
 
-	v, b := p.Value().(string)
-	if !b {
-		return "", fmt.Errorf("Empty value received: %s", property)
-	}
-
-	return v, nil
+	return p, nil
 }
