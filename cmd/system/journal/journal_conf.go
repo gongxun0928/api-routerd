@@ -20,37 +20,7 @@ const (
 	journalConfPath = "/etc/systemd/journald.conf"
 )
 
-var journalConfig = map[string]string{
-	"Storage":              "",
-	"Compress":             "",
-	"Seal":                 "",
-	"SplitMode":            "",
-	"SyncIntervalSec":      "",
-	"RateLimitIntervalSec": "",
-	"RateLimitBurst":       "",
-	"SystemMaxUse":         "",
-	"SystemKeepFree":       "",
-	"SystemMaxFileSize":    "",
-	"SystemMaxFiles":       "",
-	"RuntimeMaxUse":        "",
-	"RuntimeKeepFree":      "",
-	"RuntimeMaxFileSize":   "",
-	"RuntimeMaxFiles":      "",
-	"MaxRetentionSec":      "",
-	"MaxFileSec":           "",
-	"ForwardToSyslog":      "",
-	"ForwardToKMsg":        "",
-	"ForwardToConsole":     "",
-	"ForwardToWall":        "",
-	"TTYPath":              "",
-	"MaxLevelStore":        "",
-	"MaxLevelSyslog":       "",
-	"MaxLevelKMsg":         "",
-	"MaxLevelConsole":      "",
-	"MaxLevelWall":         "",
-	"LineMax":              "",
-	"ReadKMsg":             "",
-}
+var journalConfig = map[string]string{}
 
 func writeConfig() error {
 	f, err := os.OpenFile(journalConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
@@ -134,4 +104,37 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	}
 
 	return share.JSONResponse(journalConfig, rw)
+}
+
+// InitJournalConf Init Journal configuration
+func InitJournalConf() {
+	journalConfig["Storage"] = ""
+	journalConfig["Compress"] = ""
+	journalConfig["Seal"] = ""
+	journalConfig["SplitMode"] = ""
+	journalConfig["SyncIntervalSec"] = ""
+	journalConfig["RateLimitIntervalSec"] = ""
+	journalConfig["RateLimitBurst"] = ""
+	journalConfig["SystemMaxUse"] = ""
+	journalConfig["SystemKeepFree"] = ""
+	journalConfig["SystemMaxFileSize"] = ""
+	journalConfig["SystemMaxFiles"] = ""
+	journalConfig["RuntimeMaxUse"] = ""
+	journalConfig["RuntimeKeepFree"] = ""
+	journalConfig["RuntimeMaxFileSize"] = ""
+	journalConfig["RuntimeMaxFiles"] = ""
+	journalConfig["MaxRetentionSec"] = ""
+	journalConfig["MaxFileSec"] = ""
+	journalConfig["ForwardToSyslog"] = ""
+	journalConfig["ForwardToKMsg"] = ""
+	journalConfig["ForwardToConsole"] = ""
+	journalConfig["ForwardToWall"] = ""
+	journalConfig["TTYPath"] = ""
+	journalConfig["MaxLevelStore"] = ""
+	journalConfig["MaxLevelSyslog"] = ""
+	journalConfig["MaxLevelKMsg"] = ""
+	journalConfig["MaxLevelConsole"] = ""
+	journalConfig["MaxLevelWall"] = ""
+	journalConfig["LineMax"] = ""
+	journalConfig["ReadKMsg"] = ""
 }

@@ -19,7 +19,7 @@ const (
 	timeSyncdConfPath = "/etc/systemd/timesyncd.conf"
 )
 
-//TimeSyncConfig Json request
+// TimeSyncConfig Json request
 type TimeSyncConfig struct {
 	NTP                []string `json:"NTP"`
 	FallbackNTP        []string `json:"FallbackNTP"`
@@ -86,7 +86,7 @@ func readConf() (*TimeSyncConfig, error) {
 	return conf, nil
 }
 
-//GetConf read from file and send response
+// GetConf read from file and send response
 func GetConf(rw http.ResponseWriter) error {
 	conf, err := readConf()
 	if err != nil {
@@ -96,7 +96,7 @@ func GetConf(rw http.ResponseWriter) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//UpdateConf update timesync conf
+// UpdateConf update timesync conf
 func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
 		NTP:         []string{""},
@@ -158,7 +158,7 @@ func UpdateConf(rw http.ResponseWriter, r *http.Request) error {
 	return share.JSONResponse(conf, rw)
 }
 
-//DeleteConf remove conf from file
+// DeleteConf remove conf from file
 func DeleteConf(rw http.ResponseWriter, r *http.Request) error {
 	t := TimeSyncConfig{
 		NTP:         []string{""},

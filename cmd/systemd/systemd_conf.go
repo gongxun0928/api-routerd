@@ -20,59 +20,7 @@ const (
 	systemConfPath = "/etc/systemd/system.conf"
 )
 
-var systemConfig = map[string]string{
-	"LogLevel":                     "",
-	"LogTarget":                    "",
-	"LogColor":                     "",
-	"LogLocation":                  "",
-	"DumpCore":                     "",
-	"ShowStatus":                   "",
-	"CrashChangeVT":                "",
-	"CrashShell":                   "",
-	"CrashReboot":                  "",
-	"CtrlAltDelBurstAction":        "",
-	"CPUAffinity":                  "",
-	"JoinControllers":              "",
-	"RuntimeWatchdogSec":           "",
-	"ShutdownWatchdogSec":          "",
-	"CapabilityBoundingSe":         "",
-	"SystemCallArchitectures":      "",
-	"TimerSlackNSec":               "",
-	"DefaultTimerAccuracySec":      "",
-	"DefaultStandardOutput":        "",
-	"DefaultStandardError":         "",
-	"DefaultTimeoutStartSec":       "",
-	"DefaultTimeoutStopSec":        "",
-	"DefaultRestartSec":            "",
-	"DefaultStartLimitIntervalSec": "",
-	"DefaultStartLimitBurst":       "",
-	"DefaultEnvironment":           "",
-	"DefaultCPUAccounting":         "",
-	"DefaultIOAccounting":          "",
-	"DefaultIPAccounting":          "",
-	"DefaultBlockIOAccounting":     "",
-	"DefaultMemoryAccounting":      "",
-	"DefaultTasksAccounting":       "",
-	"DefaultTasksMax":              "",
-	"DefaultLimitCPU":              "",
-	"DefaultLimitFSIZE":            "",
-	"DefaultLimitDATA":             "",
-	"DefaultLimitSTACK":            "",
-	"DefaultLimitCORE":             "",
-	"DefaultLimitRSS":              "",
-	"DefaultLimitNOFILE":           "",
-	"DefaultLimitAS":               "",
-	"DefaultLimitNPROC":            "",
-	"DefaultLimitMEMLOCK":          "",
-	"DefaultLimitLOCKS":            "",
-	"DefaultLimitSIGPENDING":       "",
-	"DefaultLimitMSGQUEUE":         "",
-	"DefaultLimitNICE":             "",
-	"DefaultLimitRTPRIO":           "",
-	"DefaultLimitRTTIME":           "",
-	"IPAddressAllow":               "",
-	"IPAddressDeny":                "",
-}
+var systemConfig = map[string]string{}
 
 func writeSystemConfig() error {
 	f, err := os.OpenFile(systemConfPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
@@ -112,7 +60,7 @@ func readSystemConf() error {
 	return nil
 }
 
-//GetSystemConf read system.conf
+// GetSystemConf read system.conf
 func GetSystemConf(rw http.ResponseWriter) error {
 	err := readSystemConf()
 	if err != nil {
@@ -156,4 +104,59 @@ func UpdateSystemConf(rw http.ResponseWriter, r *http.Request) error {
 	}
 
 	return share.JSONResponse(systemConfig, rw)
+}
+
+// InitSystemd Init systemd conf
+func InitSystemd() {
+	systemConfig["LogLevel"] = ""
+	systemConfig["LogTarget"] = ""
+	systemConfig["LogColor"] = ""
+	systemConfig["LogLocation"] = ""
+	systemConfig["DumpCore"] = ""
+	systemConfig["ShowStatus"] = ""
+	systemConfig["CrashChangeVT"] = ""
+	systemConfig["CrashShell"] = ""
+	systemConfig["CrashReboot"] = ""
+	systemConfig["CtrlAltDelBurstAction"] = ""
+	systemConfig["CPUAffinity"] = ""
+	systemConfig["JoinControllers"] = ""
+	systemConfig["RuntimeWatchdogSec"] = ""
+	systemConfig["ShutdownWatchdogSec"] = ""
+	systemConfig["CapabilityBoundingSe"] = ""
+	systemConfig["SystemCallArchitectures"] = ""
+	systemConfig["TimerSlackNSec"] = ""
+	systemConfig["DefaultTimerAccuracySec"] = ""
+	systemConfig["DefaultStandardOutput"] = ""
+	systemConfig["DefaultStandardError"] = ""
+	systemConfig["DefaultTimeoutStartSec"] = ""
+	systemConfig["DefaultTimeoutStopSec"] = ""
+	systemConfig["DefaultRestartSec"] = ""
+	systemConfig["DefaultStartLimitIntervalSec"] = ""
+	systemConfig["DefaultStartLimitBurst"] = ""
+	systemConfig["DefaultEnvironment"] = ""
+	systemConfig["DefaultCPUAccounting"] = ""
+	systemConfig["DefaultIOAccounting"] = ""
+	systemConfig["DefaultIPAccounting"] = ""
+	systemConfig["DefaultBlockIOAccounting"] = ""
+	systemConfig["DefaultMemoryAccounting"] = ""
+	systemConfig["DefaultTasksAccounting"] = ""
+	systemConfig["DefaultTasksMax"] = ""
+	systemConfig["DefaultLimitCPU"] = ""
+	systemConfig["DefaultLimitFSIZE"] = ""
+	systemConfig["DefaultLimitDATA"] = ""
+	systemConfig["DefaultLimitSTACK"] = ""
+	systemConfig["DefaultLimitCORE"] = ""
+	systemConfig["DefaultLimitRSS"] = ""
+	systemConfig["DefaultLimitNOFILE"] = ""
+	systemConfig["DefaultLimitAS"] = ""
+	systemConfig["DefaultLimitNPROC"] = ""
+	systemConfig["DefaultLimitMEMLOCK"] = ""
+	systemConfig["DefaultLimitLOCKS"] = ""
+	systemConfig["DefaultLimitSIGPENDING"] = ""
+	systemConfig["DefaultLimitMSGQUEUE"] = ""
+	systemConfig["DefaultLimitNICE"] = ""
+	systemConfig["DefaultLimitRTPRIO"] = ""
+	systemConfig["DefaultLimitRTTIME"] = ""
+	systemConfig["IPAddressAllow"] = ""
+	systemConfig["IPAddressDeny"] = ""
 }

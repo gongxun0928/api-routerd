@@ -33,7 +33,10 @@ func StartRouter(ip string, port string, tlsCertPath string, tlsKeyPath string) 
 	container.RegisterRouterContainer(s)
 	network.RegisterRouterNetwork(s)
 	proc.RegisterRouterProc(s)
+
+	systemd.InitSystemd()
 	systemd.RegisterRouterSystemd(s)
+
 	system.RegisterRouterSystem(s)
 
 	// Authenticate users

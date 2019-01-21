@@ -16,12 +16,12 @@ const (
 	sshConfigFile = "/etc/ssh/sshd_config"
 )
 
-//SudoersConf Json response
+// SudoersConf Json response
 type SudoersConf struct {
 	Sudoers []string `json:"sudoers"`
 }
 
-//SSHdConf sshd json response
+// SSHdConf sshd json response
 type SSHdConf struct {
 	Value string `json:"value"`
 }

@@ -49,6 +49,7 @@ func RegisterRouterSystem(router *mux.Router) {
 	hostname.RegisterRouterHostname(n)
 
 	// journald
+	journal.InitJournalConf()
 	journal.RegisterRouterJournal(n)
 
 	// kmod

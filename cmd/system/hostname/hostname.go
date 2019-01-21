@@ -11,22 +11,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var hostNameInfo = map[string]string{
-	"Hostname":                  "",
-	"StaticHostname":            "",
-	"PrettyHostname":            "",
-	"IconName":                  "",
-	"Chassis":                   "",
-	"Deployment":                "",
-	"Location":                  "",
-	"KernelName":                "",
-	"KernelRelease":             "",
-	"KernelVersion":             "",
-	"OperatingSystemPrettyName": "",
-	"OperatingSystemCPEName":    "",
-	"HomeURL":                   "",
-}
-
 // Hostname commands
 type Hostname struct {
 	Property string `json:"property"`
@@ -34,6 +18,7 @@ type Hostname struct {
 }
 
 var hostNameMethods *share.Set
+var hostNameInfo = map[string]string{}
 
 // SetHostname set hostname via dbus
 func (h *Hostname) SetHostname() error {
@@ -83,7 +68,6 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 	return share.JSONResponse(host, rw)
 }
 
-
 // InitHostName init hostname package
 func InitHostname() error {
 	hostNameMethods = share.NewSet()
@@ -95,6 +79,20 @@ func InitHostname() error {
 	hostNameMethods.Add("SetChassis")
 	hostNameMethods.Add("SetDeployment")
 	hostNameMethods.Add("SetLocation")
+
+	hostNameInfo["Hostname"] = ""
+	hostNameInfo["StaticHostname"] = ""
+	hostNameInfo["PrettyHostname"] = ""
+	hostNameInfo["IconName"] = ""
+	hostNameInfo["Chassis"] = ""
+	hostNameInfo["Deployment"] = ""
+	hostNameInfo["Location"] = ""
+	hostNameInfo["KernelName"] = ""
+	hostNameInfo["KernelRelease"] = ""
+	hostNameInfo["KernelVersion"] = ""
+	hostNameInfo["OperatingSystemPrettyName"] = ""
+	hostNameInfo["OperatingSystemCPEName"] = ""
+	hostNameInfo["HomeURL"] = ""
 
 	return nil
 }

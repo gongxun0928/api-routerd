@@ -13,16 +13,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var timeInfo = map[string]string{
-	"Timezone":        "",
-	"LocalRTC":        "",
-	"CanNTP":          "",
-	"NTP":             "",
-	"NTPSynchronized": "",
-	"TimeUSec":        "",
-	"RTCTimeUSec":     "",
-}
-
 // TimeDate JSON message
 type TimeDate struct {
 	Property string `json:"property"`
@@ -30,6 +20,7 @@ type TimeDate struct {
 }
 
 var timeDateMethods *share.Set
+var timeInfo = map[string]string{}
 
 // SetTimeDate set timedate property
 func (t *TimeDate) SetTimeDate() error {
@@ -158,6 +149,14 @@ func InitTimeDate() error {
 	timeDateMethods.Add("SetLocalRTC")
 	timeDateMethods.Add("SetNTP")
 	timeDateMethods.Add("ListTimezones")
+
+	timeInfo["Timezone"] = ""
+	timeInfo["LocalRTC"] = ""
+	timeInfo["CanNTP"] = ""
+	timeInfo["NTP"] = ""
+	timeInfo["NTPSynchronized"] = ""
+	timeInfo["TimeUSec"] = ""
+	timeInfo["RTCTimeUSec"] = ""
 
 	return nil
 }
