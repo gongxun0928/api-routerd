@@ -23,19 +23,13 @@ var timeInfo = map[string]string{
 	"RTCTimeUSec":     "",
 }
 
-var timeDateMethod = map[string]string{
-	"SetTime":       "",
-	"SetTimezone":   "",
-	"SetLocalRTC":   "",
-	"SetNTP":        "",
-	"ListTimezones": "",
-}
-
 // TimeDate JSON message
 type TimeDate struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
+
+var timeDateMethods *share.Set
 
 // SetTimeDate set timedate property
 func (t *TimeDate) SetTimeDate() error {
@@ -46,8 +40,8 @@ func (t *TimeDate) SetTimeDate() error {
 	}
 	defer conn.Close()
 
-	_, k := timeDateMethod[t.Property]
-	if !k {
+	b := timeDateMethods.Contains(t.Property)
+	if !b {
 		return fmt.Errorf("Failed to set timedate:  %s not found", t.Property)
 	}
 
@@ -153,4 +147,17 @@ func GetTimeDate(rw http.ResponseWriter, property string) error {
 	}
 
 	return share.JSONResponse(t, rw)
+}
+
+// timeDateMethods init timedate package
+func InitTimeDate() error {
+	timeDateMethods = share.NewSet()
+
+	timeDateMethods.Add("SetTime")
+	timeDateMethods.Add("SetTimezone")
+	timeDateMethods.Add("SetLocalRTC")
+	timeDateMethods.Add("SetNTP")
+	timeDateMethods.Add("ListTimezones")
+
+	return nil
 }

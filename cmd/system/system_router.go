@@ -45,6 +45,7 @@ func RegisterRouterSystem(router *mux.Router) {
 	group.RegisterRouterGroup(n)
 
 	// hostname
+	hostname.InitHostname()
 	hostname.RegisterRouterHostname(n)
 
 	// journald
@@ -66,6 +67,7 @@ func RegisterRouterSystem(router *mux.Router) {
 	resolve.RegisterRouterResolve(n)
 
 	// timedate
+	timedate.InitTimeDate()
 	timedate.RegisterRouterTimeDate(n)
 
 	// timesync

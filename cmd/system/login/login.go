@@ -25,14 +25,14 @@ var loginMethod = map[string]string{
 	"terminate-user":    "TerminateUser",
 }
 
-//Login JSON message
+// Login JSON message
 type Login struct {
 	Path     string `json:"path"`
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
 
-//LoginMethodGet Pull properties from systemd
+// LoginMethodGet Pull properties from systemd
 func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 	c, err := sd.New()
 	if err != nil {
@@ -65,7 +65,7 @@ func (t *Login) LoginMethodGet(rw http.ResponseWriter) error {
 	return nil
 }
 
-//LoginMethodPost Do call login methods via dbus
+// LoginMethodPost Do call login methods via dbus
 func (t *Login) LoginMethodPost(rw http.ResponseWriter) error {
 	c, err := sd.New()
 	if err != nil {

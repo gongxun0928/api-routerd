@@ -54,9 +54,10 @@ func routerLoginMethodPost(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterLogin register with mux
+// RegisterRouterLogin register with mux
 func RegisterRouterLogin(router *mux.Router) {
 	s := router.PathPrefix("/login").Subrouter().StrictSlash(false)
+
 	s.HandleFunc("/get/{path}", routerLoginMethodGet)
 	s.HandleFunc("/post/{path}", routerLoginMethodPost)
 }

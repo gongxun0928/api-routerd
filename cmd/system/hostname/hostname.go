@@ -27,21 +27,13 @@ var hostNameInfo = map[string]string{
 	"HomeURL":                   "",
 }
 
-var hostMethodInfo = map[string]string{
-	"SetHostname":       "",
-	"SetStaticHostname": "",
-	"SetPrettyHostname": "",
-	"SetIconName":       "",
-	"SetChassis":        "",
-	"SetDeployment":     "",
-	"SetLocation":       "",
-}
-
 // Hostname commands
 type Hostname struct {
 	Property string `json:"property"`
 	Value    string `json:"value"`
 }
+
+var hostNameMethods *share.Set
 
 // SetHostname set hostname via dbus
 func (h *Hostname) SetHostname() error {
@@ -52,8 +44,8 @@ func (h *Hostname) SetHostname() error {
 	}
 	defer conn.Close()
 
-	_, k := hostMethodInfo[h.Property]
-	if !k {
+	b := hostNameMethods.Contains(h.Property)
+	if !b {
 		return fmt.Errorf("Failed to set hostname property: %s not found", h.Property)
 	}
 
@@ -89,4 +81,20 @@ func GetHostname(rw http.ResponseWriter, property string) error {
 	}
 
 	return share.JSONResponse(host, rw)
+}
+
+
+// InitHostName init hostname package
+func InitHostname() error {
+	hostNameMethods = share.NewSet()
+
+	hostNameMethods.Add("SetHostname")
+	hostNameMethods.Add("SetStaticHostname")
+	hostNameMethods.Add("SetPrettyHostname")
+	hostNameMethods.Add("SetIconName")
+	hostNameMethods.Add("SetChassis")
+	hostNameMethods.Add("SetDeployment")
+	hostNameMethods.Add("SetLocation")
+
+	return nil
 }
