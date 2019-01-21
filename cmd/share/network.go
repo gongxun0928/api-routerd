@@ -10,7 +10,7 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-//IsValidIfName tests whether it's a valid ifname
+// IsValidIfName tests whether it's a valid ifname
 func IsValidIfName(ifname string) bool {
 	s := strings.TrimSpace(ifname)
 	if len(s) == 0 || len(s) > unix.IFNAMSIZ {
@@ -20,7 +20,7 @@ func IsValidIfName(ifname string) bool {
 	return true
 }
 
-//LinkExists tests whether link exists
+// LinkExists tests whether link exists
 func LinkExists(ifname string) bool {
 	_, err := os.Stat(path.Join("/sys/class/net", ifname))
 	if os.IsNotExist(err) {

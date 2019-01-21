@@ -1,7 +1,6 @@
-# api-routerd
-![N|Solid](https://ibin.co/4R6Hzr2H7l4A.png)
+![N|Solid](https://github.com/RestGW/api-routerd/blob/master/logo/api-routerd-logo.png)
 
-A RestAPI MicroService GateWay for Linux
+A REST API MicroService Gateway
 
 [![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
@@ -17,7 +16,8 @@ api-routerd is a cloud-enabled, mobile-ready, a super light weight remote manage
 - Proactive Monitoring and Analytics
   api-routerd saves network administrators time and frustration because it makes it easy to gather statistics and perform analyses.
 - Platform independent REST APIs can be accessed via any application (curl, chrome, PostMan ...) from any OS (Linux, IOS, Android, Windows ...)
-- An [Iphone App Demo](https://www.linkedin.com/feed/update/urn:li:activity:6486243669560127488) using REST APIS . See [Source Code](https://github.com/RestGW/iDevOps) .
+- An [iphone app demo](https://www.linkedin.com/feed/update/urn:li:activity:6493161973260357632) using REST APIS . See [Source Code](https://github.com/RestGW/iDevOps) .
+- Runs on [Rasberry pi](https://www.linkedin.com/feed/update/urn:li:activity:6492312857231888384).
 - Minimal data transfer using JSON.
 - Plugin based Architechture. See how to write plugin section for more information.
 
@@ -210,8 +210,6 @@ License
 
 Apache 2.0
 
-
-**Free Software, Hell Yeah!**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 

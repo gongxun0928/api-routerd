@@ -19,7 +19,7 @@ const (
 	networkdUnitPath = "/etc/systemd/network"
 )
 
-//Link JSON message
+// Link JSON message
 type Link struct {
 	ConfFile string      `json:"ConfFile"`
 	Match    interface{} `json:"Match"`
@@ -205,7 +205,7 @@ func parseJSONFromHTTPReq(req *http.Request) error {
 	return share.WriteFullFile(unitPath, config)
 }
 
-//CreateFile generate .link file
+// CreateFile generate .link file
 func CreateFile(rw http.ResponseWriter, req *http.Request) {
 	parseJSONFromHTTPReq(req)
 }

@@ -190,7 +190,7 @@ func routerGetRoute(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//RegisterRouterNetlink register with mux
+// RegisterRouterNetlink register with mux
 func RegisterRouterNetlink(n *mux.Router) {
 	// Link
 	n.HandleFunc("/link/set", routerLinkSet)
