@@ -1,6 +1,6 @@
 ![N|Solid](https://github.com/RestGW/api-routerd/blob/master/logo/api-routerd-logo.png)
 
-A REST API MicroService Gateway
+REST API based Monitoring and System/Network Management
 
 [![Build Status CircleCI](https://circleci.com/gh/RestGW/api-routerd.svg?style=svg)](https://circleci.com/gh/RestGW/api-routerd)
 [![Build Status](https://travis-ci.org/RestGW/api-routerd.svg?branch=master)](https://travis-ci.org/RestGW/api-routerd)
