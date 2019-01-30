@@ -11,7 +11,7 @@ import (
 	"github.com/vishvananda/netlink"
 )
 
-//Address JSON request
+// Address JSON request
 type Address struct {
 	Action  string `json:"action"`
 	Link    string `json:"link"`
@@ -19,7 +19,7 @@ type Address struct {
 	Label   string `json:"label"`
 }
 
-//DecodeJSONRequest parses JSON request to Address type
+// DecodeJSONRequest parses JSON request to Address type
 func DecodeJSONRequest(r *http.Request) (Address, error) {
 	address := new(Address)
 
@@ -31,7 +31,7 @@ func DecodeJSONRequest(r *http.Request) (Address, error) {
 	return *address, nil
 }
 
-//Add Add a new address to interface
+// Add Add a new address to interface
 func (a *Address) Add() error {
 	link, err := netlink.LinkByName(a.Link)
 	if err != nil {
@@ -51,7 +51,7 @@ func (a *Address) Add() error {
 	return nil
 }
 
-//Del remove a address from interface
+// Del remove a address from interface
 func (a *Address) Del() error {
 	link, err := netlink.LinkByName(a.Link)
 	if err != nil {
@@ -71,7 +71,7 @@ func (a *Address) Del() error {
 	return nil
 }
 
-//Get link address
+// Get link address
 func (a *Address) Get(rw http.ResponseWriter) error {
 	if a.Link == "" {
 		link, err := netlink.LinkByName(a.Link)

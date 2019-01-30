@@ -7,22 +7,22 @@ import (
 	"unsafe"
 )
 
-//Ifname size
+// Ifname size
 const (
 	IFNAMSIZ = 16
 )
 
-//ETHTOOL
+// ETHTOOL
 const (
 	SIOCETHTOOL = 0x8946
 )
 
-//driver info
+// driver info
 const (
 	EthtoolGDRVInfo = 0x00000003
 )
 
-//EthTool Manager struct
+// EthTool Manager struct
 type EthTool struct {
 	fd int
 }
@@ -32,7 +32,7 @@ type ifreq struct {
 	ifrData uintptr
 }
 
-//DrvInfo JSON message
+// DrvInfo JSON message
 type DrvInfo struct {
 	Cmd         uint32   `json:"cmd"`
 	Driver      [32]byte `json:"driver"`
@@ -96,7 +96,7 @@ func (e *EthTool) ethtoolConnect() error {
 	return nil
 }
 
-//Close close fd
+// Close close fd
 func (e *EthTool) Close() {
 	syscall.Close(e.fd)
 	e.fd = -1
@@ -104,7 +104,7 @@ func (e *EthTool) Close() {
 	manager = nil
 }
 
-//NewEthTool new fd
+// NewEthTool new fd
 func NewEthTool() (*EthTool, error) {
 	if manager == nil {
 		manager = new(EthTool)

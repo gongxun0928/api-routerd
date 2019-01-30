@@ -10,14 +10,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-//Group Json Commands
+// Group Json Commands
 type Group struct {
 	Gid     string `json:"gid"`
 	Name    string `json:"name"`
 	NewName string `json:"new_name"`
 }
 
-//GroupAdd Add group
+// GroupAdd Add group
 func (r *Group) GroupAdd() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {
@@ -58,7 +58,7 @@ func (r *Group) GroupAdd() error {
 	return nil
 }
 
-//GroupDel delete a group
+// GroupDel delete a group
 func (r *Group) GroupDel() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {
@@ -87,7 +87,7 @@ func (r *Group) GroupDel() error {
 	return nil
 }
 
-//GroupModify modify a group
+// GroupModify modify a group
 func (r *Group) GroupModify() error {
 	g, err := user.LookupGroup(r.Name)
 	if err != nil {

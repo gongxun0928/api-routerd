@@ -75,7 +75,7 @@ func routerGroupDel(rw http.ResponseWriter, r *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-//RegisterRouterGroup register with mux
+// RegisterRouterGroup register with mux
 func RegisterRouterGroup(router *mux.Router) {
 	s := router.PathPrefix("/group").Subrouter().StrictSlash(false)
 

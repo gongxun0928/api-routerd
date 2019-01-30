@@ -296,7 +296,7 @@ func parseJSONFromHTTPReq(req *http.Request) error {
 	return share.WriteFullFile(unitPath, config)
 }
 
-//CreateFile generate .netdev
+// CreateFile generate .netdev
 func CreateFile(rw http.ResponseWriter, req *http.Request) {
 	parseJSONFromHTTPReq(req)
 }

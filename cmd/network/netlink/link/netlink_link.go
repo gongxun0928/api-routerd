@@ -13,7 +13,7 @@ import (
 	"github.com/vishvananda/netlink"
 )
 
-//Link JSON message
+// Link JSON message
 type Link struct {
 	Action  string   `json:"action"`
 	Link    string   `json:"link"`
@@ -23,7 +23,7 @@ type Link struct {
 	Enslave []string `json:"enslave"`
 }
 
-//DecodeJSONRequest decodes JSON message to type Link
+// DecodeJSONRequest decodes JSON message to type Link
 func DecodeJSONRequest(r *http.Request) (Link, error) {
 	link := new(Link)
 
@@ -35,7 +35,7 @@ func DecodeJSONRequest(r *http.Request) (Link, error) {
 	return *link, nil
 }
 
-//Set sets link status/attribute
+// Set sets link status/attribute
 func (link *Link) Set() error {
 	switch link.Action {
 	case "set-link-up":
@@ -55,7 +55,7 @@ func (link *Link) Set() error {
 	return nil
 }
 
-//Get all link
+// Get all link
 func (link *Link) Get(rw http.ResponseWriter) error {
 	if link.Link != "" {
 		l, err := netlink.LinkByName(link.Link)
@@ -90,7 +90,7 @@ func (link *Link) Delete() error {
 	return nil
 }
 
-//Create create netdevs
+// Create create virtual netdevs
 func (link *Link) Create() error {
 	switch link.Action {
 	case "add-link-bridge":

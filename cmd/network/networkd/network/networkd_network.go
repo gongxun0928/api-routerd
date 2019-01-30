@@ -20,7 +20,7 @@ const (
 	networkdUnitPath = "/etc/systemd/network"
 )
 
-//Address message
+// Address JSON message
 type Address struct {
 	Address string `json:"Address"`
 	Peer    string `json:"Peer"`
@@ -28,7 +28,7 @@ type Address struct {
 	Scope   string `json:"Scope"`
 }
 
-//Route message
+// Route JSON message
 type Route struct {
 	Gateway         string `json:"Gateway"`
 	GatewayOnlink   string `json:"GatewayOnlink"`
@@ -38,7 +38,7 @@ type Route struct {
 	Table           string `json:"Table"`
 }
 
-//RoutingPolicyRule message
+// RoutingPolicyRule JSON message
 type RoutingPolicyRule struct {
 	TypeOfService     string `json:"TypeOfService"`
 	From              string `json:"From"`
@@ -54,7 +54,7 @@ type RoutingPolicyRule struct {
 	InvertRule        string `json:"InvertRule"`
 }
 
-//DHCPSection message
+// DHCPSection JSON message
 type DHCPSection struct {
 	UseDNS             string `json:"UseDNS"`
 	UseNTP             string `json:"UseNTP"`
@@ -70,7 +70,7 @@ type DHCPSection struct {
 	ClientIdentifier   string `json:"ClientIdentifier"`
 }
 
-//Network message
+// Network JSON message
 type Network struct {
 	ConfFile string `json:"ConfFile"`
 
@@ -720,7 +720,7 @@ func parseJSONfromHTTPReq(req *http.Request) error {
 	return share.WriteFullFile(unitPath, config)
 }
 
-//CreateFile generate .network
+// CreateFile generate .network
 func CreateFile(rw http.ResponseWriter, req *http.Request) {
 	parseJSONfromHTTPReq(req)
 }

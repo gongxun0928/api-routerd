@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-//PathExists test if path exists
+// PathExists test if path exists
 func PathExists(path string) bool {
 	_, r := os.Stat(path)
 	if os.IsNotExist(r) {
@@ -19,7 +19,7 @@ func PathExists(path string) bool {
 	return true
 }
 
-//ReadFullFile read a file and store in string array
+// ReadFullFile read a file and store in string array
 func ReadFullFile(path string) ([]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -42,7 +42,7 @@ func ReadFullFile(path string) ([]string, error) {
 	return lines, nil
 }
 
-//WriteFullFile write a string arrray to a file
+// WriteFullFile write a string arrray to a file
 func WriteFullFile(path string, lines []string) error {
 	file, err := os.Create(path)
 	if err != nil {
@@ -60,7 +60,7 @@ func WriteFullFile(path string, lines []string) error {
 	return nil
 }
 
-//ReadOneLineFile read one line from a file
+// ReadOneLineFile read one line from a file
 func ReadOneLineFile(path string) (string, error) {
 	f, err := os.Create(path)
 	if err != nil {
@@ -78,7 +78,7 @@ func ReadOneLineFile(path string) (string, error) {
 	return line, nil
 }
 
-//WriteOneLineFile write oneline to a file
+// WriteOneLineFile write oneline to a file
 func WriteOneLineFile(path string, line string) error {
 	file, err := os.Create(path)
 	if err != nil {
@@ -92,7 +92,7 @@ func WriteOneLineFile(path string, line string) error {
 	return w.Flush()
 }
 
-//CreateDirectory creates a dir
+// CreateDirectory creates a dir
 func CreateDirectory(directoryPath string, perm os.FileMode) error {
 	if !PathExists(directoryPath) {
 		err := os.Mkdir(directoryPath, perm)
@@ -104,7 +104,7 @@ func CreateDirectory(directoryPath string, perm os.FileMode) error {
 	return nil
 }
 
-//CreateDirectoryNested recursively creates all dir
+// CreateDirectoryNested recursively creates all dir
 func CreateDirectoryNested(directoryPath string, perm os.FileMode) error {
 	if !PathExists(directoryPath) {
 		err := os.MkdirAll(directoryPath, perm)

@@ -12,7 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// KMod Json commanfs
+// KMod JSON message
 type KMod struct {
 	Name string `json:"name"`
 	Args string `json:"args"`
