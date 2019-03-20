@@ -481,6 +481,14 @@ func (p *Process) MemoryInfoExWithContext(ctx context.Context) (*MemoryInfoExSta
 	return nil, common.ErrNotImplementedError
 }
 
+func (p *Process) PageFaults() (*PageFaultsStat, error) {
+	return p.PageFaultsWithContext(context.Background())
+}
+
+func (p *Process) PageFaultsWithContext(ctx context.Context) (*PageFaultsStat, error) {
+	return nil, common.ErrNotImplementedError
+}
+
 func (p *Process) Children() ([]*Process, error) {
 	return p.ChildrenWithContext(context.Background())
 }
@@ -515,6 +523,15 @@ func (p *Process) Connections() ([]net.ConnectionStat, error) {
 
 func (p *Process) ConnectionsWithContext(ctx context.Context) ([]net.ConnectionStat, error) {
 	return net.ConnectionsPid("all", p.Pid)
+}
+
+// Connections returns a slice of net.ConnectionStat used by the process at most `max`
+func (p *Process) ConnectionsMax(max int) ([]net.ConnectionStat, error) {
+	return p.ConnectionsMaxWithContext(context.Background(), max)
+}
+
+func (p *Process) ConnectionsMaxWithContext(ctx context.Context, max int) ([]net.ConnectionStat, error) {
+	return net.ConnectionsPidMax("all", p.Pid, max)
 }
 
 func (p *Process) NetIOCounters(pernic bool) ([]net.IOCountersStat, error) {
